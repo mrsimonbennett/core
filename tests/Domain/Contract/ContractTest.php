@@ -79,6 +79,7 @@ final class ContractTest extends \TestCase
     protected function makeContract()
     {
         $contract = Contract::draftContract($this->makeContractId(),
+            new \FullRent\Core\Contract\Landlord(\FullRent\Core\Contract\LandlordId::random()),
             $this->makeContractDuration(), $this->makeProperty(),
             $this->makeRentAmount(), $this->makeDeposit());
 

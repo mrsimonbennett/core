@@ -24,17 +24,22 @@ final class Contract extends EventSourcedAggregateRoot
      */
     protected $property;
     /**
-     * @var Deposit
+     * @var Rent
      */
     protected $rent;
     /**
-     * @var  Deposit
+     * @var Deposit
      */
     protected $deposit;
+    /**
+     * @var Landlord
+     */
+    protected $landlord;
 
 
     /**
      * @param ContractId $contractId
+     * @param Landlord $landlord
      * @param ContractMinimalPeriod $contractMinimalPeriod
      * @param Property $property
      * @param Rent $rent
@@ -43,13 +48,16 @@ final class Contract extends EventSourcedAggregateRoot
      */
     public static function draftContract(
         ContractId $contractId,
+        Landlord $landlord,
         ContractMinimalPeriod $contractMinimalPeriod,
         Property $property,
         Rent $rent,
         Deposit $deposit
     ) {
         $contract = new static;
-        $contract->apply(new ContractWasDrafted($contractId, $contractMinimalPeriod, $property, $rent, $deposit));
+        $contract->apply(new ContractWasDrafted($contractId, $landlord, $contractMinimalPeriod, $property, $rent,
+            $deposit));
+
         return $contract;
     }
 
@@ -59,6 +67,7 @@ final class Contract extends EventSourcedAggregateRoot
     public function applyContractWasDrafted(ContractWasDrafted $contractWasDrafted)
     {
         $this->contractId = $contractWasDrafted->getContractId();
+        $this->landlord = $contractWasDrafted->getLandlord();
         $this->contractMinimalPeriod = $contractWasDrafted->getContractMinimalPeriod();
         $this->property = $contractWasDrafted->getProperty();
         $this->rent = $contractWasDrafted->getRent();

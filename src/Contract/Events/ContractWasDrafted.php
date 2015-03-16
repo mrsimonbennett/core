@@ -4,6 +4,7 @@ namespace FullRent\Core\Contract\Events;
 use FullRent\Core\Contract\ContractId;
 use FullRent\Core\Contract\ContractMinimalPeriod;
 use FullRent\Core\Contract\Deposit;
+use FullRent\Core\Contract\Landlord;
 use FullRent\Core\Contract\Property;
 use FullRent\Core\Contract\Rent;
 
@@ -34,21 +35,33 @@ final class ContractWasDrafted
      * @var Deposit
      */
     private $deposit;
+    /**
+     * @var Landlord
+     */
+    private $landlord;
 
     /**
      * @param ContractId $contractId
+     * @param Landlord $landlord
      * @param ContractMinimalPeriod $contractMinimalPeriod
      * @param Property $property
      * @param Rent $rent
      * @param Deposit $deposit
      */
-    public function __construct(ContractId $contractId, ContractMinimalPeriod $contractMinimalPeriod, Property $property, Rent $rent, Deposit $deposit)
-    {
+    public function __construct(
+        ContractId $contractId,
+        Landlord $landlord,
+        ContractMinimalPeriod $contractMinimalPeriod,
+        Property $property,
+        Rent $rent,
+        Deposit $deposit
+    ) {
         $this->contractId = $contractId;
         $this->contractMinimalPeriod = $contractMinimalPeriod;
         $this->property = $property;
         $this->rent = $rent;
         $this->deposit = $deposit;
+        $this->landlord = $landlord;
     }
 
     /**
@@ -89,6 +102,14 @@ final class ContractWasDrafted
     public function getDeposit()
     {
         return $this->deposit;
+    }
+
+    /**
+     * @return Landlord
+     */
+    public function getLandlord()
+    {
+        return $this->landlord;
     }
 
 }
