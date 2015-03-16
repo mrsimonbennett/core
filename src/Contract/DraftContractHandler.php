@@ -9,6 +9,5 @@ final class DraftContractHandler implements CommandHandler
 
     public function handle(DraftContract $draftContract)
     {
-        dd($draftContract);
     }
 }
