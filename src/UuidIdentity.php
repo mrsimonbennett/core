@@ -54,7 +54,7 @@ abstract class UuidIdentity implements Identity
     /**
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return (string)$this->uuid;
     }
