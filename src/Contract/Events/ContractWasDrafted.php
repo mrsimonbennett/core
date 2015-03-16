@@ -1,0 +1,94 @@
+<?php
+namespace FullRent\Core\Contract\Events;
+
+use FullRent\Core\Contract\ContractId;
+use FullRent\Core\Contract\ContractMinimalPeriod;
+use FullRent\Core\Contract\Deposit;
+use FullRent\Core\Contract\Property;
+use FullRent\Core\Contract\Rent;
+
+/**
+ * Class ContractWasDrafted
+ * @package FullRent\Core\Contract\Events
+ * @author Simon Bennett <simon@bennett.im>
+ */
+final class ContractWasDrafted
+{
+    /**
+     * @var ContractId
+     */
+    private $contractId;
+    /**
+     * @var ContractMinimalPeriod
+     */
+    private $contractMinimalPeriod;
+    /**
+     * @var Property
+     */
+    private $property;
+    /**
+     * @var Rent
+     */
+    private $rent;
+    /**
+     * @var Deposit
+     */
+    private $deposit;
+
+    /**
+     * @param ContractId $contractId
+     * @param ContractMinimalPeriod $contractMinimalPeriod
+     * @param Property $property
+     * @param Rent $rent
+     * @param Deposit $deposit
+     */
+    public function __construct(ContractId $contractId, ContractMinimalPeriod $contractMinimalPeriod, Property $property, Rent $rent, Deposit $deposit)
+    {
+        $this->contractId = $contractId;
+        $this->contractMinimalPeriod = $contractMinimalPeriod;
+        $this->property = $property;
+        $this->rent = $rent;
+        $this->deposit = $deposit;
+    }
+
+    /**
+     * @return ContractId
+     */
+    public function getContractId()
+    {
+        return $this->contractId;
+    }
+
+    /**
+     * @return ContractMinimalPeriod
+     */
+    public function getContractMinimalPeriod()
+    {
+        return $this->contractMinimalPeriod;
+    }
+
+    /**
+     * @return Property
+     */
+    public function getProperty()
+    {
+        return $this->property;
+    }
+
+    /**
+     * @return Rent
+     */
+    public function getRent()
+    {
+        return $this->rent;
+    }
+
+    /**
+     * @return Deposit
+     */
+    public function getDeposit()
+    {
+        return $this->deposit;
+    }
+
+}
