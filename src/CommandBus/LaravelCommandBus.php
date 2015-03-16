@@ -21,7 +21,7 @@ final class LaravelCommandBus implements CommandBus
     public function __construct(CommandTranslator $commandTranslator, Application $application)
     {
         $this->application = $application;
-        $this->commandTranslater = $commandTranslator;
+        $this->commandTranslator = $commandTranslator;
     }
 
     /**
@@ -30,7 +30,7 @@ final class LaravelCommandBus implements CommandBus
      */
     public function execute($command)
     {
-        $handler = $this->commandTranslater->toCommandHandler($command);
+        $handler = $this->commandTranslator->toCommandHandler($command);
 
         return $this->application->make($handler)->handle($command);
     }
