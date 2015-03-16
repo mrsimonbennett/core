@@ -11,6 +11,9 @@
 |
 */
 
+use App\Exceptions\Handler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+
 $app = new Illuminate\Foundation\Application(
 	realpath(__DIR__.'/../')
 );
@@ -37,8 +40,8 @@ $app->singleton(
 );
 
 $app->singleton(
-	'Illuminate\Contracts\Debug\ExceptionHandler',
-	'App\Exceptions\Handler'
+	ExceptionHandler::class,
+	Handler::class
 );
 
 /*

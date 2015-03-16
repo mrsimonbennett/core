@@ -95,7 +95,7 @@ return [
 	|
 	*/
 
-	'log' => 'daily',
+	'log' => 'single',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -136,7 +136,6 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 
-		'GrahamCampbell\Exceptions\ExceptionsServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -146,6 +145,7 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'App\Providers\EventStoreServiceProvider',
+		'App\Providers\CommandBusServiceProvider',
 
 	],
 
