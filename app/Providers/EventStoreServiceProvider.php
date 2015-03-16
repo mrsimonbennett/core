@@ -28,12 +28,8 @@ class EventStoreServiceProvider extends ServiceProvider {
 	{
 		$this->app->bind(EventBusInterface::class, SimpleEventBus::class);
 
-		$this->app->bind(EventStoreInterface::class, function ($app) {
-			$es = new EventStore('http://127.0.0.1:2113');
-
-			return new BroadwayEventStore($es);
+		$this->app->bind(EventStoreInterface::class, function () {
+			return new BroadwayEventStore(new EventStore('http://127.0.0.1:2113'));
 		});
-
 	}
-
 }
