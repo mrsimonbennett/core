@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core;
 
+use InvalidUuidException;
 use Rhumsaa\Uuid\Uuid;
 
 /**
@@ -27,7 +28,7 @@ abstract class UuidIdentity implements Identity
 
     /**
      * @param $string
-     * @return static
+     * @return Identity
      */
     public static function fromString($string)
     {
@@ -35,7 +36,7 @@ abstract class UuidIdentity implements Identity
     }
 
     /**
-     * @return UUID
+     * @return Identity
      */
     public static function random()
     {
@@ -50,6 +51,7 @@ abstract class UuidIdentity implements Identity
     {
         return new static((string)$other);
     }
+
     /**
      * @return string
      */
@@ -70,7 +72,7 @@ abstract class UuidIdentity implements Identity
 
     /**
      * @param string $uuid
-     * @throws InvalidArgumentException
+     * @throws InvalidUuidException
      */
     private function guardAgainstInvalidUUID($uuid)
     {

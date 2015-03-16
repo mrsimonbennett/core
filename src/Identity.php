@@ -16,12 +16,12 @@ interface Identity
 
     /**
      * @param $string
-     * @return static
+     * @return Identity
      */
     public static function fromString($string);
 
     /**
-     * @return UUID
+     * @return Identity
      */
     public static function random();
 
