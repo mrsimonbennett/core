@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core;
 
-use InvalidUuidException;
 use Rhumsaa\Uuid\Uuid;
 
 /**
