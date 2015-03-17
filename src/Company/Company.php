@@ -3,6 +3,7 @@ namespace FullRent\Core\Company;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
+use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
@@ -14,6 +15,10 @@ use FullRent\Core\Company\ValueObjects\CompanyName;
  */
 final class Company extends EventSourcedAggregateRoot
 {
+    /**
+     * @var Landlord[]
+     */
+    private $landlords;
     /**
      * @var CompanyId
      */
@@ -42,6 +47,14 @@ final class Company extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param Landlord $landlord
+     */
+    public function inRoleLandlord(Landlord $landlord)
+    {
+        $this->apply(new LandlordEnrolled($this->companyId, $landlord));
+    }
+
+    /**
      * @param CompanyHasBeenRegistered $companyHasBeenRegistered
      */
     protected function applyCompanyHasBeenRegistered(CompanyHasBeenRegistered $companyHasBeenRegistered)
@@ -52,10 +65,18 @@ final class Company extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param LandlordEnrolled $landlordEnrolled
+     */
+    protected function applyLandlordEnrolled(LandlordEnrolled $landlordEnrolled)
+    {
+        $this->landlords[(string)$landlordEnrolled->getLandlord()->getLandlordId()] = $landlordEnrolled->getLandlord();
+    }
+
+    /**
      * @return string
      */
     public function getAggregateRootId()
     {
-        return (string) $this->companyId;
+        return (string)$this->companyId;
     }
 }
