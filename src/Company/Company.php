@@ -27,6 +27,12 @@ final class Company extends EventSourcedAggregateRoot
      */
     private $companyDomain;
 
+    /**
+     * @param CompanyId $companyId
+     * @param CompanyName $companyName
+     * @param CompanyDomain $companyDomain
+     * @return static
+     */
     public static function registerCompany(CompanyId $companyId, CompanyName $companyName, CompanyDomain $companyDomain)
     {
         $company = new static();
@@ -35,7 +41,10 @@ final class Company extends EventSourcedAggregateRoot
         return $company;
     }
 
-    public function applyCompanyHasBeenRegistered(CompanyHasBeenRegistered $companyHasBeenRegistered)
+    /**
+     * @param CompanyHasBeenRegistered $companyHasBeenRegistered
+     */
+    protected function applyCompanyHasBeenRegistered(CompanyHasBeenRegistered $companyHasBeenRegistered)
     {
         $this->companyId = $companyHasBeenRegistered->getCompanyId();
         $this->companyName = $companyHasBeenRegistered->getCompanyName();
@@ -47,6 +56,6 @@ final class Company extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return $this->companyId;
+        return (string) $this->companyId;
     }
 }
