@@ -45,7 +45,7 @@ class Money
     }
 
     /**
-     * @return float
+     * @return float|int
      */
     public function getAmountInPounds()
     {
