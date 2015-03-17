@@ -1,9 +1,14 @@
 <?php
-namespace FullRent\Core\Contract;
+namespace FullRent\Core\Contract\ValueObjects;
 
 use Carbon\Carbon;
 use ValueObjects\Money\Money;
 
+/**
+ * Class Deposit
+ * @package FullRent\Core\Contract\ValueObjects
+ * @author Simon Bennett <simon@bennett.im>
+ */
 final class Deposit
 {
     /**

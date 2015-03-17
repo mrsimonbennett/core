@@ -1,12 +1,12 @@
 <?php
 namespace FullRent\Core\Contract\Events;
 
-use FullRent\Core\Contract\ContractId;
-use FullRent\Core\Contract\ContractMinimalPeriod;
-use FullRent\Core\Contract\Deposit;
-use FullRent\Core\Contract\Landlord;
-use FullRent\Core\Contract\Property;
-use FullRent\Core\Contract\Rent;
+use FullRent\Core\Contract\ValueObjects\ContractId;
+use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
+use FullRent\Core\Contract\ValueObjects\Deposit;
+use FullRent\Core\Contract\ValueObjects\Landlord;
+use FullRent\Core\Contract\ValueObjects\Property;
+use FullRent\Core\Contract\ValueObjects\Rent;
 
 /**
  * Class ContractWasDrafted

@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Contract;
+namespace FullRent\Core\Contract\ValueObjects;
 
 
 /**

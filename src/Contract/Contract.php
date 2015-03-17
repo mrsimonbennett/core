@@ -3,6 +3,12 @@ namespace FullRent\Core\Contract;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Contract\Events\ContractWasDrafted;
+use FullRent\Core\Contract\ValueObjects\ContractId;
+use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
+use FullRent\Core\Contract\ValueObjects\Deposit;
+use FullRent\Core\Contract\ValueObjects\Landlord;
+use FullRent\Core\Contract\ValueObjects\Property;
+use FullRent\Core\Contract\ValueObjects\Rent;
 
 /**
  * Class Contract
