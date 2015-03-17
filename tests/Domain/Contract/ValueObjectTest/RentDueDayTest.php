@@ -6,9 +6,6 @@
  */
 final class RentDueDayTest extends TestCase
 {
-    /**
-     *
-     */
     public function testCreatingRentDueDay()
     {
         $rentDue = new \FullRent\Core\Contract\ValueObjects\RentDueDay(10);
