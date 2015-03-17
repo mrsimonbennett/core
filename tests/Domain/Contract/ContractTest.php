@@ -2,15 +2,18 @@
 
 use Carbon\Carbon;
 use FullRent\Core\Contract\Contract;
-use FullRent\Core\Contract\ContractId;
-use FullRent\Core\Contract\ContractMinimalPeriod;
-use FullRent\Core\Contract\Deposit;
-use FullRent\Core\Contract\DepositAmount;
+use FullRent\Core\Contract\ValueObjects\ContractId;
+use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
+use FullRent\Core\Contract\ValueObjects\Deposit;
+use FullRent\Core\Contract\ValueObjects\DepositAmount;
 use FullRent\Core\Contract\Events\ContractWasDrafted;
-use FullRent\Core\Contract\Property;
-use FullRent\Core\Contract\PropertyId;
-use FullRent\Core\Contract\Rent;
-use FullRent\Core\Contract\RentAmount;
+use FullRent\Core\Contract\ValueObjects\Landlord;
+use FullRent\Core\Contract\ValueObjects\LandlordId;
+use FullRent\Core\Contract\ValueObjects\Property;
+use FullRent\Core\Contract\ValueObjects\PropertyId;
+use FullRent\Core\Contract\ValueObjects\Rent;
+use FullRent\Core\Contract\ValueObjects\RentAmount;
+use FullRent\Core\Contract\ValueObjects\RentDueDay;
 
 /**
  * Class ContractTest
@@ -62,7 +65,7 @@ final class ContractTest extends \TestCase
      */
     protected function makeRentAmount()
     {
-        return new Rent(RentAmount::fromPounds(100));
+        return new Rent(RentAmount::fromPounds(100), new RentDueDay(10));
     }
 
     /**
@@ -79,7 +82,7 @@ final class ContractTest extends \TestCase
     protected function makeContract()
     {
         $contract = Contract::draftContract($this->makeContractId(),
-            new \FullRent\Core\Contract\Landlord(\FullRent\Core\Contract\LandlordId::random()),
+            new Landlord(LandlordId::random()),
             $this->makeContractDuration(), $this->makeProperty(),
             $this->makeRentAmount(), $this->makeDeposit());
 

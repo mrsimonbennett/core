@@ -13,13 +13,19 @@ final class Rent
      * @var RentAmount
      */
     private $rentAmount;
+    /**
+     * @var RentDueDay
+     */
+    private $rentDueDay;
 
     /**
      * @param RentAmount $rentAmount
+     * @param RentDueDay $rentDueDay
      */
-    public function __construct(RentAmount $rentAmount)
+    public function __construct(RentAmount $rentAmount, RentDueDay $rentDueDay)
     {
         $this->rentAmount = $rentAmount;
+        $this->rentDueDay = $rentDueDay;
     }
 
     /**
