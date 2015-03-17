@@ -3,12 +3,14 @@ namespace FullRent\Core\Contract;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Contract\Events\ContractWasDrafted;
+use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
 use FullRent\Core\Contract\ValueObjects\Deposit;
 use FullRent\Core\Contract\ValueObjects\Landlord;
 use FullRent\Core\Contract\ValueObjects\Property;
 use FullRent\Core\Contract\ValueObjects\Rent;
+use FullRent\Core\Contract\ValueObjects\Tenant;
 
 /**
  * Class Contract
@@ -42,6 +44,11 @@ final class Contract extends EventSourcedAggregateRoot
      */
     protected $landlord;
 
+    /**
+     * @var Tenant[]
+     */
+    protected $tenants;
+
 
     /**
      * @param ContractId $contractId
@@ -68,9 +75,17 @@ final class Contract extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param Tenant $tenant
+     */
+    public function attachTenant(Tenant $tenant)
+    {
+        $this->apply(new TenantJoinedContract($this->contractId, $tenant));
+    }
+
+    /**
      * @param ContractWasDrafted $contractWasDrafted
      */
-    public function applyContractWasDrafted(ContractWasDrafted $contractWasDrafted)
+    protected function applyContractWasDrafted(ContractWasDrafted $contractWasDrafted)
     {
         $this->contractId = $contractWasDrafted->getContractId();
         $this->landlord = $contractWasDrafted->getLandlord();
@@ -78,6 +93,14 @@ final class Contract extends EventSourcedAggregateRoot
         $this->property = $contractWasDrafted->getProperty();
         $this->rent = $contractWasDrafted->getRent();
         $this->deposit = $contractWasDrafted->getDeposit();
+    }
+
+    /**
+     * @param TenantJoinedContract $tenantJoinedContract
+     */
+    protected function applyTenantJoinedContract(TenantJoinedContract $tenantJoinedContract)
+    {
+        $this->tenants[(string)$tenantJoinedContract->getTenant()->getTenantId()] = $tenantJoinedContract->getTenant();
     }
 
     /**

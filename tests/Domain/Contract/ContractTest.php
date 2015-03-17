@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use FullRent\Core\Contract\Contract;
+use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
 use FullRent\Core\Contract\ValueObjects\Deposit;
@@ -14,6 +15,8 @@ use FullRent\Core\Contract\ValueObjects\PropertyId;
 use FullRent\Core\Contract\ValueObjects\Rent;
 use FullRent\Core\Contract\ValueObjects\RentAmount;
 use FullRent\Core\Contract\ValueObjects\RentDueDay;
+use FullRent\Core\Contract\ValueObjects\Tenant;
+use FullRent\Core\Contract\ValueObjects\TenantId;
 
 /**
  * Class ContractTest
@@ -32,9 +35,18 @@ final class ContractTest extends \TestCase
         $this->assertCount(1, $events);
         $this->assertInstanceOf(ContractWasDrafted::class, $events[0]->getPayload());
     }
+    public function testAttachingTenantToContract()
+    {
+        $contract = $this->makeContract();
+        $contract->attachTenant(new Tenant(TenantId::random()));
+
+        $events = $contract->getUncommittedEvents()->getIterator();
+        $this->assertCount(2, $events);
+        $this->assertInstanceOf(TenantJoinedContract::class, $events[1]->getPayload());
+    }
 
     /**
-     * @return \Rhumsaa\Uuid\Uuid
+     * @return ContractId
      */
     protected function makeContractId()
     {
@@ -77,7 +89,7 @@ final class ContractTest extends \TestCase
     }
 
     /**
-     * @return static
+     * @return Contract
      */
     protected function makeContract()
     {
