@@ -41,14 +41,13 @@ final class DraftContract
     private $deposit;
 
     /**
-     * @param ContractId $contractId
      * @param Landlord $landlord
      * @param ContractMinimalPeriod $contractMinimalPeriod
      * @param Property $property
      * @param Rent $rent
      * @param Deposit $deposit
      */
-    public function __construct( ContractId $contractId,
+    public function __construct(
         Landlord $landlord,
         ContractMinimalPeriod $contractMinimalPeriod,
         Property $property,
@@ -56,7 +55,7 @@ final class DraftContract
         Deposit $deposit)
     {
 
-        $this->contractId = $contractId;
+        $this->contractId = ContractId::random();
         $this->landlord = $landlord;
         $this->contractMinimalPeriod = $contractMinimalPeriod;
         $this->property = $property;

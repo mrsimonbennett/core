@@ -30,9 +30,8 @@ final class CompanyTest extends TestCase
 
         $this->assertCount(2, $events);
         $this->assertInstanceOf(\FullRent\Core\Company\Events\LandlordEnrolled::class, $events[1]->getPayload());
-
-
     }
+
     /**
      * @return Company
      */

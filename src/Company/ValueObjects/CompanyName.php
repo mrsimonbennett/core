@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Company\ValueObjects;
 
+use Broadway\Serializer\SerializableInterface;
+
 /**
  * Class CompanyName\ValueObjects
  * @package FullRent\Core\Company
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompanyName
+final class CompanyName implements SerializableInterface
 {
     /**
      * @var string
@@ -29,4 +31,19 @@ final class CompanyName
         return $this->name;
     }
 
+    /**
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static($data['name']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['name' => $this->name];
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Company\Events;
 
+use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
@@ -10,7 +11,7 @@ use FullRent\Core\Company\ValueObjects\CompanyName;
  * @package FullRent\Core\Company\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompanyHasBeenRegistered
+final class CompanyHasBeenRegistered implements SerializableInterface
 {
     /**
      * @var CompanyId
@@ -61,4 +62,24 @@ final class CompanyHasBeenRegistered
         return $this->companyDomain;
     }
 
+    /**
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new CompanyId($data['id']), CompanyName::deserialize($data['name']),
+            CompanyDomain::deserialize($data['domain']));
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'id' => (string)$this->companyId,
+            'name' => $this->companyName->serialize(),
+            'domain' => $this->companyDomain->serialize(),
+        ];
+    }
 }

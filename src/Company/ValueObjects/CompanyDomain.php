@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Company\ValueObjects;
 
+use Broadway\Serializer\SerializableInterface;
+
 /**
  * Class CompanyDomain
  * @package FullRent\Core\Company\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompanyDomain
+final class CompanyDomain implements SerializableInterface
 {
     /**
      * @var string
@@ -29,4 +31,19 @@ final class CompanyDomain
         return $this->domain;
     }
 
+    /**
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static($data['domain']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['domain' => $this->domain];
+    }
 }
