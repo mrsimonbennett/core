@@ -50,7 +50,7 @@ final class User extends EventSourcedAggregateRoot
     /**
      * @param UserRegistered $userRegistered
      */
-    public function applyRegisterUser(UserRegistered $userRegistered)
+    public function applyUserRegistered(UserRegistered $userRegistered)
     {
         $this->userId = $userRegistered->getUserId();
         $this->name = $userRegistered->getName();
