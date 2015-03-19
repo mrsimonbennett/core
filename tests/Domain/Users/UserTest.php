@@ -30,6 +30,9 @@ final class UserTest extends \TestCase
         $this->assertInstanceOf(UserRegistered::class, $events[0]->getPayload());
     }
 
+    /**
+     *
+     */
     public function testUpdatingUsersEmail()
     {
         $user = $this->registerUser();
@@ -41,6 +44,9 @@ final class UserTest extends \TestCase
         $this->checkCorrectEvent($events, 1, UsersEmailHasChanged::class);
     }
 
+    /**
+     *
+     */
     public function testChangingUsersName()
     {
         $user = $this->registerUser();
