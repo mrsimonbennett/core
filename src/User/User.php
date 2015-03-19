@@ -3,6 +3,7 @@ namespace FullRent\Core\User;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\User\Events\UserRegistered;
+use FullRent\Core\User\Events\UsersEmailHasChanged;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
@@ -48,14 +49,29 @@ final class User extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param Email $email
+     */
+    public function changeEmail(Email $email)
+    {
+        $this->apply(new UsersEmailHasChanged($email));
+    }
+    /**
      * @param UserRegistered $userRegistered
      */
-    public function applyUserRegistered(UserRegistered $userRegistered)
+    protected function applyUserRegistered(UserRegistered $userRegistered)
     {
         $this->userId = $userRegistered->getUserId();
         $this->name = $userRegistered->getName();
         $this->email = $userRegistered->getEmail();
         $this->password = $userRegistered->getPassword();
+    }
+
+    /**
+     * @param UsersEmailHasChanged $usersEmailHasChanged
+     */
+    protected function applyUsersEmailHasChanged(UsersEmailHasChanged $usersEmailHasChanged)
+    {
+        $this->email = $usersEmailHasChanged->getEmail();
     }
 
     /**
