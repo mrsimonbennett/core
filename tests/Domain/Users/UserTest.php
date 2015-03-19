@@ -1,6 +1,7 @@
 <?php
 namespace Domain\Users;
 
+use FullRent\Core\User\Events\UserHasChangedName;
 use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
 use FullRent\Core\User\User;
@@ -34,11 +35,21 @@ final class UserTest extends \TestCase
         $user = $this->registerUser();
 
         $user->changeEmail(new Email('simon@test.com'));
-        $events = $user->getUncommittedEvents()->getIterator();
+        $events = $this->events($user);
 
         $this->assertCount(2, $events);
-        $this->assertInstanceOf(UsersEmailHasChanged::class,$events[1]->getPayload());
+        $this->checkCorrectEvent($events, 1, UsersEmailHasChanged::class);
     }
+
+    public function testChangingUsersName()
+    {
+        $user = $this->registerUser();
+        $user->changeName(new Name('test', 'test'));
+
+        $events = $this->events($user);
+        $this->checkCorrectEvent($events, 1, UserHasChangedName::class);
+    }
+
     /**
      * @return User
      */
@@ -49,4 +60,6 @@ final class UserTest extends \TestCase
 
         return $user;
     }
+
+
 }

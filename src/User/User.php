@@ -2,6 +2,7 @@
 namespace FullRent\Core\User;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\User\Events\UserHasChangedName;
 use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
 use FullRent\Core\User\ValueObjects\Email;
@@ -47,13 +48,20 @@ final class User extends EventSourcedAggregateRoot
 
         return $user;
     }
-
     /**
      * @param Email $email
      */
     public function changeEmail(Email $email)
     {
         $this->apply(new UsersEmailHasChanged($email));
+    }
+
+    /**
+     * @param Name $name
+     */
+    public function changeName(Name $name)
+    {
+        $this->apply(new UserHasChangedName($name));
     }
     /**
      * @param UserRegistered $userRegistered
@@ -75,10 +83,17 @@ final class User extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param UserHasChangedName $userHasChangedName
+     */
+    protected function applyUserHasChangedName(UserHasChangedName $userHasChangedName)
+    {
+        $this->name = $userHasChangedName->getName();
+    }
+    /**
      * @return string
      */
     public function getAggregateRootId()
     {
-        return $this->userId;
+        return (string) $this->userId;
     }
 }
