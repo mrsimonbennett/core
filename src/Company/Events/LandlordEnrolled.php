@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Company\Events;
 
+use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Company\Landlord;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 
@@ -9,35 +10,35 @@ use FullRent\Core\Company\ValueObjects\CompanyId;
  * @package FullRent\Core\Company\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class LandlordEnrolled
+final class LandlordEnrolled implements SerializableInterface
 {
 
     /**
      * @var CompanyId
      */
-    private $contractId;
+    private $companyId;
     /**
      * @var Landlord
      */
     private $landlord;
 
     /**
-     * @param CompanyId $contractId
+     * @param CompanyId $companyId
      * @param Landlord $landlord
      */
-    public function __construct(CompanyId $contractId, Landlord $landlord)
+    public function __construct(CompanyId $companyId, Landlord $landlord)
     {
 
-        $this->contractId = $contractId;
+        $this->companyId = $companyId;
         $this->landlord = $landlord;
     }
 
     /**
      * @return CompanyId
      */
-    public function getContractId()
+    public function getCompanyId()
     {
-        return $this->contractId;
+        return $this->companyId;
     }
 
     /**
@@ -49,4 +50,23 @@ final class LandlordEnrolled
     }
 
 
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new CompanyId($data['company_id']), Landlord::deserialize($data['landlord']));
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'company_id' => (string)$this->companyId,
+            'landlord' => $this->landlord->serialize(),
+        ];
+    }
 }

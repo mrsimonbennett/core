@@ -4,6 +4,7 @@ namespace FullRent\Core\Company\Commands;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\Company\ValueObjects\LandlordId;
 
 /**
  * Class RegisterCompany
@@ -24,16 +25,22 @@ final class RegisterCompany
      * @var CompanyId
      */
     private $companyId;
+    /**
+     * @var LandlordId
+     */
+    private $landlordId;
 
     /**
      * @param CompanyName $companyName
      * @param CompanyDomain $companyDomain
+     * @param LandlordId $landlordId
      */
     public function __construct(CompanyName $companyName, CompanyDomain $companyDomain)
     {
         $this->companyId = CompanyId::random();
         $this->companyName = $companyName;
         $this->companyDomain = $companyDomain;
+        $this->landlordId = LandlordId::random();
     }
 
     /**
@@ -59,5 +66,14 @@ final class RegisterCompany
     {
         return $this->companyId;
     }
+
+    /**
+     * @return LandlordId
+     */
+    public function getLandlordId()
+    {
+        return $this->landlordId;
+    }
+
 
 }

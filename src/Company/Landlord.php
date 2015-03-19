@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Company;
 
+use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Company\ValueObjects\LandlordId;
 
 /**
@@ -8,7 +9,7 @@ use FullRent\Core\Company\ValueObjects\LandlordId;
  * @package FullRent\Core\Company
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Landlord
+final class Landlord implements SerializableInterface
 {
     /**
      * @var LandlordId
@@ -31,4 +32,19 @@ final class Landlord
         return $this->landlordId;
     }
 
+    /**
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new LandlordId($data['id']));
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['id' => (string)$this->landlordId];
+    }
 }

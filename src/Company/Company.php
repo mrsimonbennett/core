@@ -49,7 +49,7 @@ final class Company extends EventSourcedAggregateRoot
     /**
      * @param Landlord $landlord
      */
-    public function inRoleLandlord(Landlord $landlord)
+    public function enrolLandlord(Landlord $landlord)
     {
         $this->apply(new LandlordEnrolled($this->companyId, $landlord));
     }

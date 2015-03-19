@@ -36,6 +36,6 @@ final class CompaniesWriteController extends Controller
         );
 
         $this->bus->execute($command);
-        dd($command->getCompanyId());
+        dd($command->getCompanyId(), $command->getLandlordId());
     }
 }

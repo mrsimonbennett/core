@@ -25,7 +25,7 @@ final class CompanyTest extends TestCase
     {
         $company = $this->makeCompany();
 
-        $company->inRoleLandlord(new \FullRent\Core\Company\Landlord(\FullRent\Core\Company\ValueObjects\LandlordId::random()));
+        $company->enrolLandlord(new \FullRent\Core\Company\Landlord(\FullRent\Core\Company\ValueObjects\LandlordId::random()));
         $events = $company->getUncommittedEvents()->getIterator();
 
         $this->assertCount(2, $events);

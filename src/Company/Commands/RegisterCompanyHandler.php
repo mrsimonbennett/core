@@ -4,6 +4,7 @@ namespace FullRent\Core\Company\Commands;
 use FullRent\Core\CommandBus\CommandHandler;
 use FullRent\Core\Company\Company;
 use FullRent\Core\Company\CompanyRepository;
+use FullRent\Core\Company\Landlord;
 
 /**
  * Class RegisterCompanyHandler
@@ -36,6 +37,8 @@ final class RegisterCompanyHandler implements CommandHandler
             $command->getCompanyName(),
             $command->getCompanyDomain()
         );
+        $company->enrolLandlord(new Landlord($command->getLandlordId()));
+
 
         $this->companyRepository->save($company);
     }
