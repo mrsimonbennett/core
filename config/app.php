@@ -145,7 +145,6 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'App\Providers\CommandBusServiceProvider',
-		'App\Http\Companies\CompaniesHttpServiceProvider',
 
 		'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
 		'App\Providers\EventStoreServiceProvider',

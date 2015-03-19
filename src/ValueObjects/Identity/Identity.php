@@ -1,7 +1,6 @@
 <?php
-namespace FullRent\Core;
+namespace FullRent\Core\ValueObjects\Identity;
 
-use Rhumsaa\Uuid\Uuid;
 /**
  * Class UuidIdentity
  * @package Discuss

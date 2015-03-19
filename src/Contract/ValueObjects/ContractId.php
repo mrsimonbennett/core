@@ -1,8 +1,8 @@
 <?php
 namespace FullRent\Core\Contract\ValueObjects;
 
-use FullRent\Core\Identity;
-use FullRent\Core\UuidIdentity;
+use FullRent\Core\ValueObjects\Identity\Identity;
+use FullRent\Core\ValueObjects\Identity\UuidIdentity;
 
 final class ContractId extends UuidIdentity implements Identity
 {

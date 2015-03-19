@@ -12,7 +12,13 @@ use Illuminate\Support\ServiceProvider;
  */
 final class LaravelServiceProvider extends ServiceProvider
 {
-
+    public function boot()
+    {
+        $this->app['router']->group([], function($router)
+        {
+            require __DIR__ . '/../Http/routes.php';
+        });
+    }
     /**
      * Register the service provider.
      *
@@ -21,5 +27,7 @@ final class LaravelServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(CompanyRepository::class,EventStoreCompanyRepository::class);
+
+
     }
 }

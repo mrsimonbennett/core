@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core;
+namespace FullRent\Core\ValueObjects\Identity;
 use InvalidArgumentException;
 
 /**

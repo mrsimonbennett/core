@@ -1,6 +1,6 @@
 <?php
 /** @var Router $router */
-use App\Http\Companies\Controllers\CompaniesWriteController;
+use FullRent\Core\Company\Http\Controllers\CompaniesWriteController;
 use Illuminate\Routing\Router;
 
 $router->post('companies', CompaniesWriteController::class . '@create');

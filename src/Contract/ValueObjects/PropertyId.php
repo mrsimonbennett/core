@@ -1,9 +1,8 @@
 <?php
 namespace FullRent\Core\Contract\ValueObjects;
 
-use FullRent\Core\Identity;
-use FullRent\Core\UuidIdentity;
-
+use FullRent\Core\ValueObjects\Identity\Identity;
+use FullRent\Core\ValueObjects\Identity\UuidIdentity;
 /**
  * Class PropertyId
  * @package FullRent\Core\Contract\ValueObjects

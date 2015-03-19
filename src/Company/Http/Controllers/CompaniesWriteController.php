@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Companies\Controllers;
+namespace FullRent\Core\Company\Http\Controllers;
 
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\RegisterCompany;
