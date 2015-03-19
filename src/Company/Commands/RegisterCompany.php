@@ -33,7 +33,6 @@ final class RegisterCompany
     /**
      * @param CompanyName $companyName
      * @param CompanyDomain $companyDomain
-     * @param LandlordId $landlordId
      */
     public function __construct(CompanyName $companyName, CompanyDomain $companyDomain)
     {

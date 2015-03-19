@@ -11,5 +11,5 @@ use FullRent\Core\ValueObjects\Identity\UuidIdentity;
  */
 final class LandlordId extends UuidIdentity implements Identity
 {
-   
+
 }

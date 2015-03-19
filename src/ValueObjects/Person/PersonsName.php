@@ -6,7 +6,7 @@ namespace FullRent\Core\ValueObjects\Person;
  * @package FullRent\Core\ValueObjects\Person
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PersonsName
+class PersonsName
 {
     /**
      * @var string
