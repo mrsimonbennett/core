@@ -32,7 +32,7 @@ class HashedPassword
     /**
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return (string)$this->password;
     }

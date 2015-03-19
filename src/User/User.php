@@ -54,7 +54,7 @@ final class User extends EventSourcedAggregateRoot
     {
         $this->userId = $userRegistered->getUserId();
         $this->name = $userRegistered->getName();
-        $this->email = $userRegistered->getName();
+        $this->email = $userRegistered->getEmail();
         $this->password = $userRegistered->getPassword();
     }
 
