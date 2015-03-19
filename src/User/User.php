@@ -48,6 +48,7 @@ final class User extends EventSourcedAggregateRoot
 
         return $user;
     }
+
     /**
      * @param Email $email
      */
@@ -63,6 +64,7 @@ final class User extends EventSourcedAggregateRoot
     {
         $this->apply(new UserHasChangedName($name));
     }
+
     /**
      * @param UserRegistered $userRegistered
      */
@@ -89,11 +91,12 @@ final class User extends EventSourcedAggregateRoot
     {
         $this->name = $userHasChangedName->getName();
     }
+
     /**
      * @return string
      */
     public function getAggregateRootId()
     {
-        return (string) $this->userId;
+        return (string)$this->userId;
     }
 }
