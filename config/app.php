@@ -140,14 +140,16 @@ return [
 		/*
 		 * Application Service Providers...
 		 */
-		'App\Providers\AppServiceProvider',
-		'App\Providers\ConfigServiceProvider',
-		'App\Providers\EventServiceProvider',
-		'App\Providers\RouteServiceProvider',
-		'App\Providers\CommandBusServiceProvider',
+		'FullRent\Core\Application\Providers\AppServiceProvider',
+		'FullRent\Core\Application\Providers\ConfigServiceProvider',
+		'FullRent\Core\Application\Providers\EventServiceProvider',
+		'FullRent\Core\Application\Providers\RouteServiceProvider',
+		'FullRent\Core\Application\Providers\CommandBusServiceProvider',
 
 		'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
-		'App\Providers\EventStoreServiceProvider',
+		'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
+
+		'FullRent\Core\Application\Providers\EventStoreServiceProvider',
 
 	],
 

@@ -1,17 +1,18 @@
 <?php
-namespace FullRent\Core\Company\ServiceProviders;
+namespace FullRent\Core\User\ServiceProviders;
 
-use FullRent\Core\Company\CompanyRepository;
-use FullRent\Core\Company\EventStoreCompanyRepository;
+use FullRent\Core\User\EventStoreUserRepository;
+use FullRent\Core\User\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class LaravelServiceProvider
- * @package FullRent\Core\Company\ServiceProviders
+ * @package FullRent\Core\User\ServiceProviders
  * @author Simon Bennett <simon@bennett.im>
  */
 final class LaravelServiceProvider extends ServiceProvider
 {
+
     /**
      * Register the service provider.
      *
@@ -19,8 +20,6 @@ final class LaravelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(CompanyRepository::class,EventStoreCompanyRepository::class);
-
-
+        $this->app->bind(UserRepository::class, EventStoreUserRepository::class);
     }
 }

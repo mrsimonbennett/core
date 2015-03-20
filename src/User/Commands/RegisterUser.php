@@ -1,18 +1,17 @@
 <?php
-namespace FullRent\Core\User\Events;
+namespace FullRent\Core\User\Commands;
 
-use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 
 /**
- * Class UserRegistered
- * @package FullRent\Core\User
+ * Class RegisterUser
+ * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserRegistered implements SerializableInterface
+final class RegisterUser 
 {
     /**
      * @var UserId
@@ -77,31 +76,4 @@ final class UserRegistered implements SerializableInterface
         return $this->password;
     }
 
-    /**
-     * @param array $data
-     * @return mixed The object instance
-     */
-    public static function deserialize(array $data)
-    {
-        return new static(
-            new UserId($data['id']),
-            Name::deserialize($data['name']),
-            Email::deserialize($data['email']),
-            Password::deserialize($data['password'])
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function serialize()
-    {
-        return
-            [
-                'id' => (string)$this->userId,
-                'name' => $this->name->serialize(),
-                'email' => $this->email->serialize(),
-                'password' => $this->password->serialize(),
-            ];
-    }
 }

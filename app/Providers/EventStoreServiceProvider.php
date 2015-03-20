@@ -1,4 +1,4 @@
-<?php namespace App\Providers;
+<?php namespace FullRent\Core\Application\Providers;
 
 use Broadway\EventHandling\EventBusInterface;
 use Broadway\EventHandling\SimpleEventBus;

@@ -11,7 +11,7 @@
 |
 */
 
-use App\Exceptions\Handler;
+use FullRent\Core\Application\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 
 $app = new Illuminate\Foundation\Application(
@@ -31,12 +31,12 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
 	'Illuminate\Contracts\Http\Kernel',
-	'App\Http\Kernel'
+	'FullRent\Core\Application\Http\Kernel'
 );
 
 $app->singleton(
 	'Illuminate\Contracts\Console\Kernel',
-	'App\Console\Kernel'
+	'FullRent\Core\Application\Console\Kernel'
 );
 
 $app->singleton(

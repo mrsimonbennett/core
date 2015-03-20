@@ -1,4 +1,4 @@
-<?php namespace App\Providers;
+<?php namespace FullRent\Core\Application\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

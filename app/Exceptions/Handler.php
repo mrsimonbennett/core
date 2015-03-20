@@ -1,4 +1,4 @@
-<?php namespace App\Exceptions;
+<?php namespace FullRent\Core\Application\Exceptions;
 
 use Exception;
 use GrahamCampbell\Exceptions\ExceptionHandler as ExceptionHandler;

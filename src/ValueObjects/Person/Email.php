@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects\Person;
 
+use Broadway\Serializer\SerializableInterface;
+
 /**
  * Class Email
  * @package FullRent\Core\ValueObjects\Person
  * @author Simon Bennett <simon@bennett.im>
  */
-class Email
+class Email implements SerializableInterface
 {
     /**
      * @var string
@@ -36,7 +38,7 @@ class Email
      */
     public function __toString()
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -56,5 +58,22 @@ class Email
     public function equal(Email $other)
     {
         return $this->email === $other->getEmail();
+    }
+
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static($data['email']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['email' => $this->email];
     }
 }

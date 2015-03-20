@@ -1,5 +1,5 @@
 <?php
-namespace App\Providers;
+namespace FullRent\Core\Application\Providers;
 use Broadway\CommandHandling\SimpleCommandBus;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\CommandBus\LaravelCommandBus;

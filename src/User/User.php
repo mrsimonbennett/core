@@ -39,7 +39,7 @@ final class User extends EventSourcedAggregateRoot
      * @param Name $name
      * @param Email $email
      * @param Password $password
-     * @return static
+     * @return User
      */
     public static function registerUser(UserId $userId, Name $name, Email $email, Password $password)
     {

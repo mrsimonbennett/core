@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects\Person;
 
+use Broadway\Serializer\SerializableInterface;
+
 /**
  * Class HashedPassword
  * @package FullRent\Core\ValueObjects\Person
  * @author Simon Bennett <simon@bennett.im>
  */
-class HashedPassword
+class HashedPassword implements SerializableInterface
 {
     /**
      * @var string
@@ -35,5 +37,22 @@ class HashedPassword
     public function __toString()
     {
         return (string)$this->password;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static($data['hash']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['hash' => $this->password];
     }
 }
