@@ -220,7 +220,7 @@ mysql:
             grant:
                 - ALL
             name: fullrent
-            host: fullrent
+            host: localhost
             user: dbuser
             password: '123'
             sql_file: ''

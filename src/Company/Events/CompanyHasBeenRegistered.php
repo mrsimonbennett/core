@@ -5,6 +5,7 @@ use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class CompanyHasBeenRegistered
@@ -25,17 +26,27 @@ final class CompanyHasBeenRegistered implements SerializableInterface
      * @var CompanyDomain
      */
     private $companyDomain;
+    /**
+     * @var DateTime
+     */
+    private $createdAt;
 
     /**
      * @param CompanyId $companyId
      * @param CompanyName $companyName
      * @param CompanyDomain $companyDomain
+     * @param DateTime $createdAt
      */
-    public function __construct(CompanyId $companyId, CompanyName $companyName, CompanyDomain $companyDomain)
-    {
+    public function __construct(
+        CompanyId $companyId,
+        CompanyName $companyName,
+        CompanyDomain $companyDomain,
+        DateTime $createdAt
+    ) {
         $this->companyId = $companyId;
         $this->companyName = $companyName;
         $this->companyDomain = $companyDomain;
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -63,12 +74,21 @@ final class CompanyHasBeenRegistered implements SerializableInterface
     }
 
     /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return mixed The object instance
      */
     public static function deserialize(array $data)
     {
         return new static(new CompanyId($data['id']), CompanyName::deserialize($data['name']),
-            CompanyDomain::deserialize($data['domain']));
+            CompanyDomain::deserialize($data['domain']),
+            DateTime::deserialize($data['created_at']));
     }
 
     /**
@@ -80,6 +100,9 @@ final class CompanyHasBeenRegistered implements SerializableInterface
             'id' => (string)$this->companyId,
             'name' => $this->companyName->serialize(),
             'domain' => $this->companyDomain->serialize(),
+            'created_at' => $this->createdAt->serialize(),
         ];
     }
+
+
 }

@@ -151,6 +151,11 @@ return [
 
 		'FullRent\Core\Application\Providers\EventStoreServiceProvider',
 
+		'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
+
+		'FullRent\Core\Application\Infrastructure\LaravelBridge',
+
+
 	],
 
 	/*

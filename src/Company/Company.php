@@ -7,6 +7,7 @@ use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class Company
@@ -41,7 +42,7 @@ final class Company extends EventSourcedAggregateRoot
     public static function registerCompany(CompanyId $companyId, CompanyName $companyName, CompanyDomain $companyDomain)
     {
         $company = new static();
-        $company->apply(new CompanyHasBeenRegistered($companyId, $companyName, $companyDomain));
+        $company->apply(new CompanyHasBeenRegistered($companyId, $companyName, $companyDomain, DateTime::now()));
 
         return $company;
     }

@@ -5,31 +5,41 @@ use Broadway\EventHandling\SimpleEventBus;
 use Broadway\EventStore\EventStoreInterface;
 use EventStore\Broadway\BroadwayEventStore;
 use EventStore\EventStore;
+use FullRent\Core\Application\Infrastructure\BroadWayToLaravelEvents;
+use FullRent\Core\Application\Infrastructure\LogEvents;
 use Illuminate\Support\ServiceProvider;
 
-class EventStoreServiceProvider extends ServiceProvider {
+class EventStoreServiceProvider extends ServiceProvider
+{
 
-	/**
-	 * Bootstrap the application services.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		//
-	}
+    /**
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
 
-	/**
-	 * Register the application services.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->app->bind(EventBusInterface::class, SimpleEventBus::class);
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton(EventBusInterface::class, SimpleEventBus::class);
 
-		$this->app->bind(EventStoreInterface::class, function () {
-			return new BroadwayEventStore(new EventStore('http://172.16.1.10:2113'));
-		});
-	}
+        /** @var EventBusInterface $eventBus */
+        $eventBus = $this->app->make(EventBusInterface::class);
+        $eventBus->subscribe($this->app->make(LogEvents::class));
+        $eventBus->subscribe($this->app->make(BroadWayToLaravelEvents::class));
+
+
+        $this->app->bind(EventStoreInterface::class, function () {
+            return new BroadwayEventStore(new EventStore('http://172.16.1.10:2113'));
+        });
+
+    }
 }
