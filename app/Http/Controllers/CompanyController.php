@@ -2,6 +2,7 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
+use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\RegisterCompany;
 use FullRent\Core\Company\CompanyRepository;
@@ -48,8 +49,9 @@ final class CompanyController extends Controller
 
     /**
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function createCompany(Request $request)
+    public function createCompany(CreateCompanyHttpRequest $request)
     {
         $registerCompanyCommand = new RegisterCompany(
             new CompanyName($request->get('company_name')),
@@ -60,7 +62,7 @@ final class CompanyController extends Controller
 
         $registerUserCommand = new RegisterUser(
             UserId::fromIdentity($registerCompanyCommand->getLandlordId()),
-            new Name($request->get('user_legal_name'), $request->get('user_know_as')),
+            new Name($request->get('user_legal_name'), $request->get('user_know_as','')),
             new Email($request->get('user_email')),
             new Password(bcrypt($request->get('user_password')))
         );
@@ -71,8 +73,8 @@ final class CompanyController extends Controller
             'user_id' => (string)$registerUserCommand->getUserId()
         ]);
     }
-    public function show()
+    public function show($id)
     {
-        dd($this->companyRepository->load('1c84ed6c-a09f-4d3f-b56d-7f5154eede90'));
+        dd($this->companyRepository->load($id));
     }
 }

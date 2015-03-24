@@ -1,14 +1,13 @@
-<?php namespace FullRent\Core\Application\Http\Requests;
+<?php
+namespace FullRent\Core\Application\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Validator;
-use ValueObjects\Identity\UUID;
-
-abstract class Request extends FormRequest {
-
+/**
+ * Class ApiRequest
+ * @package FullRent\Core\Application\Http\Requests
+ * @author Simon Bennett <simon@bennett.im>
+ */
+final class ApiRequest 
+{
     public function response(array $errors)
     {
         return new JsonResponse(['message' => 'Bad Request', 'validation' => $errors], 400);
@@ -89,5 +88,4 @@ abstract class Request extends FormRequest {
             ":attribute must be before end date"
         );
     }
-
 }
