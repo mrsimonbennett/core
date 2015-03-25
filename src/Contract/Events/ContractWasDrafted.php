@@ -119,7 +119,7 @@ final class ContractWasDrafted implements SerializableInterface
      */
     public static function deserialize(array $data)
     {
-        return new static(new ContractId(),
+        return new static(new ContractId($data['id']),
                           Landlord::deserialize($data['landlord']),
                           ContractMinimalPeriod::deserialize($data['minimal-period']),
                           Property::deserialize($data['property']),
