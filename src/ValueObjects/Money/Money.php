@@ -1,13 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects\Money;
 
+use Broadway\Serializer\SerializableInterface;
 use InvalidArgumentException;
 
 /**
  * Class Money
  * @author  Simon Bennett <simon@bennett.im>
  */
-class Money
+class Money implements SerializableInterface
 {
     /**
      * @var int
@@ -58,5 +59,22 @@ class Money
     public function __toString()
     {
         return "£" . number_format($this->getAmountInPounds(), 2, '.', '');
+    }
+
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static($data['amount']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['amount' => $this->amount];
     }
 }

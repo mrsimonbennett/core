@@ -108,6 +108,6 @@ final class Contract extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return (string)$this->contractId;
+        return 'contract-' . (string)$this->contractId;
     }
 }

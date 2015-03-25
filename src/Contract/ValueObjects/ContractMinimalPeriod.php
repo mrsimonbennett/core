@@ -1,21 +1,22 @@
 <?php
 namespace FullRent\Core\Contract\ValueObjects;
 
-use Carbon\Carbon;
+use Broadway\Serializer\SerializableInterface;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class ContractMinimalPeriod
  * @package FullRent\Core\Contract
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractMinimalPeriod
+final class ContractMinimalPeriod implements SerializableInterface
 {
     /**
-     * @var Carbon
+     * @var DateTime
      */
     private $start;
     /**
-     * @var Carbon
+     * @var DateTime
      */
     private $end;
     /**
@@ -24,11 +25,11 @@ final class ContractMinimalPeriod
     private $continue;
 
     /**
-     * @param Carbon $start
-     * @param Carbon $end
+     * @param DateTime $start
+     * @param DateTime $end
      * @param bool $continue Does contract continue after period
      */
-    public function __construct(Carbon $start, Carbon $end, $continue)
+    public function __construct(DateTime $start, DateTime $end, $continue)
     {
         $this->start = $start;
         $this->end = $end;
@@ -36,7 +37,7 @@ final class ContractMinimalPeriod
     }
 
     /**
-     * @return Carbon
+     * @return DateTime
      */
     public function getStart()
     {
@@ -44,7 +45,7 @@ final class ContractMinimalPeriod
     }
 
     /**
-     * @return Carbon
+     * @return DateTime
      */
     public function getEnd()
     {
@@ -60,4 +61,25 @@ final class ContractMinimalPeriod
     }
 
 
+    /**
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(DateTime::deserialize($data['start']),
+                          DateTime::deserialize($data['start']),
+                          $data['continues']);
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'start'     => $this->start->serialize(),
+            'end'       => $this->end->serialize(),
+            'continues' => $this->continue,
+        ];
+    }
 }

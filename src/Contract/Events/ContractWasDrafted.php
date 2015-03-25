@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Contract\Events;
 
+use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
 use FullRent\Core\Contract\ValueObjects\Deposit;
@@ -13,7 +14,7 @@ use FullRent\Core\Contract\ValueObjects\Rent;
  * @package FullRent\Core\Contract\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractWasDrafted
+final class ContractWasDrafted implements SerializableInterface
 {
     /**
      * @var ContractId
@@ -112,4 +113,32 @@ final class ContractWasDrafted
         return $this->landlord;
     }
 
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new ContractId(),
+                          Landlord::deserialize($data['landlord']),
+                          ContractMinimalPeriod::deserialize($data['minimal-period']),
+                          Property::deserialize($data['property']),
+                          Rent::deserialize($data['rent']),
+                          Deposit::deserialize($data['deposit']));
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'id'             => (string)$this->contractId,
+            'minimal-period' => $this->contractMinimalPeriod->serialize(),
+            'property'       => $this->property->serialize(),
+            'landlord'       => $this->landlord->serialize(),
+            'rent'           => $this->rent->serialize(),
+            'deposit'        => $this->deposit->serialize(),
+        ];
+    }
 }

@@ -17,6 +17,7 @@ use FullRent\Core\Contract\ValueObjects\RentAmount;
 use FullRent\Core\Contract\ValueObjects\RentDueDay;
 use FullRent\Core\Contract\ValueObjects\Tenant;
 use FullRent\Core\Contract\ValueObjects\TenantId;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class ContractTest
@@ -59,8 +60,8 @@ final class ContractTest extends \TestCase
     protected function makeContractDuration()
     {
         return new ContractMinimalPeriod(
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->addMonths(12)->endOfMonth(),
+            DateTime::now()->startOfMonth(),
+            DateTime::now()->addMonths(12)->endOfMonth(),
             false);
     }
 
@@ -85,7 +86,7 @@ final class ContractTest extends \TestCase
      */
     protected function makeDeposit()
     {
-        return new Deposit(DepositAmount::fromPounds(100), Carbon::now());
+        return new Deposit(DepositAmount::fromPounds(100), DateTime::now());
     }
 
     /**
