@@ -78,6 +78,6 @@ final class Company extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return (string)$this->companyId;
+        return 'company-'.(string)$this->companyId;
     }
 }

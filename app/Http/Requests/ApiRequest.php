@@ -6,7 +6,7 @@ namespace FullRent\Core\Application\Http\Requests;
  * @package FullRent\Core\Application\Http\Requests
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApiRequest 
+class ApiRequest
 {
     public function response(array $errors)
     {

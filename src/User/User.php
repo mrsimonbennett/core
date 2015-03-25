@@ -97,6 +97,6 @@ final class User extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return (string)$this->userId;
+        return 'user-'.(string)$this->userId;
     }
 }

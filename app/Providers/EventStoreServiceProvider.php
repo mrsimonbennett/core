@@ -41,5 +41,6 @@ class EventStoreServiceProvider extends ServiceProvider
             return new BroadwayEventStore(new EventStore('http://172.16.1.10:2113'));
         });
 
+
     }
 }
