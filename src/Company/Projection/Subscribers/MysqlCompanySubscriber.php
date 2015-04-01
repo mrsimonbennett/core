@@ -12,7 +12,7 @@ use Illuminate\Database\Connection;
  * @package FullRent\Core\Company\Projection\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MysqlSubscriber
+final class MysqlCompanySubscriber
 {
     /**
      * @var Connection
