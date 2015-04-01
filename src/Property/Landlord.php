@@ -33,11 +33,12 @@ final class Landlord implements SerializableInterface
     }
 
     /**
+     * @param array $data
      * @return mixed The object instance
      */
     public static function deserialize(array $data)
     {
-        return new static($data['id']);
+        return new static(new LandlordId($data['id']));
     }
 
     /**
