@@ -4,7 +4,7 @@ vagrantfile-local:
         box: puphpet/debian75-x64
         box_url: puphpet/debian75-x64
         hostname: 'FullRent'
-        memory: '512'
+        memory: '1024'
         cpus: '1'
         chosen_provider: virtualbox
         network:
@@ -264,7 +264,7 @@ mailcatcher:
         mailcatcher_path: /usr/local/rvm/wrappers/default
         from_email_method: inline
 beanstalkd:
-    install: '0'
+    install: '1'
     settings:
         listenaddress: 0.0.0.0
         listenport: '13000'
@@ -273,7 +273,7 @@ beanstalkd:
         binlogdir: /var/lib/beanstalkd/binlog
         binlogfsync: null
         binlogsize: '10485760'
-    beanstalk_console: 0
+    beanstalk_console: 1
     binlogdir: /var/lib/beanstalkd/binlog
 rabbitmq:
     install: '0'
