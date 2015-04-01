@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers;
 
+use FullRent\Core\User\Exceptions\UserNotFoundException;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\UserId;
 use Illuminate\Routing\Controller;
