@@ -12,6 +12,8 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'FullRent\Core\Application\Console\Commands\Inspire',
+		'FullRent\Core\Application\Console\Commands\ReplaceEvents',
+
 	];
 
 	/**
