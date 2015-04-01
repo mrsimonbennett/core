@@ -22,8 +22,8 @@ class DraftContractHttpRequest extends Request
     public function rules()
     {
         return [
-            "landlord_id" => 'required|uuid',//|exists:Company,uuid,deleted_at,NULL',
-            'property_id' => 'required|uuid',//|exists:Property,uuid',
+            "landlord_id" => 'required|uuid|exists:Company,uuid',
+            'property_id' => 'required|uuid|exists:Property,uuid',
             'rent' => 'required|integer',
             'deposit' => 'required|integer',
             'start_date' => 'required|date_format:d/m/Y|before_date:end_date',

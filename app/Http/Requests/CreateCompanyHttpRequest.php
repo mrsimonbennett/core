@@ -21,9 +21,9 @@ class CreateCompanyHttpRequest extends Request
     public function rules()
     {
         return [
-            'company_domain' => 'required|min:2|max:62|alpha_dash',//|unique:company,domain',
+            'company_domain' => 'required|min:2|max:62|alpha_dash|unique:companies,domain',
             'company_name' => 'required',
-            'user_email' => 'required|email',//|unique:user,email_email',
+            'user_email' => 'required|email|unique:users,email',
             'user_legal_name' => 'required',
             'user_password' => 'required|min:8',
         ];

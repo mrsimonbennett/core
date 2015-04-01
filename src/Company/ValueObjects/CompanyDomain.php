@@ -46,4 +46,13 @@ final class CompanyDomain implements SerializableInterface
     {
         return ['domain' => $this->domain];
     }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return (string)$this->domain;
+    }
+
 }

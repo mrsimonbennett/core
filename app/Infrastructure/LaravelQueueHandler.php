@@ -1,17 +1,16 @@
 <?php
 namespace FullRent\Core\Application\Infrastructure;
 
-use Broadway\Domain\DomainMessage;
-use Broadway\EventHandling\EventListenerInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 
 /**
- * Class BroadWayToLaravelEvents
+ * Class LaravelQueueHandler
  * @package FullRent\Core\Application\Infrastructure
  * @author Simon Bennett <simon@bennett.im>
  */
-final class BroadWayToLaravelEvents implements EventListenerInterface
+final class LaravelQueueHandler
 {
+    use \Illuminate\Queue\InteractsWithQueue;
     /**
      * @var Dispatcher
      */
@@ -25,11 +24,16 @@ final class BroadWayToLaravelEvents implements EventListenerInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * @param DomainMessage $domainMessage
-     */
-    public function handle(DomainMessage $domainMessage)
+    public function fire($job, $data)
     {
-        \Queue::push(LaravelQueueHandler::class,['type' => $domainMessage->getType(),'job' => $domainMessage->getPayload()->serialize()]);
+        $this->dispatcher->fire($data['type'],
+            (call_user_func(
+                [
+                    str_replace('.', '\\', $data['type']),
+                    'deserialize'
+                ],
+                $data['job']
+            )));
+        return $job->delete();
     }
 }

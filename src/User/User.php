@@ -9,6 +9,7 @@ use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class User
@@ -34,6 +35,8 @@ final class User extends EventSourcedAggregateRoot
      */
     private $password;
 
+    private $createdAt;
+
     /**
      * @param UserId $userId
      * @param Name $name
@@ -44,7 +47,7 @@ final class User extends EventSourcedAggregateRoot
     public static function registerUser(UserId $userId, Name $name, Email $email, Password $password)
     {
         $user = new static();
-        $user->apply(new UserRegistered($userId, $name, $email, $password));
+        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now()));
 
         return $user;
     }
@@ -74,6 +77,7 @@ final class User extends EventSourcedAggregateRoot
         $this->name = $userRegistered->getName();
         $this->email = $userRegistered->getEmail();
         $this->password = $userRegistered->getPassword();
+        $this->createdAt = $userRegistered->getCreatedAt();
     }
 
     /**

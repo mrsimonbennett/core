@@ -19,4 +19,9 @@ final class JsonResponse
         $extraInfo = ['status' => 'success', 'signature' => md5(json_encode($data))];
         return new BaseJsonResponse(array_merge($extraInfo, $data), 200);
     }
+    public function notFound($data = [])
+    {
+        $extraInfo = ['status' => 'error', 'signature' => md5(json_encode($data))];
+        return new BaseJsonResponse(array_merge($extraInfo, $data), 404);
+    }
 }

@@ -12,6 +12,8 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected $scanEvents = [
         'FullRent\Core\Company\Projection\Subscribers\MysqlSubscriber',
+        'FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber',
+
     ];
 
     /**

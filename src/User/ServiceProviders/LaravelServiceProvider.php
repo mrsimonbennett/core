@@ -2,6 +2,8 @@
 namespace FullRent\Core\User\ServiceProviders;
 
 use FullRent\Core\User\EventStoreUserRepository;
+use FullRent\Core\User\Projections\MysqlUserReadRepository;
+use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,5 +23,6 @@ final class LaravelServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(UserRepository::class, EventStoreUserRepository::class);
+        $this->app->bind(UserReadRepository::class,MysqlUserReadRepository::class);
     }
 }

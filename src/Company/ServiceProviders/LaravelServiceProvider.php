@@ -3,6 +3,8 @@ namespace FullRent\Core\Company\ServiceProviders;
 
 use FullRent\Core\Company\CompanyRepository;
 use FullRent\Core\Company\EventStoreCompanyRepository;
+use FullRent\Core\Company\Projection\CompanyReadRepository;
+use FullRent\Core\Company\Projection\MySqlCompanyReadRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -20,7 +22,6 @@ final class LaravelServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(CompanyRepository::class,EventStoreCompanyRepository::class);
-
-
+        $this->app->bind(CompanyReadRepository::class, MysqlCompanyReadRepository::class);
     }
 }

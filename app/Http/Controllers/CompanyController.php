@@ -6,6 +6,8 @@ use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\RegisterCompany;
 use FullRent\Core\Company\CompanyRepository;
+use FullRent\Core\Company\Exceptions\CompanyNotFoundException;
+use FullRent\Core\Company\Projection\CompanyReadRepository;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\User\Commands\RegisterUser;
@@ -35,16 +37,24 @@ final class CompanyController extends Controller
      * @var CompanyRepository
      */
     private $companyRepository;
+    /**
+     * @var CompanyReadRepository
+     */
+    private $companyReadRepository;
 
     /**
      * @param CommandBus $bus
      * @param JsonResponse $jsonResponse
+     * @param CompanyReadRepository $companyReadRepository
      */
-    public function __construct(CommandBus $bus, JsonResponse $jsonResponse, CompanyRepository $companyRepository)
-    {
+    public function __construct(
+        CommandBus $bus,
+        JsonResponse $jsonResponse,
+        CompanyReadRepository $companyReadRepository
+    ) {
         $this->bus = $bus;
         $this->jsonResponse = $jsonResponse;
-        $this->companyRepository = $companyRepository;
+        $this->companyReadRepository = $companyReadRepository;
     }
 
     /**
@@ -62,19 +72,44 @@ final class CompanyController extends Controller
 
         $registerUserCommand = new RegisterUser(
             UserId::fromIdentity($registerCompanyCommand->getLandlordId()),
-            new Name($request->get('user_legal_name'), $request->get('user_know_as','')),
+            new Name($request->get('user_legal_name'), $request->get('user_know_as', '')),
             new Email($request->get('user_email')),
             new Password(bcrypt($request->get('user_password')))
         );
         $this->bus->execute($registerUserCommand);
 
         return $this->jsonResponse->success([
-            'company_id' => (string)$registerCompanyCommand->getCompanyId(),
-            'user_id' => (string)$registerUserCommand->getUserId()
-        ]);
+                                                'company_id' => (string)$registerCompanyCommand->getCompanyId(),
+                                                'user_id'    => (string)$registerUserCommand->getUserId()
+                                            ]);
     }
-    public function show($id)
+
+    /**
+     *
+     */
+    public function show($companyDomain)
     {
-        dd($this->companyRepository->load($id));
+        try {
+            $company = $this->companyReadRepository->getByDomain(new CompanyDomain($companyDomain));
+
+            return $this->jsonResponse->success(['company' => (array)$company]);
+        } catch (CompanyNotFoundException $ex) {
+            return $this->jsonResponse->notFound(['exists' => false]);
+        }
+    }
+
+    /**
+     * @param $companyDomain
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkExists($companyDomain)
+    {
+        try {
+            $this->companyReadRepository->getByDomain(new CompanyDomain($companyDomain));
+
+            return $this->jsonResponse->success(['exists' => true]);
+        } catch (CompanyNotFoundException $ex) {
+            return $this->jsonResponse->success(['exists' => false]);
+        }
     }
 }

@@ -6,6 +6,7 @@ use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class UserRegistered
@@ -30,19 +31,25 @@ final class UserRegistered implements SerializableInterface
      * @var Password
      */
     private $password;
+    /**
+     * @var DateTime
+     */
+    private $createdAt;
 
     /**
      * @param UserId $userId
      * @param Name $name
      * @param Email $email
      * @param Password $password
+     * @param DateTime $createdAt
      */
-    public function __construct(UserId $userId, Name $name, Email $email, Password $password)
+    public function __construct(UserId $userId, Name $name, Email $email, Password $password, DateTime $createdAt)
     {
         $this->userId = $userId;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -87,7 +94,8 @@ final class UserRegistered implements SerializableInterface
             new UserId($data['id']),
             Name::deserialize($data['name']),
             Email::deserialize($data['email']),
-            Password::deserialize($data['password'])
+            Password::deserialize($data['password']),
+            DateTime::deserialize($data['created'])
         );
     }
 
@@ -102,6 +110,15 @@ final class UserRegistered implements SerializableInterface
                 'name' => $this->name->serialize(),
                 'email' => $this->email->serialize(),
                 'password' => $this->password->serialize(),
+                'created' => $this->createdAt->serialize(),
             ];
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
