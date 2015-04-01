@@ -45,4 +45,11 @@ final class Parking implements SerializableInterface
     {
         return ['count' => $this->parkingCount];
     }
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->parkingCount;
+    }
 }

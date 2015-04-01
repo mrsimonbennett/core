@@ -30,6 +30,7 @@ final class BedRooms implements SerializableInterface
     {
         return $this->bedroomCount;
     }
+
     /**
      * @return mixed The object instance
      */
@@ -45,4 +46,14 @@ final class BedRooms implements SerializableInterface
     {
         return ['count' => $this->bedroomCount];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->bedroomCount;
+    }
+
+
 }

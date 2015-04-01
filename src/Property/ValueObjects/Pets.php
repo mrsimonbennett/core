@@ -85,4 +85,12 @@ final class Pets implements SerializableInterface
     {
         return ['allowed' => $this->allowed, 'permission-required' => $this->permissionRequired];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) "Pets Unknown";
+    }
 }

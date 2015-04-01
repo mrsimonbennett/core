@@ -50,7 +50,7 @@ final class CompanyDomain implements SerializableInterface
     /**
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return (string)$this->domain;
     }

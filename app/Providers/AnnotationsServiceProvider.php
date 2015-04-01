@@ -2,6 +2,9 @@
 namespace FullRent\Core\Application\Providers;
 
 use Collective\Annotations\AnnotationsServiceProvider as ServiceProvider;
+use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
+use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
+use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 
 class AnnotationsServiceProvider extends ServiceProvider {
 
@@ -11,9 +14,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $scanEvents = [
-        'FullRent\Core\Company\Projection\Subscribers\MysqlSubscriber',
-        'FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber',
-
+        MysqlCompanySubscriber::class,
+        UserMysqlSubscriber::class,
+        MysqlPropertySubscriber::class,
     ];
 
     /**

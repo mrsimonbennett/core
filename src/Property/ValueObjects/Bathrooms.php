@@ -46,4 +46,12 @@ final class Bathrooms implements SerializableInterface
     {
         return ['count' => $this->bathroomCount];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->bathroomCount;
+    }
 }
