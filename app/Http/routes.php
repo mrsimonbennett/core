@@ -17,6 +17,8 @@ $router->get('companies/{domain}', CompanyController::class . '@show');
  * Properties
  */
 $router->post('properties', PropertiesController::class . '@listNewProperty');
+$router->get('properties', PropertiesController::class . '@index');
+$router->get('properties/{id}', PropertiesController::class . '@show');
 
 /**
  * Contracts

@@ -28,5 +28,4 @@ class CreateCompanyHttpRequest extends Request
             'user_password' => 'required|min:8',
         ];
     }
-
 }

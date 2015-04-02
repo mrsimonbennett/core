@@ -1,0 +1,53 @@
+<?php
+namespace FullRent\Core\Property\Read;
+
+use FullRent\Core\Property\Exceptions\PropertyNotFoundException;
+use FullRent\Core\Property\ValueObjects\CompanyId;
+use FullRent\Core\Property\ValueObjects\PropertyId;
+use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
+use stdClass;
+
+/**
+ * Class MysqlPropertiesReadRepository
+ * @package FullRent\Core\Property\Read
+ * @author Simon Bennett <simon@bennett.im>
+ */
+final class MysqlPropertiesReadRepository implements PropertiesReadRepository
+{
+    /**
+     * @var Connection
+     */
+    private $db;
+
+    /**
+     * @param DatabaseManager $db
+     */
+    public function __construct(DatabaseManager $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * @param CompanyId $companyId
+     * @return mixed
+     */
+    public function getByCompany(CompanyId $companyId)
+    {
+        return $this->db->table('properties')->where('company_id', $companyId)->get();
+    }
+
+    /**
+     * @param PropertyId $propertyId
+     * @throws PropertyNotFoundException
+     * @return stdClass
+     */
+    public function getById(PropertyId $propertyId)
+    {
+        if (is_null($property = $this->db->table('properties')->where('id', $propertyId)->first())) {
+            throw new PropertyNotFoundException;
+        }
+
+        return $property;
+    }
+}
