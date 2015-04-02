@@ -90,10 +90,10 @@ Vagrant.configure('2') do |config|
 
       if folder['sync_type'] == 'nfs'
         if Vagrant.has_plugin?('vagrant-bindfs')
-          config.vm.synced_folder "#{folder['source']}", "/mnt/vagrant-#{i}", id: "#{i}", type: 'nfs'
+          config.vm.synced_folder "#{folder['source']}", "/mnt/vagrant-#{i}", id: "#{i}", type: 'nfs', mount_options: ['actimeo=2']
           config.bindfs.bind_folder "/mnt/vagrant-#{i}", "#{folder['target']}", owner: sync_owner, group: sync_group, perms: "u=rwX:g=rwX:o=rD"
         else
-          config.vm.synced_folder "#{folder['source']}", "#{folder['target']}", id: "#{i}", type: 'nfs'
+          config.vm.synced_folder "#{folder['source']}", "#{folder['target']}", id: "#{i}", type: 'nfs', mount_options: ['actimeo=2']
         end
       elsif folder['sync_type'] == 'smb'
         config.vm.synced_folder "#{folder['source']}", "#{folder['target']}", id: "#{i}", type: 'smb'
@@ -115,7 +115,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.usable_port_range = (data['vm']['usable_port_range']['start'].to_i..data['vm']['usable_port_range']['stop'].to_i)
-
+  config.vm.boot_timeout = 600
   unless ENV.fetch('VAGRANT_DEFAULT_PROVIDER', '').strip.empty?
     data['vm']['chosen_provider'] = ENV['VAGRANT_DEFAULT_PROVIDER'];
   end
