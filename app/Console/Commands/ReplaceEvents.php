@@ -50,6 +50,7 @@ class ReplaceEvents extends Command
     {
         $es = new EventStore('http://172.16.1.10:2113');
 
+        $this->line('Running: '.ucfirst($this->argument('type')));
         try {
             $feed = $es->openStreamFeed('$ce-' . $this->argument('type'), EntryEmbedMode::RICH());
         } catch (StreamNotFoundException $ex) {
@@ -60,10 +61,10 @@ class ReplaceEvents extends Command
         $feed = $es
             ->navigateStreamFeed(
                 $feed,
-                LinkRelation::Last()
+                LinkRelation::FIRST()
             );
 
-        $rel = LinkRelation::PREVIOUS();
+        $rel = LinkRelation::NEXT();
 
         $messages = [];
         $i = 0;
@@ -82,11 +83,10 @@ class ReplaceEvents extends Command
                 ->navigateStreamFeed(
                     $feed,
                     $rel
-                )
-            ;
+                );
         }
-        foreach($messages as $message)
-        {
+        foreach (array_reverse($messages) as $message) {
+            $this->line($message['eventType']);
             $this->dispatcher->fire($message['eventClass'],
                 (call_user_func(
                     [
@@ -96,6 +96,7 @@ class ReplaceEvents extends Command
                     $message['data']
                 )));
         }
+        $this->line("");
 
     }
 
