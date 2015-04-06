@@ -3,6 +3,10 @@ namespace FullRent\Core\Property;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Property\Events\NewPropertyListed;
+use FullRent\Core\Property\Events\PropertyAcceptingApplications;
+use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
+use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
 use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
@@ -54,8 +58,23 @@ final class Property extends EventSourcedAggregateRoot
      * @var DateTime
      */
     private $listedAt;
+    /**
+     * @var DateTime
+     */
+    private $acceptingApplicationsFrom = false;
 
 
+    /**
+     * @param PropertyId $propertyId
+     * @param Address $address
+     * @param Company $company
+     * @param Landlord $landlord
+     * @param BedRooms $bedRooms
+     * @param Bathrooms $bathrooms
+     * @param Parking $parking
+     * @param Pets $pets
+     * @return static
+     */
     public static function listNewProperty(
         PropertyId $propertyId,
         Address $address,
@@ -68,11 +87,44 @@ final class Property extends EventSourcedAggregateRoot
     ) {
         $property = new static();
         $property->apply(new NewPropertyListed($propertyId, $address, $company, $landlord, $bedRooms, $bathrooms,
-            $parking, $pets, DateTime::now()));
+                                               $parking, $pets, DateTime::now()));
 
         return $property;
     }
 
+    /**
+     * @param DateTime $acceptingAt
+     * @throws PropertyAlreadyAcceptingApplicationsException
+     */
+    public function acceptApplications(DateTime $acceptingAt = null)
+    {
+        if ($this->acceptingApplicationsFrom) {
+            throw new PropertyAlreadyAcceptingApplicationsException();
+        }
+
+        if (is_null($acceptingAt)) {
+            $acceptingAt = DateTime::now();
+        }
+
+        $this->apply(new PropertyAcceptingApplications($this->propertyId, $acceptingAt));
+    }
+
+    public function closeApplications(DateTime $closedAt = null)
+    {
+        if (!$this->acceptingApplicationsFrom) {
+            throw new PropertyAlreadyClosedToApplicationsException();
+        }
+
+        if (is_null($closedAt)) {
+            $closedAt = DateTime::now();
+        }
+
+        $this->apply(new PropertyClosedAcceptingApplications($this->propertyId, $closedAt));
+    }
+
+    /**
+     * @param NewPropertyListed $newPropertyListed
+     */
     public function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
     {
         $this->propertyId = $newPropertyListed->getPropertyId();
@@ -84,6 +136,17 @@ final class Property extends EventSourcedAggregateRoot
         $this->parking = $newPropertyListed->getParking();
         $this->pets = $newPropertyListed->getPets();
         $this->listedAt = $newPropertyListed->getListedAt();
+    }
+
+    public function applyPropertyAcceptingApplications(PropertyAcceptingApplications $propertyAcceptingApplications)
+    {
+        $this->acceptingApplicationsFrom = true;
+    }
+
+    public function applyPropertyClosedAcceptingApplications(
+        PropertyClosedAcceptingApplications $propertyClosedAcceptingApplications
+    ) {
+        $this->acceptingApplicationsFrom = false;
     }
 
     /**

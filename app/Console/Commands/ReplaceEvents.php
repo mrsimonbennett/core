@@ -1,7 +1,9 @@
 <?php namespace FullRent\Core\Application\Console\Commands;
 
 use EventStore\EventStore;
+use EventStore\Exception\StreamNotFoundException;
 use EventStore\StreamFeed\EntryEmbedMode;
+use EventStore\StreamFeed\LinkRelation;
 use Illuminate\Console\Command;
 use Illuminate\Events\Dispatcher;
 use Symfony\Component\Console\Input\InputArgument;
@@ -47,22 +49,54 @@ class ReplaceEvents extends Command
     public function fire()
     {
         $es = new EventStore('http://172.16.1.10:2113');
-        $stream = $es->openStreamFeed('$ce-' . $this->argument('type'), EntryEmbedMode::RICH());
-        foreach ($stream->getEntries() as $entry) {
 
+        try {
+            $feed = $es->openStreamFeed('$ce-' . $this->argument('type'), EntryEmbedMode::RICH());
+        } catch (StreamNotFoundException $ex) {
+            $this->error('Stream Not Found');
 
-            $event = $es->readEvent($entry->getEventUrl());
-            $data = $event->getData();
-            unset($data['broadway_recorded_on']);
-            $this->dispatcher->fire(str_replace('\\','.',$entry->getJson()['eventType']),
+            return;
+        }
+        $feed = $es
+            ->navigateStreamFeed(
+                $feed,
+                LinkRelation::Last()
+            );
+
+        $rel = LinkRelation::PREVIOUS();
+
+        $messages = [];
+        $i = 0;
+        while ($feed !== null) {
+            foreach ($feed->getEntries() as $entry) {
+                $event = $es->readEvent($entry->getEventUrl());
+                $data = $event->getData();
+                $messages[] = [
+                    'eventType'  => $entry->getJson()['eventType'],
+                    'data'       => $data,
+                    'eventClass' => str_replace('\\', '.', $entry->getJson()['eventType'])
+                ];
+
+            }
+            $feed = $es
+                ->navigateStreamFeed(
+                    $feed,
+                    $rel
+                )
+            ;
+        }
+        foreach($messages as $message)
+        {
+            $this->dispatcher->fire($message['eventClass'],
                 (call_user_func(
                     [
-                        $entry->getJson()['eventType'],
+                        $message['eventType'],
                         'deserialize'
                     ],
-                    $data
+                    $message['data']
                 )));
         }
+
     }
 
     /**
@@ -70,10 +104,11 @@ class ReplaceEvents extends Command
      *
      * @return array
      */
-    protected function getArguments()
+    protected
+    function getArguments()
     {
         return [
-            ['type', InputArgument::REQUIRED, 'Type (user,contract,property,company).'],
+            ['type', InputArgument::OPTIONAL, 'Type (user,contract,property,company).'],
         ];
     }
 
@@ -82,7 +117,8 @@ class ReplaceEvents extends Command
      *
      * @return array
      */
-    protected function getOptions()
+    protected
+    function getOptions()
     {
         return [
             ['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],

@@ -30,7 +30,7 @@ class CreateProperties extends Migration
                 $table->integer('parking');
 
                 $table->string('pets');
-
+                $table->boolean('accepting_applications',false);
                 $table->timestamps();
             });
 

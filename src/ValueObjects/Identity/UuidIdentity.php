@@ -8,7 +8,7 @@ use Rhumsaa\Uuid\Uuid;
  * @package Discuss
  * @author Simon Bennett <simon@bennett.im>
  */
-abstract class UuidIdentity implements Identity
+class UuidIdentity implements Identity
 {
     /**
      * @var

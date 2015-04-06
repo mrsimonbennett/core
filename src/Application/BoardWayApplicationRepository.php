@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Property;
+namespace FullRent\Core\Application;
 
 use Broadway\EventHandling\EventBusInterface;
 use Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory;
@@ -7,11 +7,11 @@ use Broadway\EventSourcing\EventSourcingRepository;
 use Broadway\EventStore\EventStoreInterface;
 
 /**
- * Class BroadWayPropertyRepository
- * @package FullRent\Core\Property
+ * Class BoardWayApplicationRepository
+ * @package FullRent\Core\Application
  * @author Simon Bennett <simon@bennett.im>
  */
-final class BroadWayPropertyRepository extends EventSourcingRepository implements PropertyRepository
+final class BoardWayApplicationRepository extends EventSourcingRepository implements ApplicationRepository
 {
     /**
      * @param EventStoreInterface $eventStore
@@ -19,7 +19,7 @@ final class BroadWayPropertyRepository extends EventSourcingRepository implement
      */
     public function __construct(EventStoreInterface $eventStore, EventBusInterface $eventBus)
     {
-        parent::__construct($eventStore, $eventBus, Property::class, new PublicConstructorAggregateFactory());
+        parent::__construct($eventStore, $eventBus, Application::class, new PublicConstructorAggregateFactory());
     }
 
     /**
@@ -28,6 +28,6 @@ final class BroadWayPropertyRepository extends EventSourcingRepository implement
      */
     public function load($id)
     {
-        return parent::load('property-'. $id);
+        return parent::load('application-'. $id);
     }
 }

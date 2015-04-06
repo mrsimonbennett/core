@@ -2,9 +2,14 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
+use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Property\Commands\AcceptApplications;
+use FullRent\Core\Property\Commands\CloseApplications;
 use FullRent\Core\Property\Commands\ListNewProperty;
+use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
+use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
@@ -41,36 +46,93 @@ final class PropertiesController extends Controller
      * @param CommandBus $bus
      * @param PropertiesReadRepository $propertiesReadRepository
      */
-    public function __construct(CommandBus $bus, PropertiesReadRepository $propertiesReadRepository, JsonResponse $jsonResponse)
-    {
+    public function __construct(
+        CommandBus $bus,
+        PropertiesReadRepository $propertiesReadRepository,
+        JsonResponse $jsonResponse
+    ) {
         $this->bus = $bus;
         $this->propertiesReadRepository = $propertiesReadRepository;
         $this->jsonResponse = $jsonResponse;
     }
 
+    /**
+     * @param ListNewPropertyHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listNewProperty(ListNewPropertyHttpRequest $request)
     {
         $address = new Address($request->get('address'),
-            $request->get('city'),
-            $request->get('county'),
-            $request->get('country'),
-            $request->get('postcode'));
+                               $request->get('city'),
+                               $request->get('county'),
+                               $request->get('country'),
+                               $request->get('postcode'));
 
 
-        $command = new ListNewProperty($address, new CompanyId($request->get('company_id')),
-            new LandlordId($request->get('landlord_id')), new BedRooms($request->get('bedrooms')), new Bathrooms($request->get('bathrooms')), new Parking($request->get('parking')),
-            new Pets(true, false));
+        $command = new ListNewProperty($address,
+                                       new CompanyId($request->get('company_id')),
+                                       new LandlordId($request->get('landlord_id')),
+                                       new BedRooms($request->get('bedrooms')),
+                                       new Bathrooms($request->get('bathrooms')),
+                                       new Parking($request->get('parking')),
+                                       new Pets(true, false));
 
         $this->bus->execute($command);
+
+        return $this->jsonResponse->success(['property_id' => (string)$command->getPropertyId()]);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         return $this->jsonResponse->success(['properties' => $this->propertiesReadRepository->getByCompany(new CompanyId($request->get('company_id')))]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         return $this->jsonResponse->success(['property' => $this->propertiesReadRepository->getById(new PropertyId($id))]);
+
+    }
+
+    /**
+     * @param AcceptPropertyApplicationsHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function acceptApplication(AcceptPropertyApplicationsHttpRequest $request)
+    {
+        try {
+            $this->bus->execute(new AcceptApplications(new PropertyId($request->get('property_id'))));
+            $this->jsonResponse->success();
+        } catch (PropertyAlreadyAcceptingApplicationsException $ex) {
+            return $this->jsonResponse->error('Already Accepting Applications');
+        }
+    }
+
+    public function closeApplication(AcceptPropertyApplicationsHttpRequest $request)
+    {
+        try {
+            $this->bus->execute(new CloseApplications(new PropertyId($request->get('property_id'))));
+            $this->jsonResponse->success();
+        } catch (PropertyAlreadyClosedToApplicationsException $ex) {
+            return $this->jsonResponse->error('Already Closed to Applications');
+
+        }
+    }
+
+    /**
+     * @param $propertyId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getHistory($propertyId)
+    {
+        return $this->jsonResponse->success(['property_history' => $this->propertiesReadRepository->getPropertyHistory(new PropertyId($propertyId))]);
 
     }
 }

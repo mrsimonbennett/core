@@ -142,6 +142,7 @@ return [
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Contract\ServiceProviders\LaravelServiceProvider',
+        FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider::class,
 
         'FullRent\Core\Application\Providers\EventStoreServiceProvider',
         'FullRent\Core\Application\Providers\AnnotationsServiceProvider',

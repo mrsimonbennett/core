@@ -50,4 +50,13 @@ final class MysqlPropertiesReadRepository implements PropertiesReadRepository
 
         return $property;
     }
+
+    /**
+     * @param PropertyId $propertyId
+     * @return stdClass
+     */
+    public function getPropertyHistory(PropertyId $propertyId)
+    {
+        return $this->db->table('property_history')->where('property_id', $propertyId)->orderBy('event_happened','desc')->get();
+    }
 }

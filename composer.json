@@ -21,7 +21,8 @@
     "graham-campbell/exceptions": "~1.0@dev",
     "dbellettini/eventstore-client": "@dev",
     "laravelcollective/annotations": "~5.0",
-    "pda/pheanstalk": "~3.0"
+    "pda/pheanstalk": "~3.0",
+    "cleentfaar/slack": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"
