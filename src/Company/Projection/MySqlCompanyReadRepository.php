@@ -3,6 +3,7 @@ namespace FullRent\Core\Company\Projection;
 
 use FullRent\Core\Company\Exceptions\CompanyNotFoundException;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
+use FullRent\Core\Company\ValueObjects\CompanyId;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use stdClass;
@@ -47,5 +48,21 @@ final class MySqlCompanyReadRepository implements CompanyReadRepository
 
             return $company;
         }
+    }
+
+    /**
+     * @param CompanyId $companyId
+     * @throws CompanyNotFoundException
+     * @return stdClass
+     */
+    public function getById(CompanyId $companyId)
+    {
+        if (is_null($company = $this->db->table('companies')
+                                        ->where('id', $companyId)
+                                        ->first())) {
+            throw new CompanyNotFoundException();
+        }
+
+        return $company;
     }
 }

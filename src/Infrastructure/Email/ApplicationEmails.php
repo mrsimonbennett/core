@@ -1,0 +1,90 @@
+<?php
+namespace FullRent\Core\Infrastructure\Email;
+
+use FullRent\Core\Application\Events\ApplicationFinished;
+use FullRent\Core\Application\Query\ApplicationReadRepository;
+use FullRent\Core\Company\Projection\CompanyReadRepository;
+use FullRent\Core\Company\ValueObjects\CompanyId;
+use FullRent\Core\Property\Read\PropertiesReadRepository;
+use FullRent\Core\Property\ValueObjects\PropertyId;
+use FullRent\Core\User\Projections\UserReadRepository;
+use FullRent\Core\User\ValueObjects\UserId;
+
+/**
+ * Class LandlordEmails
+ * @package FullRent\Core\Infrastructure\Email
+ * @author Simon Bennett <simon@bennett.im>
+ */
+final class ApplicationEmails
+{
+    /**
+     * @var EmailClient
+     */
+    private $emailClient;
+
+
+    /**
+     * @var ApplicationReadRepository
+     */
+    private $applicationReadRepository;
+    /**
+     * @var UserReadRepository
+     */
+    private $userReadRepository;
+    /**
+     * @var PropertiesReadRepository
+     */
+    private $propertiesReadRepository;
+    /**
+     * @var CompanyReadRepository
+     */
+    private $companyReadRepository;
+
+    /**
+     * @param EmailClient $emailClient
+     * @param ApplicationReadRepository $applicationReadRepository
+     * @param UserReadRepository $userReadRepository
+     * @param PropertiesReadRepository $propertiesReadRepository
+     * @param CompanyReadRepository $companyReadRepository
+     */
+    public function __construct(
+        EmailClient $emailClient,
+        ApplicationReadRepository $applicationReadRepository,
+        UserReadRepository $userReadRepository,
+        PropertiesReadRepository $propertiesReadRepository,
+        CompanyReadRepository $companyReadRepository
+    ) {
+        $this->emailClient = $emailClient;
+        $this->applicationReadRepository = $applicationReadRepository;
+        $this->userReadRepository = $userReadRepository;
+        $this->propertiesReadRepository = $propertiesReadRepository;
+        $this->companyReadRepository = $companyReadRepository;
+    }
+
+    /**
+     * @param ApplicationFinished $applicationFinished
+     * @hears("FullRent.Core.Application.Events.ApplicationFinished")
+     */
+    public function whenApplicationFinishesEmailLandlord(ApplicationFinished $applicationFinished)
+    {
+        $application = $this->applicationReadRepository->getById($applicationFinished->getApplicationId());
+        $applicant = $this->userReadRepository->getById(new UserId($application->applicant_id));
+        $property = $this->propertiesReadRepository->getById(new PropertyId($application->property_id));
+        $landlord = $this->userReadRepository->getById(new UserId($property->landlord_id));
+        $company = $this->companyReadRepository->getById(new CompanyId($property->company_id));
+
+        $this->emailClient->send('applications.finished-landlord',
+                                 "Application for {$property->address_firstline} by {$applicant->known_as} has been completed for your review",
+                                 [
+                                     'application' => $application,
+                                     'applicant'   => $applicant,
+                                     'landlord'    => $landlord,
+                                     'property'    => $property,
+                                     'company'     => $company,
+                                 ],
+                                 $landlord->known_as,
+                                 $landlord->email);
+
+
+    }
+}

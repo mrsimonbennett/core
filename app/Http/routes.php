@@ -50,8 +50,16 @@ $router->group(['prefix' => 'auth'],
 
 $router->group(['prefix' => 'applications'],
     function () use ($router) {
+        $router->get('for-property/{propertyId}',ApplicationController::class. '@forProperty');
+
         $router->post('{propertyId}/create-account',ApplicationController::class . '@createAccount');
         $router->post('{propertyId}/{applicationId}/personal',ApplicationController::class . '@personal');
+        $router->post('{propertyId}/{applicationId}/residential',ApplicationController::class . '@residential');
+        $router->post('{propertyId}/{applicationId}/finish',ApplicationController::class . '@finish');
+
+
+        $router->post('{propertyId}/for-user',ApplicationController::class . '@forUser');
+        $router->get('{propertyId}/{applicationId}',ApplicationController::class . '@showApplication');
 
     }
 );

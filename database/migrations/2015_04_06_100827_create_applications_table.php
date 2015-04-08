@@ -21,6 +21,9 @@ class CreateApplicationsTable extends Migration
                 $table->string('about_description')->nullable();
 				$table->string('date_of_birth')->nullable();
 				$table->string('phone_number')->nullable();
+                $table->boolean('currently_renting')->nullable();
+                $table->timestamp('finished_at')->nullable();
+                $table->boolean('finished',false);
 				$table->timestamp('started_at');
 			});
     }
