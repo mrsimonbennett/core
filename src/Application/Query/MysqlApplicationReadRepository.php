@@ -35,7 +35,8 @@ final class MysqlApplicationReadRepository extends BaseMysqlSubscriber implement
         if (is_null($application = $this->db->table('applications')->where('id', $applicantId)->first())) {
             throw new ApplicationNotFoundException;
         }
-
+        $application->applicant = $this->db->table('users')->where('id', $application->applicant_id)->first();
+        $application->property = $this->db->table('properties')->where('id', $application->property_id)->first();
         return $application;
     }
 
@@ -45,11 +46,14 @@ final class MysqlApplicationReadRepository extends BaseMysqlSubscriber implement
      */
     public function finishedByProperty(PropertyId $propertyId)
     {
-        return $this->db
+        $applications = $this->db
             ->table('applications')
             ->where('property_id', $propertyId)
             ->where('finished',true)
-            ->join('users','users.id','=','applications.applicant_id')
             ->get();
+        foreach($applications as $key => $application) {
+            $applications[$key]->applicant = $this->db->table('users')->where('id', $application->applicant_id)->first();
+        }
+        return $applications;
     }
 }
