@@ -24,6 +24,14 @@ class CreateApplicationsTable extends Migration
                 $table->boolean('currently_renting')->nullable();
                 $table->timestamp('finished_at')->nullable();
                 $table->boolean('finished',false);
+
+                $table->boolean('rejected',false);
+                $table->string('rejected_reason')->nullable();
+
+
+                $table->boolean('approved',false);
+                $table->timestamp('approved_at')->nullable();
+
 				$table->timestamp('started_at');
 			});
     }

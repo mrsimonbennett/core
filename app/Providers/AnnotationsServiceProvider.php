@@ -54,4 +54,13 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected $scanControllers = false;
 
+    /**
+     * Determines whether or not to automatically scan all namespaced
+     * classes for event, route, and model annotations.
+     *
+     * @var bool
+     */
+    protected $scanEverything = false;
+
+
 }

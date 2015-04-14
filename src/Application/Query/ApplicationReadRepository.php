@@ -32,4 +32,6 @@ interface ApplicationReadRepository
      * @return  \stdClass
      */
     public function finishedByProperty(PropertyId $propertyId);
+
+
 }

@@ -1,12 +1,15 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers;
 
+use FullRent\Core\Application\Commands\ApproveApplication;
 use FullRent\Core\Application\Commands\FinishApplication;
+use FullRent\Core\Application\Commands\RejectApplication;
 use FullRent\Core\Application\Commands\StartApplication;
 use FullRent\Core\Application\Commands\SubmitAboutInformation;
 use FullRent\Core\Application\Commands\SubmitRentingInformation;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\CreateApplicationAccountHttpRequest;
+use FullRent\Core\Application\Http\Requests\RejectApplicationHttpRequest;
 use FullRent\Core\Application\Http\Requests\SubmitAboutInformationHttpRequest;
 use FullRent\Core\Application\Http\Requests\SubmitRentingInformationHttpRequest;
 use FullRent\Core\Application\Query\ApplicationReadRepository;
@@ -123,9 +126,27 @@ final class ApplicationController extends Controller
     {
         $this->commandBus->execute(new FinishApplication(new ApplicationId($applicationId)));
         return $this->jsonResponse->success();
-
     }
 
+    /**
+     * @param RejectApplicationHttpRequest $request
+     * @param $propertyId
+     * @param $applicationId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function reject(RejectApplicationHttpRequest $request, $propertyId, $applicationId)
+    {
+        $this->commandBus->execute(new RejectApplication($applicationId,$request->get('reason','')));
+        return $this->jsonResponse->success();
+    }
+
+
+    public function approve($propertyId,$applicationId)
+    {
+        $this->commandBus->execute(new ApproveApplication(new ApplicationId($applicationId)));
+
+        return $this->jsonResponse->success();
+    }
     /**
      * If the user does not already have a application we will just make one.
      * @param Request $request

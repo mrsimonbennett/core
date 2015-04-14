@@ -57,6 +57,8 @@ $router->group(['prefix' => 'applications'],
         $router->post('{propertyId}/{applicationId}/residential',ApplicationController::class . '@residential');
         $router->post('{propertyId}/{applicationId}/finish',ApplicationController::class . '@finish');
 
+        $router->post('{propertyId}/{applicationId}/reject',ApplicationController::class . '@reject');
+        $router->post('{propertyId}/{applicationId}/approve',ApplicationController::class . '@approve');
 
         $router->post('{propertyId}/for-user',ApplicationController::class . '@forUser');
         $router->get('{propertyId}/{applicationId}',ApplicationController::class . '@showApplication');

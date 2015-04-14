@@ -145,9 +145,9 @@ return [
         FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider::class,
 
         'FullRent\Core\Application\Providers\EventStoreServiceProvider',
-        'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
         'FullRent\Core\Application\Infrastructure\LaravelBridge',
 
+        'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
 
     ],
     /*

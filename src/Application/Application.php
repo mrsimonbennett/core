@@ -4,13 +4,16 @@ namespace FullRent\Core\Application;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Application\Events\ApplicantAboutInformationProvided;
 use FullRent\Core\Application\Events\ApplicantProvidedRentingInformation;
+use FullRent\Core\Application\Events\ApplicationApproved;
 use FullRent\Core\Application\Events\ApplicationFinished;
+use FullRent\Core\Application\Events\ApplicationRejected;
 use FullRent\Core\Application\Events\StartedApplication;
 use FullRent\Core\Application\Exceptions\ApplicationNotFinished;
 use FullRent\Core\Application\ValueObjects\AboutYouApplication;
 use FullRent\Core\Application\ValueObjects\ApplicantId;
 use FullRent\Core\Application\ValueObjects\ApplicationId;
 use FullRent\Core\Application\ValueObjects\PropertyId;
+use FullRent\Core\Application\ValueObjects\RejectReason;
 use FullRent\Core\Application\ValueObjects\RentingInformation;
 use FullRent\Core\ValueObjects\DateTime;
 
@@ -81,11 +84,18 @@ final class Application extends EventSourcedAggregateRoot
         $this->apply(new ApplicantAboutInformationProvided($this->applicationId, $aboutYouApplication));
     }
 
+    /**
+     * @param RentingInformation $rentingInformation
+     */
     public function submitRentingInformation(RentingInformation $rentingInformation)
     {
         $this->apply(new ApplicantProvidedRentingInformation($this->applicationId, $rentingInformation));
     }
 
+    /**
+     * @param DateTime $finishedAt
+     * @throws ApplicationNotFinished
+     */
     public function finish(DateTime $finishedAt = null)
     {
         if ($finishedAt == null) {
@@ -96,10 +106,36 @@ final class Application extends EventSourcedAggregateRoot
         }
 
         $this->apply(new ApplicationFinished($this->applicationId, $finishedAt));
-
-
     }
 
+    /**
+     * @param RejectReason $reason
+     * @param DateTime $rejectedAt
+     * @throws ApplicationNotFinished
+     */
+    public function reject(RejectReason $reason, DateTime $rejectedAt = null)
+    {
+        if ($this->editable) {
+           // throw new ApplicationNotFinished;
+        }
+        if (is_null($rejectedAt)) {
+            $rejectedAt = DateTime::now();
+        }
+
+        $this->apply(new ApplicationRejected($this->applicationId, $reason, $rejectedAt));
+    }
+
+    /**
+     * @param DateTime $approvedAt
+     */
+    public function approve(DateTime $approvedAt = null)
+    {
+        if (is_null($approvedAt)) {
+            $approvedAt = DateTime::now();
+        }
+
+        $this->apply(new ApplicationApproved($this->applicationId,$approvedAt));
+    }
     /**
      * @param StartedApplication $startedApplication
      */
@@ -127,11 +163,30 @@ final class Application extends EventSourcedAggregateRoot
     {
         $this->rentingInformation = $event->getRentingInformation();
     }
+
+    /**
+     * @param ApplicationFinished $applicationFinished
+     */
     protected function applyApplicationFinished(ApplicationFinished $applicationFinished)
     {
         $this->editable = false;
     }
 
+    /**
+     * @param ApplicationRejected $applicationRejected
+     */
+    protected function applyApplicationRejected(ApplicationRejected $applicationRejected)
+    {
+        $this->editable = true;
+    }
+
+    /**
+     * @param ApplicationApproved $applicationApproved
+     */
+    public function applyApplicationApproved(ApplicationApproved $applicationApproved)
+    {
+
+    }
     /**
      * @return string
      */
@@ -140,6 +195,9 @@ final class Application extends EventSourcedAggregateRoot
         return "application-" . (string)$this->applicationId;
     }
 
+    /**
+     * @return bool
+     */
     private function isComplete()
     {
         return true;

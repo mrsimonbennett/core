@@ -26,7 +26,7 @@ final class MysqlCompanySubscriber
 
     /**
      * @param CompanyHasBeenRegistered $beenRegistered
-     * @hears("FullRent.Core.Company.Events.CompanyHasBeenRegistered")
+     * @hears("FullRent.Core.Company.Events.CompanyHasBeenRegistered",)
      */
     public function companyHasBeenRegistered(CompanyHasBeenRegistered $beenRegistered)
     {

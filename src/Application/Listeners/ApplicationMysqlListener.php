@@ -3,7 +3,9 @@ namespace FullRent\Core\Application\Listeners;
 
 use FullRent\Core\Application\Events\ApplicantAboutInformationProvided;
 use FullRent\Core\Application\Events\ApplicantProvidedRentingInformation;
+use FullRent\Core\Application\Events\ApplicationApproved;
 use FullRent\Core\Application\Events\ApplicationFinished;
+use FullRent\Core\Application\Events\ApplicationRejected;
 use FullRent\Core\Application\Events\StartedApplication;
 use FullRent\Core\Infrastructure\Subscribers\BaseMysqlSubscriber;
 
@@ -82,8 +84,45 @@ final class ApplicationMysqlListener extends BaseMysqlSubscriber
             ->where('id', $event->getApplicationId())
             ->update(
                 [
-                    'finished' => true,
+                    'finished'    => true,
                     'finished_at' => $event->getFinishedAt(),
+                ]
+            );
+    }
+
+    /**
+     * @param ApplicationRejected $event
+     * @hears("FullRent.Core.Application.Events.ApplicationRejected")
+     */
+    public function whenApplicationRejected(ApplicationRejected $event)
+    {
+        $this->db
+            ->table('applications')
+            ->where('id', $event->getApplicationId())
+            ->update(
+                [
+                    'finished'        => false,
+                    'rejected'        => true,
+                    'rejected_reason' => $event->getRejectReason(),
+                ]
+            );
+    }
+
+    /**
+     * @param ApplicationApproved $e
+     * @hears("FullRent.Core.Application.Events.ApplicationApproved")
+     */
+    public function whenApplicationApproved(ApplicationApproved $e)
+    {
+        $this->db
+            ->table('applications')
+            ->where('id', $e->getApplicationId())
+            ->update(
+                [
+                    'finished'    => true,
+                    'rejected'    => false,
+                    'approved'    => true,
+                    'approved_at' => $e->getApprovedAt()
                 ]
             );
     }

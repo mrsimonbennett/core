@@ -2,6 +2,7 @@
 namespace FullRent\Core\Infrastructure\Email;
 
 use FullRent\Core\Application\Events\ApplicationFinished;
+use FullRent\Core\Application\Events\ApplicationRejected;
 use FullRent\Core\Application\Query\ApplicationReadRepository;
 use FullRent\Core\Company\Projection\CompanyReadRepository;
 use FullRent\Core\Company\ValueObjects\CompanyId;
@@ -67,11 +68,7 @@ final class ApplicationEmails
      */
     public function whenApplicationFinishesEmailLandlord(ApplicationFinished $applicationFinished)
     {
-        $application = $this->applicationReadRepository->getById($applicationFinished->getApplicationId());
-        $applicant = $this->userReadRepository->getById(new UserId($application->applicant_id));
-        $property = $this->propertiesReadRepository->getById(new PropertyId($application->property_id));
-        $landlord = $this->userReadRepository->getById(new UserId($property->landlord_id));
-        $company = $this->companyReadRepository->getById(new CompanyId($property->company_id));
+        list($application, $applicant, $property, $landlord, $company) = $this->getApplicationDetails($applicationFinished);
 
         $this->emailClient->send('applications.finished-landlord',
                                  "Application for {$property->address_firstline} by {$applicant->known_as} has been completed for your review",
@@ -86,5 +83,42 @@ final class ApplicationEmails
                                  $landlord->email);
 
 
+    }
+
+    /**
+     * @param ApplicationRejected $applicationRejected
+     * @hears("FullRent.Core.Application.Events.ApplicationRejected")
+     */
+    public function whenApplicationWasRejected(ApplicationRejected $applicationRejected)
+    {
+        list($application, $applicant, $property, $landlord, $company) = $this->getApplicationDetails($applicationRejected);
+
+        $this->emailClient->send('applications.rejected',
+                                 "Sorry your Application for {$property->address_firstline} has been rejected but can be fixed",
+                                 [
+                                     'application' => $application,
+                                     'applicant'   => $applicant,
+                                     'landlord'    => $landlord,
+                                     'property'    => $property,
+                                     'company'     => $company,
+                                     'reason'      => $applicationRejected->getRejectReason()->getReason(),
+                                 ],
+                                 $applicant->known_as,
+                                 $applicant->email);
+    }
+
+    /**
+     * @param ApplicationFinished $applicationFinished
+     * @return array
+     */
+    protected function getApplicationDetails($applicationFinished)
+    {
+        $application = $this->applicationReadRepository->getById($applicationFinished->getApplicationId());
+        $applicant = $this->userReadRepository->getById(new UserId($application->applicant_id));
+        $property = $this->propertiesReadRepository->getById(new PropertyId($application->property_id));
+        $landlord = $this->userReadRepository->getById(new UserId($property->landlord_id));
+        $company = $this->companyReadRepository->getById(new CompanyId($property->company_id));
+
+        return array($application, $applicant, $property, $landlord, $company);
     }
 }
