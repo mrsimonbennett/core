@@ -2,6 +2,7 @@
 namespace FullRent\Core\Contract;
 
 use Broadway\Domain\AggregateRoot;
+use FullRent\Core\Contract\ValueObjects\ContractId;
 
 /**
  * Interface ContractRepository
@@ -11,7 +12,7 @@ use Broadway\Domain\AggregateRoot;
 interface ContractRepository
 {
     /**
-     * @param $id
+     * @param ContractId $id
      * @return Contract
      */
     public function load($id);

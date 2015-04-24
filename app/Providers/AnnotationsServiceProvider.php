@@ -4,6 +4,8 @@ namespace FullRent\Core\Application\Providers;
 use Collective\Annotations\AnnotationsServiceProvider as ServiceProvider;
 use FullRent\Core\Application\Listeners\ApplicationMysqlListener;
 use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
+use FullRent\Core\Contract\Listeners\ApplicationListener;
+use FullRent\Core\Contract\Listeners\MySqlContractListener;
 use FullRent\Core\Infrastructure\Email\ApplicationEmails;
 use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\Property\Read\Subscribers\PropertyHistorySubscriber;
@@ -22,7 +24,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
         MysqlPropertySubscriber::class,
         PropertyHistorySubscriber::class,
         ApplicationMysqlListener::class,
-        ApplicationEmails::class
+        ApplicationEmails::class,
+        ApplicationListener::class,
+        MySqlContractListener::class,
     ];
 
     /**

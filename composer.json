@@ -34,7 +34,10 @@
     "psr-4": {
       "FullRent\\Core\\Application\\": "app/",
       "FullRent\\Core\\": "src/"
-    }
+    },
+    "files": [
+      "src/Infrastructure/Helpers/UuidHelper.php"
+    ]
   },
   "autoload-dev": {
     "classmap": [

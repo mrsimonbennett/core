@@ -1,33 +1,41 @@
 <?php
 namespace FullRent\Core\Contract\Events;
 
+use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Contract\ValueObjects\ContractId;
-use FullRent\Core\Contract\ValueObjects\Tenant;
+use FullRent\Core\Contract\ValueObjects\TenantId;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class TenantJoinedContract
  * @package FullRent\Core\Contract\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class TenantJoinedContract
+final class TenantJoinedContract implements SerializableInterface
 {
     /**
      * @var ContractId
      */
     private $contractId;
     /**
-     * @var Tenant
+     * @var TenantId
      */
-    private $tenant;
+    private $tenantId;
+    /**
+     * @var DateTime
+     */
+    private $jointedAt;
 
     /**
      * @param ContractId $contractId
-     * @param Tenant $tenant
+     * @param TenantId $tenant
+     * @param DateTime $jointedAt
      */
-    public function __construct(ContractId $contractId, Tenant $tenant)
+    public function __construct(ContractId $contractId, TenantId $tenant,DateTime $jointedAt)
     {
         $this->contractId = $contractId;
-        $this->tenant = $tenant;
+        $this->tenantId = $tenant;
+        $this->jointedAt = $jointedAt;
     }
 
     /**
@@ -39,11 +47,27 @@ final class TenantJoinedContract
     }
 
     /**
-     * @return Tenant
+     * @return TenantId
      */
-    public function getTenant()
+    public function getTenantId()
     {
-        return $this->tenant;
+        return $this->tenantId;
     }
 
+    /**
+     * @param array $data
+     * @return mixed The object instance
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new ContractId($data['contract_id']), new TenantId($data['tenant_id']),DateTime::deserialize($data['jointed_at']));
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return ['contract_id' => (string)$this->contractId, 'tenant_id' => (string)$this->tenantId,'jointed_at' => $this->jointedAt->serialize()];
+    }
 }

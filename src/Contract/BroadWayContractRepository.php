@@ -21,4 +21,10 @@ final class BroadWayContractRepository extends EventSourcingRepository implement
     {
         parent::__construct($eventStore, $eventBus, Contract::class, new PublicConstructorAggregateFactory());
     }
+
+    public function load($id)
+    {
+        return parent::load('contract-'.$id);
+    }
+
 }

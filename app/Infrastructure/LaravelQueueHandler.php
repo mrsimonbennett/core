@@ -10,7 +10,6 @@ use Illuminate\Contracts\Events\Dispatcher;
  */
 final class LaravelQueueHandler
 {
-    use \Illuminate\Queue\InteractsWithQueue;
     /**
      * @var Dispatcher
      */

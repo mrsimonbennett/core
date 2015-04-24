@@ -2,15 +2,17 @@
 namespace FullRent\Core\Contract;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
-use FullRent\Core\Contract\Events\ContractWasDrafted;
+use FullRent\Core\Contract\Events\ContractDraftedFromApplication;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
+use FullRent\Core\Contract\Exceptions\TenantAlreadyJoinedContractException;
+use FullRent\Core\Contract\ValueObjects\ApplicationId;
+use FullRent\Core\Contract\ValueObjects\CompanyId;
 use FullRent\Core\Contract\ValueObjects\ContractId;
-use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
-use FullRent\Core\Contract\ValueObjects\Deposit;
-use FullRent\Core\Contract\ValueObjects\Landlord;
-use FullRent\Core\Contract\ValueObjects\Property;
-use FullRent\Core\Contract\ValueObjects\Rent;
-use FullRent\Core\Contract\ValueObjects\Tenant;
+use FullRent\Core\Contract\ValueObjects\LandlordId;
+use FullRent\Core\Contract\ValueObjects\PropertyId;
+use FullRent\Core\Contract\ValueObjects\TenantId;
+use FullRent\Core\ValueObjects\DateTime;
+
 
 /**
  * Class Contract
@@ -22,85 +24,83 @@ final class Contract extends EventSourcedAggregateRoot
     /**
      * @var ContractId
      */
-    protected $contractId;
+    private $contractId;
     /**
-     * @var ContractMinimalPeriod
+     * @var ApplicationId
      */
-    protected $contractMinimalPeriod;
+    private $applicationId;
     /**
-     * @var Property
+     * @var PropertyId
      */
-    protected $property;
+    private $propertyId;
     /**
-     * @var Rent
+     * @var LandlordId
      */
-    protected $rent;
+    private $landlordId;
     /**
-     * @var Deposit
+     * @var DateTime
      */
-    protected $deposit;
+    private $draftedAt;
     /**
-     * @var Landlord
+     * @var TenantId[]
      */
-    protected $landlord;
-
-    /**
-     * @var Tenant[]
-     */
-    protected $tenants;
-
+    private $tenants = [];
 
     /**
      * @param ContractId $contractId
-     * @param Landlord $landlord
-     * @param ContractMinimalPeriod $contractMinimalPeriod
-     * @param Property $property
-     * @param Rent $rent
-     * @param Deposit $deposit
+     * @param ApplicationId $applicationId
+     * @param PropertyId $propertyId
+     * @param LandlordId $landlordId
+     * @param CompanyId $companyId
+     * @param DateTime $draftedAt
      * @return static
      */
-    public static function draftContract(
+    public static function draftFromApplication(
         ContractId $contractId,
-        Landlord $landlord,
-        ContractMinimalPeriod $contractMinimalPeriod,
-        Property $property,
-        Rent $rent,
-        Deposit $deposit
+        ApplicationId $applicationId,
+        PropertyId $propertyId,
+        LandlordId $landlordId,
+        CompanyId $companyId,
+        DateTime $draftedAt = null
     ) {
-        $contract = new static;
-        $contract->apply(new ContractWasDrafted($contractId, $landlord, $contractMinimalPeriod, $property, $rent,
-            $deposit));
+        if (is_null($draftedAt)) {
+            $draftedAt = DateTime::now();
+        }
+
+        $contract = new static();
+        $contract->apply(new ContractDraftedFromApplication($contractId,
+                                                            $applicationId,
+                                                            $propertyId,
+                                                            $landlordId,
+                                                            $companyId,
+                                                            $draftedAt));
 
         return $contract;
     }
 
-    /**
-     * @param Tenant $tenant
-     */
-    public function attachTenant(Tenant $tenant)
+    public function attachTenant(TenantId $tenantId)
     {
-        $this->apply(new TenantJoinedContract($this->contractId, $tenant));
+        if (in_array((string)$tenantId, $this->tenants)) {
+            throw new TenantAlreadyJoinedContractException;
+        }
+        $this->apply(new TenantJoinedContract($this->contractId, $tenantId, DateTime::now()));
     }
 
     /**
-     * @param ContractWasDrafted $contractWasDrafted
+     * @param ContractDraftedFromApplication $e
      */
-    protected function applyContractWasDrafted(ContractWasDrafted $contractWasDrafted)
+    protected function applyContractDraftedFromApplication(ContractDraftedFromApplication $e)
     {
-        $this->contractId = $contractWasDrafted->getContractId();
-        $this->landlord = $contractWasDrafted->getLandlord();
-        $this->contractMinimalPeriod = $contractWasDrafted->getContractMinimalPeriod();
-        $this->property = $contractWasDrafted->getProperty();
-        $this->rent = $contractWasDrafted->getRent();
-        $this->deposit = $contractWasDrafted->getDeposit();
+        $this->contractId = $e->getContractId();
+        $this->applicationId = $e->getApplicationId();
+        $this->propertyId = $e->getPropertyId();
+        $this->landlordId = $e->getLandlordId();
+        $this->draftedAt = $e->getDraftedAt();
     }
 
-    /**
-     * @param TenantJoinedContract $tenantJoinedContract
-     */
-    protected function applyTenantJoinedContract(TenantJoinedContract $tenantJoinedContract)
+    protected function applyTenantJoinedContract(TenantJoinedContract $e)
     {
-        $this->tenants[(string)$tenantJoinedContract->getTenant()->getTenantId()] = $tenantJoinedContract->getTenant();
+        $this->tenants[(string)$e->getTenantId()] = $e->getTenantId();
     }
 
     /**

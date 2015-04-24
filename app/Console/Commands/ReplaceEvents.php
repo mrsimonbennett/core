@@ -74,6 +74,7 @@ class ReplaceEvents extends Command
             while ($feed !== null) {
                 foreach ($feed->getEntries() as $entry) {
                     $event = $es->readEvent($entry->getEventUrl());
+                    if(is_null($event)) continue;
                     $data = $event->getData();
                     $messages[] = [
                         'eventType'  => $entry->getJson()['eventType'],

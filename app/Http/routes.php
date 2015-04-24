@@ -17,20 +17,22 @@ $router->get('companies/{domain}', CompanyController::class . '@show');
 /*
  * Properties
  */
-$router->post('properties/accept-applications', PropertiesController::class . '@acceptApplication');
-$router->post('properties/close-applications', PropertiesController::class . '@closeApplication');
+$router->group(['prefix' => 'properties'],
+    function () use ($router) {
+        $router->post('accept-applications', PropertiesController::class . '@acceptApplication');
+        $router->post('close-applications', PropertiesController::class . '@closeApplication');
+        $router->get('{id}/history', PropertiesController::class . '@getHistory');
+        $router->post('', PropertiesController::class . '@listNewProperty');
+        $router->get('', PropertiesController::class . '@index');
+        $router->get('{id}', PropertiesController::class . '@show');
 
-$router->get('properties/{id}/history', PropertiesController::class . '@getHistory');
+        /**
+         * Contracts
+         */
+        $router->get('{id}/contracts', ContractsController::class . '@index');
 
-
-$router->post('properties', PropertiesController::class . '@listNewProperty');
-$router->get('properties', PropertiesController::class . '@index');
-$router->get('properties/{id}', PropertiesController::class . '@show');
-
-/**
- * Contracts
- */
-$router->post('contracts', ContractsController::class . '@draftContract');
+    }
+);
 
 
 /**
@@ -50,18 +52,18 @@ $router->group(['prefix' => 'auth'],
 
 $router->group(['prefix' => 'applications'],
     function () use ($router) {
-        $router->get('for-property/{propertyId}',ApplicationController::class. '@forProperty');
+        $router->get('for-property/{propertyId}', ApplicationController::class . '@forProperty');
 
-        $router->post('{propertyId}/create-account',ApplicationController::class . '@createAccount');
-        $router->post('{propertyId}/{applicationId}/personal',ApplicationController::class . '@personal');
-        $router->post('{propertyId}/{applicationId}/residential',ApplicationController::class . '@residential');
-        $router->post('{propertyId}/{applicationId}/finish',ApplicationController::class . '@finish');
+        $router->post('{propertyId}/create-account', ApplicationController::class . '@createAccount');
+        $router->post('{propertyId}/{applicationId}/personal', ApplicationController::class . '@personal');
+        $router->post('{propertyId}/{applicationId}/residential', ApplicationController::class . '@residential');
+        $router->post('{propertyId}/{applicationId}/finish', ApplicationController::class . '@finish');
 
-        $router->post('{propertyId}/{applicationId}/reject',ApplicationController::class . '@reject');
-        $router->post('{propertyId}/{applicationId}/approve',ApplicationController::class . '@approve');
+        $router->post('{propertyId}/{applicationId}/reject', ApplicationController::class . '@reject');
+        $router->post('{propertyId}/{applicationId}/approve', ApplicationController::class . '@approve');
 
-        $router->post('{propertyId}/for-user',ApplicationController::class . '@forUser');
-        $router->get('{propertyId}/{applicationId}',ApplicationController::class . '@showApplication');
+        $router->post('{propertyId}/for-user', ApplicationController::class . '@forUser');
+        $router->get('{propertyId}/{applicationId}', ApplicationController::class . '@showApplication');
 
     }
 );
