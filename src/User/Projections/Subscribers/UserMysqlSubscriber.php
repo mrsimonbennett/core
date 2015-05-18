@@ -33,13 +33,14 @@ final class UserMysqlSubscriber
     public function whenUserRegistered(UserRegistered $userRegistered)
     {
         $this->db->table('users')->insert([
-                                              'id'         => $userRegistered->getUserId(),
-                                              'legal_name' => $userRegistered->getName()->getLegalName(),
+                                              'id'          => $userRegistered->getUserId(),
+                                              'legal_name'  => $userRegistered->getName()->getLegalName(),
                                               'known_as'    => $userRegistered->getName()->getKnowAs(),
-                                              'email'      => $userRegistered->getEmail(),
-                                              'password'   => $userRegistered->getPassword(),
-                                              'created_at' => $userRegistered->getCreatedAt(),
-                                              'updated_at' => Carbon::now(),
+                                              'email'       => $userRegistered->getEmail(),
+                                              'password'    => $userRegistered->getPassword(),
+                                              'created_at'  => $userRegistered->getCreatedAt(),
+                                              'has_address' => false,
+                                              'updated_at'  => Carbon::now(),
                                           ]);
     }
 }

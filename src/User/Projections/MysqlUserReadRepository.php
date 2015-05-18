@@ -52,6 +52,12 @@ final class MysqlUserReadRepository implements UserReadRepository
         if (is_null($user = $this->db->table('users')->where('id', $userId)->first())) {
             throw new UserNotFoundException();
         } else {
+            $companies = $this->db->table('companies')
+                                ->join('company_users', 'company_users.company_id', '=', 'companies.id')
+                                ->where('company_users.user_id', $user->id)
+                                ->get();
+            $user->companies = $companies;
+
             return $user;
         }
 

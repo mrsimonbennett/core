@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Property\Read\Subscribers;
 
+use FullRent\Core\Contract\Events\ContractDraftedFromApplication;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
@@ -67,6 +68,20 @@ final class PropertyHistorySubscriber
                                                          'property_id' => $propertyAcceptingApplications->getPropertyId(),
                                                          'event_name'  => 'Closed Applicants',
                                                          'event_happened'  => $propertyAcceptingApplications->getChangedAt(),
+                                                     ]);
+    }
+
+    /**
+     * @param ContractDraftedFromApplication $e
+     * @hears("FullRent.Core.Contract.Events.ContractDraftedFromApplication")
+     */
+    public function whenContractIsDrafted(ContractDraftedFromApplication $e)
+    {
+        $this->db->table('property_history')->insert([
+                                                         'id'          => UuidIdentity::random(),
+                                                         'property_id' => $e->getPropertyId(),
+                                                         'event_name'  => 'Contract Drafted',
+                                                         'event_happened'  => $e->getDraftedAt(),
                                                      ]);
     }
 }

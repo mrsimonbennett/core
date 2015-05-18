@@ -2,9 +2,12 @@
 namespace FullRent\Core\Application\Providers;
 
 use Collective\Annotations\AnnotationsServiceProvider as ServiceProvider;
+use FullRent\Core\Application\Infrastructure\WriteEventsToElasticSearch;
 use FullRent\Core\Application\Listeners\ApplicationMysqlListener;
+use FullRent\Core\Company\Projection\Subscribers\ApplicationEventListener;
 use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
 use FullRent\Core\Contract\Listeners\ApplicationListener;
+use FullRent\Core\Contract\Listeners\MailListener;
 use FullRent\Core\Contract\Listeners\MySqlContractListener;
 use FullRent\Core\Infrastructure\Email\ApplicationEmails;
 use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
@@ -27,6 +30,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
         ApplicationEmails::class,
         ApplicationListener::class,
         MySqlContractListener::class,
+        MailListener::class,
+        ApplicationEventListener::class,
+        WriteEventsToElasticSearch::class,
     ];
 
     /**

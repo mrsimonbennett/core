@@ -40,4 +40,13 @@ final class RentDueDay
         return $this->rentDueDay;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->rentDueDay;
+    }
+
+
 }

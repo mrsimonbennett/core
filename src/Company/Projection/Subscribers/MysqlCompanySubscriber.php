@@ -3,6 +3,7 @@ namespace FullRent\Core\Company\Projection\Subscribers;
 
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\LandlordEnrolled;
+use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\Projection\Company;
 use FullRent\Core\ValueObjects\DateTime;
 use Illuminate\Database\Connection;
@@ -49,6 +50,19 @@ final class MysqlCompanySubscriber
                                                       'user_id'    => $landlordEnrolled->getLandlord()->getLandlordId(),
                                                       'company_id' => $landlordEnrolled->getCompanyId(),
                                                       'role'       => 'landlord',
+                                                  ]);
+    }
+
+    /**
+     * @param TenantEnrolled $e
+     * @hears("FullRent.Core.Company.Events.TenantEnrolled")
+     */
+    public function whenTenantEnrolled(TenantEnrolled $e)
+    {
+        $this->db->table('company_users')->insert([
+                                                      'user_id'    => $e->getTenantId(),
+                                                      'company_id' => $e->getCompanyId(),
+                                                      'role'       => 'tenant',
                                                   ]);
     }
 }

@@ -2,6 +2,7 @@
 namespace FullRent\Core\Contract\ValueObjects;
 
 use Broadway\Serializer\SerializableInterface;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class Rent
@@ -18,15 +19,31 @@ final class Rent implements SerializableInterface
      * @var RentDueDay
      */
     private $rentDueDay;
+    /**
+     * @var DateTime
+     */
+    private $firstPayment;
+    /**
+     * @var bool
+     */
+    private $fullRentRentCollection;
 
     /**
      * @param RentAmount $rentAmount
      * @param RentDueDay $rentDueDay
+     * @param DateTime $firstPayment
+     * @param bool $fullRentRentCollection
      */
-    public function __construct(RentAmount $rentAmount, RentDueDay $rentDueDay)
-    {
+    public function __construct(
+        RentAmount $rentAmount,
+        RentDueDay $rentDueDay,
+        DateTime $firstPayment,
+        $fullRentRentCollection = false
+    ) {
         $this->rentAmount = $rentAmount;
         $this->rentDueDay = $rentDueDay;
+        $this->firstPayment = $firstPayment;
+        $this->fullRentRentCollection = $fullRentRentCollection;
     }
 
     /**
@@ -46,11 +63,32 @@ final class Rent implements SerializableInterface
     }
 
     /**
+     * @return DateTime
+     */
+    public function getFirstPayment()
+    {
+        return $this->firstPayment;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFullRentRentCollection()
+    {
+        return $this->fullRentRentCollection;
+    }
+
+
+    /**
      * @return mixed The object instance
      */
     public static function deserialize(array $data)
     {
-        return new static(RentAmount::deserialize($data['rent']), new RentDueDay($data['due']));
+        return new static(RentAmount::deserialize($data['rent']),
+                          new RentDueDay($data['due']),
+                          DateTime::deserialize($data['first_payment']),
+                          isset($data['fullrent_collection']) ? $data['fullrent_collection'] : false
+        );
     }
 
     /**
@@ -58,6 +96,11 @@ final class Rent implements SerializableInterface
      */
     public function serialize()
     {
-        return ['rent' => $this->rentAmount->serialize(), 'due' => $this->rentDueDay->getRentDueDay()];
+        return [
+            'rent'                => $this->rentAmount->serialize(),
+            'due'                 => $this->rentDueDay->getRentDueDay(),
+            'first_payment'       => $this->firstPayment->serialize(),
+            'fullrent_collection' => $this->fullRentRentCollection,
+        ];
     }
 }

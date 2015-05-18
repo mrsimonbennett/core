@@ -104,12 +104,6 @@ final class CompanyController extends Controller
      */
     public function checkExists($companyDomain)
     {
-        try {
-            $this->companyReadRepository->getByDomain(new CompanyDomain($companyDomain));
-
-            return $this->jsonResponse->success(['exists' => true]);
-        } catch (CompanyNotFoundException $ex) {
-            return $this->jsonResponse->success(['exists' => false]);
-        }
+        return $this->jsonResponse->success(['exists' => $this->companyReadRepository->doesDomainExist(new CompanyDomain($companyDomain))]);
     }
 }

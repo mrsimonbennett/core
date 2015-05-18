@@ -33,6 +33,6 @@ final class SlackNotifications implements EventListenerInterface
         $payload->setIconUrl('https://fullrent.co.uk/home/fullrent-home-logo.jpg');
 
         /** @var ChatPostMessagePayloadResponse $response */
-        $client->send($payload);
+       $client->send($payload);
     }
 }

@@ -28,6 +28,7 @@ final class MySqlCompanyReadRepository implements CompanyReadRepository
         $this->db = $db;
     }
 
+
     /**
      * @param CompanyDomain $companyDomain
      * @throws CompanyNotFoundException
@@ -64,5 +65,14 @@ final class MySqlCompanyReadRepository implements CompanyReadRepository
         }
 
         return $company;
+    }
+
+    /**
+     * @param CompanyDomain $companyDomain
+     * @return bool
+     */
+    public function doesDomainExist(CompanyDomain $companyDomain)
+    {
+        return (bool) $this->db->table('companies')->where('domain',$companyDomain)->count();
     }
 }

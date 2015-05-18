@@ -4,9 +4,11 @@ namespace FullRent\Core\Company;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\LandlordEnrolled;
+use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\Company\ValueObjects\TenantId;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -56,6 +58,14 @@ final class Company extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param TenantId $tenantId
+     */
+    public function enrolTenant(TenantId $tenantId )
+    {
+        $this->apply(new TenantEnrolled($this->companyId, $tenantId, DateTime::now()));
+    }
+
+    /**
      * @param CompanyHasBeenRegistered $companyHasBeenRegistered
      */
     protected function applyCompanyHasBeenRegistered(CompanyHasBeenRegistered $companyHasBeenRegistered)
@@ -71,6 +81,10 @@ final class Company extends EventSourcedAggregateRoot
     protected function applyLandlordEnrolled(LandlordEnrolled $landlordEnrolled)
     {
         $this->landlords[(string)$landlordEnrolled->getLandlord()->getLandlordId()] = $landlordEnrolled->getLandlord();
+    }
+    protected function applyTenantEnrolled(TenantEnrolled $e)
+    {
+        $this->tenants[(string)$e->getTenantId()] = $e->getTenantId();
     }
 
     /**

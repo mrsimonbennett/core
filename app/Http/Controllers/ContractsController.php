@@ -2,8 +2,16 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
+use FullRent\Core\Application\Http\Requests\SaveContractDatesHttpRequest;
+use FullRent\Core\Application\Http\Requests\SaveContractDocumentHttpRequest;
+use FullRent\Core\Application\Http\Requests\SaveContractRentHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Contract\Commands\LockContract;
+use FullRent\Core\Contract\Commands\SetContractPeriod;
+use FullRent\Core\Contract\Commands\SetContractRentInformation;
+use FullRent\Core\Contract\Commands\SetContractsRequiredDocuments;
 use FullRent\Core\Contract\Query\ContractReadRepository;
+use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\PropertyId;
 use Illuminate\Routing\Controller;
 
@@ -49,5 +57,71 @@ final class ContractsController extends Controller
     public function  index($propertyId)
     {
         return $this->jsonResponse->success(['contracts' => $this->contractReadRepository->getByProperty(new PropertyId($propertyId))]);
+    }
+
+    /**
+     * @param $contractId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($contractId)
+    {
+        return $this->jsonResponse->success(['contract' => $this->contractReadRepository->getById(new ContractId($contractId))]);
+    }
+
+    /**
+     * @param $contractId
+     * @param SaveContractDatesHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveDates($contractId, SaveContractDatesHttpRequest $request)
+    {
+        $this->bus->execute(new SetContractPeriod($contractId, $request->start, $request->end));
+
+        return $this->jsonResponse->success();
+    }
+
+    /**
+     * @param $contractId
+     * @param SaveContractRentHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveRent($contractId, SaveContractRentHttpRequest $request)
+    {
+        $this->bus->execute(new SetContractRentInformation($contractId,
+                                                           $request->rent,
+                                                           $request->rent_payable,
+                                                           $request->first_rent,
+                                                           $request->has('fullrent_rent_collection'),
+                                                           $request->deposit,
+                                                           $request->deposit_due,
+                                                           $request->fullrent_deposit));
+
+        return $this->jsonResponse->success();
+    }
+
+    /**
+     * @param $contractId
+     * @param SaveContractDocumentHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveDocuments($contractId, SaveContractDocumentHttpRequest $request)
+    {
+        $this->bus->execute(new SetContractsRequiredDocuments($contractId,
+                                                              $request->has('require_id'),
+                                                              $request->has('require_earnings_proof'),
+                                                              $request->get('additional_documents')));
+
+        return $this->jsonResponse->success();
+    }
+    public function lockContract($contractId)
+    {
+        $this->bus->execute(new LockContract($contractId));
+
+        return $this->jsonResponse->success();
+    }
+
+    public function tenantUploadDocuments()
+    {
+
     }
 }

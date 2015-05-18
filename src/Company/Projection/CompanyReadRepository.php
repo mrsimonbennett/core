@@ -15,6 +15,11 @@ interface CompanyReadRepository
 {
     /**
      * @param CompanyDomain $companyDomain
+     * @return bool
+     */
+    public function doesDomainExist(CompanyDomain $companyDomain);
+    /**
+     * @param CompanyDomain $companyDomain
      * @throws CompanyNotFoundException
      * @return stdClass
      */

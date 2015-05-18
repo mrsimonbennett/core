@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('known_as');
 			$table->string('email');
 			$table->string('password');
+            $table->boolean('has_address',false);
 			$table->timestamps();
 		});
 

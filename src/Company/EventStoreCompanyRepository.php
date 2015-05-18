@@ -21,4 +21,12 @@ final class EventStoreCompanyRepository extends EventSourcingRepository implemen
     {
         parent::__construct($eventStore, $eventBus, Company::class, new PublicConstructorAggregateFactory());
     }
+    /**
+     * @param mixed $id
+     * @return \Broadway\Domain\AggregateRoot|\Broadway\EventSourcing\EventSourcedAggregateRoot
+     */
+    public function load($id)
+    {
+        return parent::load('company-'. $id);
+    }
 }

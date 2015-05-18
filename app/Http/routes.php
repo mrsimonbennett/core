@@ -33,6 +33,21 @@ $router->group(['prefix' => 'properties'],
 
     }
 );
+$router->group(['prefix' => 'contracts/{id}'],
+    function () use ($router) {
+        $router->get('', ContractsController::class . '@show');
+
+        $router->post('dates', ContractsController::class . '@saveDates');
+        $router->post('rent', ContractsController::class . '@saveRent');
+        $router->post('documents', ContractsController::class . '@saveDocuments');
+        $router->post('lock', ContractsController::class . '@lockContract');
+
+    }
+);
+
+
+        $router->get('/tenants/{id}/contracts', \FullRent\Core\Application\Http\Controllers\Tenant\ContractsController::class . '@getTenantsContracts');
+
 
 
 /**
