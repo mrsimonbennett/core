@@ -10,9 +10,11 @@ use FullRent\Core\Contract\Commands\LockContract;
 use FullRent\Core\Contract\Commands\SetContractPeriod;
 use FullRent\Core\Contract\Commands\SetContractRentInformation;
 use FullRent\Core\Contract\Commands\SetContractsRequiredDocuments;
+use FullRent\Core\Contract\Commands\TenantUploadId;
 use FullRent\Core\Contract\Query\ContractReadRepository;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\PropertyId;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 /**
@@ -120,8 +122,20 @@ final class ContractsController extends Controller
         return $this->jsonResponse->success();
     }
 
-    public function tenantUploadDocuments()
+    /**
+     * @param Request $request
+     * @param $contractId
+     */
+    public function tenantUploadIdDocument(Request $request, $contractId)
     {
-
+        $this->bus->execute(new TenantUploadId($contractId,$request->get('tenant_id'),$request->file('id')));
+    }
+    /**
+     * @param Request $request
+     * @param $contractId
+     */
+    public function tenantUploadEarningsDocument(Request $request, $contractId)
+    {
+        $this->bus->execute(new TenantUploadEarningsDocument($contractId,$request->get('tenant_id'),$request->file('earnings')));
     }
 }

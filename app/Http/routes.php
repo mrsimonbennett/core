@@ -42,6 +42,10 @@ $router->group(['prefix' => 'contracts/{id}'],
         $router->post('documents', ContractsController::class . '@saveDocuments');
         $router->post('lock', ContractsController::class . '@lockContract');
 
+        $router->post('tenant-upload-id',ContractsController::class . '@tenantUploadIdDocument');
+        $router->post('tenant-upload-earnings',ContractsController::class . '@tenantUploadEarningsDocument');
+
+
     }
 );
 

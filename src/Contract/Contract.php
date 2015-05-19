@@ -9,11 +9,13 @@ use FullRent\Core\Contract\Events\ContractRentInformationDrafted;
 use FullRent\Core\Contract\Events\ContractRentPeriodSet;
 use FullRent\Core\Contract\Events\ContractSetRequiredDocuments;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
+use FullRent\Core\Contract\Events\TenantUploadedIdDocument;
 use FullRent\Core\Contract\Exceptions\TenantAlreadyJoinedContractException;
 use FullRent\Core\Contract\ValueObjects\ApplicationId;
 use FullRent\Core\Contract\ValueObjects\CompanyId;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\Deposit;
+use FullRent\Core\Contract\ValueObjects\DocumentId;
 use FullRent\Core\Contract\ValueObjects\LandlordId;
 use FullRent\Core\Contract\ValueObjects\PropertyId;
 use FullRent\Core\Contract\ValueObjects\Rent;
@@ -143,6 +145,15 @@ final class Contract extends EventSourcedAggregateRoot
     public function lock()
     {
         $this->apply(new ContractLocked($this->contractId,DateTime::now()));
+    }
+
+    /**
+     * @param $tenant
+     * @param DocumentId $fileId
+     */
+    public function uploadIdForTenant(TenantId $tenant, DocumentId $fileId)
+    {
+        $this->apply(new TenantUploadedIdDocument($this->contractId,$tenant,$fileId, DateTime::now()));
     }
 
 
