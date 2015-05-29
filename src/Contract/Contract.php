@@ -8,7 +8,10 @@ use FullRent\Core\Contract\Events\ContractLocked;
 use FullRent\Core\Contract\Events\ContractRentInformationDrafted;
 use FullRent\Core\Contract\Events\ContractRentPeriodSet;
 use FullRent\Core\Contract\Events\ContractSetRequiredDocuments;
+use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
+use FullRent\Core\Contract\Events\TenantSignedContract;
+use FullRent\Core\Contract\Events\TenantUploadedEarningsDocument;
 use FullRent\Core\Contract\Events\TenantUploadedIdDocument;
 use FullRent\Core\Contract\Exceptions\TenantAlreadyJoinedContractException;
 use FullRent\Core\Contract\ValueObjects\ApplicationId;
@@ -66,6 +69,10 @@ final class Contract extends EventSourcedAggregateRoot
      * @var bool
      */
     private $editable;
+    /**
+     * @var Documents[]
+     */
+    private $documents;
 
     /**
      * @param ContractId $contractId
@@ -144,7 +151,7 @@ final class Contract extends EventSourcedAggregateRoot
      */
     public function lock()
     {
-        $this->apply(new ContractLocked($this->contractId,DateTime::now()));
+        $this->apply(new ContractLocked($this->contractId, DateTime::now()));
     }
 
     /**
@@ -153,9 +160,36 @@ final class Contract extends EventSourcedAggregateRoot
      */
     public function uploadIdForTenant(TenantId $tenant, DocumentId $fileId)
     {
-        $this->apply(new TenantUploadedIdDocument($this->contractId,$tenant,$fileId, DateTime::now()));
+        if (isset($this->documents[(string)$tenant])) {
+            $this->documents[(string)$tenant]->guardAgainstUploadingDocumentAgainOnceApproved('id');
+        }
+
+        $this->apply(new TenantUploadedIdDocument($this->contractId, $tenant, $fileId, DateTime::now()));
     }
 
+    public function uploadEarningsProofForTenant(TenantId $tenant, DocumentId $fileId)
+    {
+        if (isset($this->documents[(string)$tenant])) {
+            $this->documents[(string)$tenant]->guardAgainstUploadingDocumentAgainOnceApproved('earnings');
+        }
+
+        $this->apply(new TenantUploadedEarningsDocument($this->contractId, $tenant, $fileId, DateTime::now()));
+    }
+
+    public function tenantSign(TenantId $tenant, $signature)
+    {
+        $this->apply(new TenantSignedContract($this->contractId, $tenant, $signature, DateTime::now()));
+    }
+
+    public function landlordSign($signature)
+    {
+        $this->apply(new LandlordSignedContract($this->contractId,$signature,DateTime::now()));
+    }
+
+
+    /**
+     * Apply Functions
+     */
 
     /**
      * @param ContractDraftedFromApplication $e
@@ -177,18 +211,34 @@ final class Contract extends EventSourcedAggregateRoot
         $this->tenants[(string)$e->getTenantId()] = $e->getTenantId();
     }
 
+    /**
+     * @param ContractRentPeriodSet $e
+     */
     protected function applyContractRentPeriodSet(ContractRentPeriodSet $e)
     {
         $this->start = $e->getStart();
         $this->end = $e->getEnd();
     }
+
     /**
      * @param ContractLocked $e
      */
     protected function applyContractLocked(ContractLocked $e)
     {
         $this->editable = false;
+
     }
+
+    protected function applyTenantUploadedIdDocument(TenantUploadedIdDocument $e)
+    {
+        if (!isset($this->documents[(string)$e->getTenantId()])) {
+            $this->documents[(string)$e->getTenantId()] = new Documents($this->contractId, $e->getTenantId());
+        }
+
+        $this->documents[(string)$e->getTenantId()]->uploadIdDocument($e->getDocumentId());
+
+    }
+
     /**
      * @return string
      */

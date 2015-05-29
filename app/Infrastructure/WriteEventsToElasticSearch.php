@@ -1,8 +1,6 @@
 <?php
 namespace FullRent\Core\Application\Infrastructure;
 
-use Elasticsearch\Client;
-
 /**
  * Class WriteEventsToElasticSearch
  * @package FullRent\Core\Application\Infrastructure
@@ -14,7 +12,12 @@ final class WriteEventsToElasticSearch
 
     public function __construct()
     {
-        $this->es = new Client(['hosts' => ['http://172.16.1.12:9200']]);
+        /*$this->es = KeenIOClient::factory([
+                                              'projectId' => '555f855696773d33037d0b71',
+                                              'writeKey'  => '32580fb6402ad166ca38d56cda2df08bc56c6774518f9d214acd3e82f395c9f013e19e26a7eb08ba96c64ad71bb38c356e676348e0c1f1a53d7cde31b9c4a53b840d4e56b237e461451284b08fc4fc67cc53e00a719a16edd2503224836f66bcb40ca01d79be3e3703f82cac801d6e0e',
+                                              'readKey'   => '9bbed2b30572890cb257021889d30a6a3478623724367712cb7aa793bdb54a0db5bc3db199d853796a6409b6a977d9a2d9cedce82f9d785eb5c682fd0943b4fc3e76b282e3f27c03eb2fcab380a41d6e8d656f83b58af3c36e48eb06650aeebad04daabf1371fcbfc8ee9543e91137f4'
+                                          ]);
+    */
     }
 
     /**
@@ -23,11 +26,6 @@ final class WriteEventsToElasticSearch
      */
     public function saveEventToElasticSearch($e)
     {
-        $this->es->index([
-                             'body'  => ['data' => $e->serialize(),'type' => get_class($e)],
-                             'index' => 'fullrent',
-                             'type'  => 'event_history',
-                             'id'    => uuid(),
-                         ]);
+        //$this->es->addEvent(str_replace('FullRent.Core.', '', str_replace('\\', '', get_class($e))), $e->serialize());
     }
 }

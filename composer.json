@@ -23,7 +23,8 @@
     "laravelcollective/annotations": "~5.0",
     "pda/pheanstalk": "~3.0",
     "cleentfaar/slack": "dev-master",
-    "elasticsearch/elasticsearch": "dev-master"
+    "elasticsearch/elasticsearch": "dev-master",
+    "keen-io/keen-io": "~2.5"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"

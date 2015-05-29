@@ -6,7 +6,11 @@ use FullRent\Core\Contract\Events\ContractLocked;
 use FullRent\Core\Contract\Events\ContractRentInformationDrafted;
 use FullRent\Core\Contract\Events\ContractRentPeriodSet;
 use FullRent\Core\Contract\Events\ContractSetRequiredDocuments;
+use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
+use FullRent\Core\Contract\Events\TenantSignedContract;
+use FullRent\Core\Contract\Events\TenantUploadedEarningsDocument;
+use FullRent\Core\Contract\Events\TenantUploadedIdDocument;
 use FullRent\Core\Infrastructure\Subscribers\BaseMysqlSubscriber;
 
 /**
@@ -130,9 +134,82 @@ final class MySqlContractListener extends BaseMysqlSubscriber
                  ->where('id', $e->getContractId())
                  ->update(
                      [
-                         'locked' => true,
-                         'status' => "Pending on Tenant(s)",
+                         'locked'              => true,
+                         'status'              => "Pending on Tenant(s)",
                          'waiting_on_landlord' => false,
+                         'waiting_on_tenant'   => true,
+
+                     ]
+                 );
+    }
+
+    /**
+     * @param TenantUploadedIdDocument $e
+     * @hears("FullRent.Core.Contract.Events.TenantUploadedIdDocument")
+     */
+    public function whenContractIdDocumentProvided(TenantUploadedIdDocument $e)
+    {
+        $this->db->table('contract_documents')
+                 ->insert([
+                              'id'          => $e->getDocumentId(),
+                              'tenant_id'   => $e->getTenantId(),
+                              'contract_id' => $e->getContractId(),
+                              'uploaded_at' => $e->getUploadedAt(),
+                              'type'        => 'id',
+                          ]);
+    }
+
+    /**
+     * @param TenantUploadedEarningsDocument $e
+     * @hears("FullRent.Core.Contract.Events.TenantUploadedEarningsDocument")
+     */
+    public function whenContractProofOfEarningsProvided(TenantUploadedEarningsDocument $e)
+    {
+        $this->db->table('contract_documents')
+                 ->insert([
+                              'id'          => $e->getDocumentId(),
+                              'tenant_id'   => $e->getTenantId(),
+                              'contract_id' => $e->getContractId(),
+                              'uploaded_at' => $e->getUploadedAt(),
+                              'type'        => 'earnings',
+                          ]);
+    }
+
+    /**
+     * @param TenantSignedContract $e
+     * @hears("FullRent.Core.Contract.Events.TenantSignedContract")
+     */
+    public function whenTenantSignsContract(TenantSignedContract $e)
+    {
+        $this->db->table('contracts')
+                 ->where('id', $e->getContractId())
+                 ->update(
+                     [
+                         'status'              => "Pending on Landlord",
+                         'waiting_on_landlord' => true,
+                         'waiting_on_tenant'   => false,
+                         'tenant_signed'       => true,
+                         'tenant_signature'    => $e->getSignature(),
+                     ]
+                 );
+    }
+
+    /**
+     * @param LandlordSignedContract $e
+     * @hears("FullRent.Core.Contract.Events.LandlordSignedContract")
+     */
+    public function whenLandlordSignsContract(LandlordSignedContract $e)
+    {
+        $this->db->table('contracts')
+                 ->where('id', $e->getContractId())
+                 ->update(
+                     [
+                         'status'              => "Activated",
+                         'waiting_on_landlord' => false,
+                         'waiting_on_tenant'   => false,
+                         'active'              => true,
+                         'landlord_signed'     => true,
+                         'landlord_signature'  => $e->getSignature(),
                      ]
                  );
     }

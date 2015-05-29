@@ -28,7 +28,7 @@ final class SlackNotifications implements EventListenerInterface
 
         $payload = new ChatPostMessagePayload();
         $payload->setChannel('#events');
-        $payload->setText(ucwords($name) . " ({$domainMessage->getType()})");
+        $payload->setText(ucwords($name) . " ( " . str_replace('FullRent.Core.','',$domainMessage->getType()) . ")");
         $payload->setUsername('FullRent Api');
         $payload->setIconUrl('https://fullrent.co.uk/home/fullrent-home-logo.jpg');
 

@@ -41,9 +41,11 @@ $router->group(['prefix' => 'contracts/{id}'],
         $router->post('rent', ContractsController::class . '@saveRent');
         $router->post('documents', ContractsController::class . '@saveDocuments');
         $router->post('lock', ContractsController::class . '@lockContract');
+        $router->post('landlord-sign',ContractsController::class . '@landlordSignContract');
 
         $router->post('tenant-upload-id',ContractsController::class . '@tenantUploadIdDocument');
         $router->post('tenant-upload-earnings',ContractsController::class . '@tenantUploadEarningsDocument');
+        $router->post('tenant-sign-contract',ContractsController::class . '@tenantSignContract');
 
 
     }

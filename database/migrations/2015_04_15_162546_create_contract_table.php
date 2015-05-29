@@ -46,13 +46,27 @@ class CreateContractTable extends Migration
                 $table->boolean('require_id', null)->nullable();
                 $table->boolean('require_earnings_proof', null)->nullable();
 
-                $table->boolean('completed_dates', false);
-                $table->boolean('completed_rent', false);
-                $table->boolean('completed_documents', false);
-                $table->boolean('locked', false);
-                $table->boolean('waiting_on_landlord')->default(true);
-                $table->string('status')->default('Draft');
+                /**
+                 * Tenant
+                 */
+                $table->boolean('tenant_signed')->default(false);
+                $table->text('tenant_signature')->nullable();
 
+                /**
+                 * Landlord
+                 */
+                $table->boolean('landlord_signed')->default(false);
+                $table->text('landlord_signature')->nullable();
+
+                $table->boolean('completed_dates')->default(false);
+                $table->boolean('completed_rent')->default(false);
+                $table->boolean('completed_documents')->default(false);
+                $table->boolean('locked')->default(false);
+                $table->boolean('waiting_on_landlord')->default(true);
+                $table->boolean('waiting_on_tenant')->default(false);
+
+                $table->string('status')->default('Draft');
+                $table->boolean('active')->default(false);
                 $table->timestamp('created_at');
             });
     }
