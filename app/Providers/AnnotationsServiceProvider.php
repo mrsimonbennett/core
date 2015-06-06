@@ -9,6 +9,8 @@ use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
 use FullRent\Core\Contract\Listeners\ApplicationListener;
 use FullRent\Core\Contract\Listeners\MailListener;
 use FullRent\Core\Contract\Listeners\MySqlContractListener;
+use FullRent\Core\Deposit\Listeners\ContractListener;
+use FullRent\Core\Deposit\Listeners\DepositMysqlListener;
 use FullRent\Core\Infrastructure\Email\ApplicationEmails;
 use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\Property\Read\Subscribers\PropertyHistorySubscriber;
@@ -33,6 +35,8 @@ class AnnotationsServiceProvider extends ServiceProvider {
         MailListener::class,
         ApplicationEventListener::class,
         WriteEventsToElasticSearch::class,
+        ContractListener::class,
+        DepositMysqlListener::class,
     ];
 
     /**

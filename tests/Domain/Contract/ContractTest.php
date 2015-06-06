@@ -4,10 +4,9 @@ use FullRent\Core\Contract\Contract;
 use FullRent\Core\Contract\Events\ContractDraftedFromApplication;
 use FullRent\Core\Contract\Events\ContractWasDrafted;
 use FullRent\Core\Contract\ValueObjects\ApplicationId;
+use FullRent\Core\Contract\ValueObjects\CompanyId;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\ContractMinimalPeriod;
-use FullRent\Core\Contract\ValueObjects\Deposit;
-use FullRent\Core\Contract\ValueObjects\DepositAmount;
 use FullRent\Core\Contract\ValueObjects\Landlord;
 use FullRent\Core\Contract\ValueObjects\LandlordId;
 use FullRent\Core\Contract\ValueObjects\Property;
@@ -25,11 +24,12 @@ final class ContractTest extends \TestCase
         $contract = Contract::draftFromApplication(ContractId::random(),
                                                    ApplicationId::random(),
                                                    PropertyId::random(),
-                                                   LandlordId::random());
+                                                   LandlordId::random(),
+                                                   CompanyId::random());
 
         $events = $this->events($contract);
-        $this->assertCount(1,$events);
+        $this->assertCount(1, $events);
 
-        $this->checkCorrectEvent($events,0,ContractDraftedFromApplication::class);
+        $this->checkCorrectEvent($events, 0, ContractDraftedFromApplication::class);
     }
 }

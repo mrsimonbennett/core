@@ -1,5 +1,8 @@
 <?php
 
+use FullRent\Core\Deposit\ServiceProviders\LaravelDepositServiceProvider;
+use GrahamCampbell\Exceptions\ExceptionsServiceProvider;
+
 return [
 
     /*
@@ -143,12 +146,12 @@ return [
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Contract\ServiceProviders\LaravelServiceProvider',
         FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider::class,
-
+        LaravelDepositServiceProvider::class,
         'FullRent\Core\Application\Providers\EventStoreServiceProvider',
-        'FullRent\Core\Application\Infrastructure\LaravelBridge',
-
         'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
 
+        ExceptionsServiceProvider::class,
+        \FullRent\Core\QueryBus\LaravelQueryBusServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

@@ -50,7 +50,7 @@ class ReplaceEvents extends Command
     {
         $this->line((memory_get_peak_usage(true)/1024/1024)." MiB");
 
-        $es = new EventStore('http://172.16.1.10:2113');
+        $es = new EventStore(getenv('EVENT_STORE_HOST'));
 
             $this->line('Running: ' . ucfirst($this->argument('type')));
 
@@ -77,9 +77,9 @@ class ReplaceEvents extends Command
                     if(is_null($event)) continue;
                     $data = $event->getData();
                     $messages[] = [
-                        'eventType'  => $entry->getJson()['eventType'],
+                        'eventType'  => $entry->getType(),
                         'data'       => $data,
-                        'eventClass' => str_replace('\\', '.', $entry->getJson()['eventType'])
+                        'eventClass' => str_replace('\\', '.',  $entry->getType())
                     ];
 
                 }
@@ -90,7 +90,7 @@ class ReplaceEvents extends Command
                     );
             }
             foreach (array_reverse($messages) as $message) {
-                $this->line($message['eventType']);
+                $this->line($message['eventType'] . " " . (memory_get_usage(true)/1024/1024)." MiB");
                 $this->dispatcher->fire($message['eventClass'],
                     (call_user_func(
                         [

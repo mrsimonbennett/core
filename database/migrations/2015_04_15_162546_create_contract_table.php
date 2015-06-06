@@ -52,7 +52,8 @@ class CreateContractTable extends Migration
                 $table->boolean('tenant_signed')->default(false);
                 $table->text('tenant_signature')->nullable();
 
-                /**
+                /*
+                 *
                  * Landlord
                  */
                 $table->boolean('landlord_signed')->default(false);
