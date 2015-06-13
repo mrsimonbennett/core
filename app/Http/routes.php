@@ -47,6 +47,11 @@ $router->group(['prefix' => 'contracts/{id}'],
         $router->post('tenant-upload-earnings',ContractsController::class . '@tenantUploadEarningsDocument');
         $router->post('tenant-sign-contract',ContractsController::class . '@tenantSignContract');
 
+        $router->get('deposit-information',ContractsController::class . '@getDepositInformation');
+        $router->get('deposit/{tenantId}',ContractsController::class . '@getDepositInformationForTenant');
+
+        $router->post('tenant-pay-deposit',ContractsController::class . '@tenantPayDeposit');
+
 
     }
 );

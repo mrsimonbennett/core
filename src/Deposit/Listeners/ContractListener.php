@@ -55,7 +55,7 @@ final class ContractListener
                                                         $tenant->tenant_id,
                                                         $contract->deposit,
                                                         $contract->deposit_due,
-                                                        $contract->fullrent_deposit));
+                                                        boolval($contract->fullrent_deposit)));
 
         }
 

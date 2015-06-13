@@ -1,6 +1,6 @@
 <?php namespace FullRent\Core\Application\Providers;
 
-use FullRent\Core\Deposit\Listeners\ContractListener;
+use FullRent\Core\Deposit\Listeners\DepositMySqlListenerV2;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -12,10 +12,15 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        'event.name' => [
-            'EventListener',
-        ],
+    protected $listen = [];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        DepositMySqlListenerV2::class,
     ];
 
     /**

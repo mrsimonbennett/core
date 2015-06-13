@@ -17,6 +17,10 @@ use FullRent\Core\Contract\Commands\TenantUploadId;
 use FullRent\Core\Contract\Query\ContractReadRepository;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\PropertyId;
+use FullRent\Core\Deposit\Commands\PayDepositWithCard;
+use FullRent\Core\Deposit\Queries\FindAllDepositInformationForContractQuery;
+use FullRent\Core\Deposit\Queries\FindTenantsDepositQuery;
+use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -39,20 +43,27 @@ final class ContractsController extends Controller
      * @var JsonResponse
      */
     private $jsonResponse;
+    /**
+     * @var QueryBus
+     */
+    private $queryBus;
 
     /**
      * @param CommandBus $bus
      * @param ContractReadRepository $contractReadRepository
      * @param JsonResponse $jsonResponse
+     * @param QueryBus $queryBus
      */
     public function __construct(
         CommandBus $bus,
         ContractReadRepository $contractReadRepository,
-        JsonResponse $jsonResponse
+        JsonResponse $jsonResponse,
+        QueryBus $queryBus
     ) {
         $this->bus = $bus;
         $this->contractReadRepository = $contractReadRepository;
         $this->jsonResponse = $jsonResponse;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -171,5 +182,22 @@ final class ContractsController extends Controller
         $this->bus->execute(new TenantSignContract($contractId,
                                                    $request->get('tenant_id'),
                                                    $request->get('signature')));
+    }
+    public function getDepositInformation($contractId)
+    {
+        return $this->jsonResponse->success(['deposits' => $this->queryBus->query(new FindAllDepositInformationForContractQuery($contractId))]);
+    }
+
+    public function getDepositInformationForTenant($contractId, $tenantId)
+    {
+        return $this->jsonResponse->success(['deposit' => $this->queryBus->query(new FindTenantsDepositQuery($contractId,$tenantId))]);
+
+    }
+
+    public function tenantPayDeposit($contractId, Request $request)
+    {
+       $deposit =  $this->queryBus->query(new FindTenantsDepositQuery($contractId,$request->get('tenant_id')));
+
+        $this->bus->execute(new PayDepositWithCard($deposit->id,$request->get('name'),$request->get('number'),$request->get('expiry'),$request->get('cvc')));
     }
 }

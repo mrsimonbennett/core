@@ -39,7 +39,7 @@ class EventStoreServiceProvider extends ServiceProvider
         $eventBus->subscribe($this->app->make(SlackNotifications::class));
 
         $this->app->bind(EventStoreInterface::class, function () {
-            return new BroadwayEventStore(new EventStore(getenv('EVENT_STORE_HOST')));
+            return new BroadwayEventStore(new EventStore(env('EVENT_STORE_HOST')));
         });
     }
 }

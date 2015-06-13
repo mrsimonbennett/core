@@ -7,11 +7,13 @@ use FullRent\Core\Deposit\Events\DepositPaid;
 use FullRent\Core\Deposit\Events\DepositSetUp;
 use FullRent\Core\Deposit\Exceptions\DepositAlreadyPaidException;
 use FullRent\Core\Deposit\Exceptions\PaymentIncorrectException;
+use FullRent\Core\Deposit\ValueObjects\CardDetails;
 use FullRent\Core\Deposit\ValueObjects\ContractId;
 use FullRent\Core\Deposit\ValueObjects\DepositAmount;
 use FullRent\Core\Deposit\ValueObjects\DepositId;
 use FullRent\Core\Deposit\ValueObjects\PaymentAmount;
 use FullRent\Core\Deposit\ValueObjects\TenantId;
+use FullRent\Core\Services\CardPayment\CardPaymentGateway;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -60,52 +62,35 @@ final class DepositTest extends \TestCase
     }
 
     /**
-     *
+     * @
      */
     public function testPayingDepositWithWrongAmount()
     {
-        $deposit = $this->buildDeposit();
 
-        $this->setExpectedException(PaymentIncorrectException::class, "Tired to pay £0.10 but should have paid £1.00");
-        $deposit->payment(new PaymentAmount(10));
-    }
-
-    public function testPayingDepositCorrectly()
-    {
 
         $deposit = $this->buildDeposit();
-
-        $deposit->payment(new PaymentAmount(100));
-
-        $events = $this->events($deposit);
-
-        $this->assertCount(2, $events);
-
-        $this->checkCorrectEvent($events, 1, DepositPaid::class);
+        $deposit->fullPayment($this->buildCard(), $this->app->make(CardPaymentGateway::class));
     }
-    public function testPayingDepositCorrectlyTwice()
-    {
 
-        $deposit = $this->buildDeposit();
-
-        $deposit->payment(new PaymentAmount(100));
-        $this->setExpectedException(DepositAlreadyPaidException::class);
-
-        $deposit->payment(new PaymentAmount(100));
-    }
 
     /**
      * @return Deposit
      */
     private function buildDeposit()
     {
-        $deposit = Deposit::setup(DepositId::random(),
+        return Deposit::setup(DepositId::random(),
                                   ContractId::random(),
                                   TenantId::random(),
                                   new DepositAmount(100),
                                   DateTime::now(),
                                   true);
+    }
 
-        return $deposit;
+    /**
+     * @return CardDetails
+     */
+    private function buildCard()
+    {
+        return new CardDetails('4242424242424242', 10, 2016, 123, 'Mr Simon Benentt');
     }
 }

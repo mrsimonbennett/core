@@ -5,6 +5,7 @@ use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Deposit\ValueObjects\DepositAmount;
 use FullRent\Core\Deposit\ValueObjects\DepositId;
 use FullRent\Core\Deposit\ValueObjects\PaymentAmount;
+use FullRent\Core\Services\CardPayment\SuccessFullPayment;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -26,17 +27,27 @@ final class DepositPaid implements SerializableInterface
      * @var DateTime
      */
     private $paidAt;
+    /**
+     * @var SuccessFullPayment
+     */
+    private $successFullPayment;
 
     /**
      * @param DepositId $depositId
      * @param PaymentAmount $paymentAmount
+     * @param SuccessFullPayment $successFullPayment
      * @param DateTime $paidAt
      */
-    public function __construct(DepositId $depositId, PaymentAmount $paymentAmount, DateTime $paidAt)
-    {
+    public function __construct(
+        DepositId $depositId,
+        PaymentAmount $paymentAmount,
+        SuccessFullPayment $successFullPayment,
+        DateTime $paidAt
+    ) {
         $this->depositId = $depositId;
         $this->paymentAmount = $paymentAmount;
         $this->paidAt = $paidAt;
+        $this->successFullPayment = $successFullPayment;
     }
 
     /**
@@ -72,6 +83,7 @@ final class DepositPaid implements SerializableInterface
     {
         return new static(new DepositId($data['deposit_id']),
                           PaymentAmount::deserialize($data['payment_amount']),
+                          SuccessFullPayment::deserialize($data['success_payment']),
                           DateTime::deserialize($data['paid_at']));
     }
 
@@ -81,9 +93,10 @@ final class DepositPaid implements SerializableInterface
     public function serialize()
     {
         return [
-            'deposit_id'     => (string)$this->depositId,
-            'payment_amount' => $this->paymentAmount->serialize(),
-            'paid_at'        => $this->paidAt->serialize(),
+            'deposit_id'      => (string)$this->depositId,
+            'payment_amount'  => $this->paymentAmount->serialize(),
+            'paid_at'         => $this->paidAt->serialize(),
+            'success_payment' => $this->successFullPayment->serialize(),
         ];
     }
 }

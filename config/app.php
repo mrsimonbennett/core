@@ -1,6 +1,9 @@
 <?php
 
+use FullRent\Core\Application\Providers\CardPaymentGatewayProvider;
+use FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider;
 use FullRent\Core\Deposit\ServiceProviders\LaravelDepositServiceProvider;
+use FullRent\Core\QueryBus\LaravelQueryBusServiceProvider;
 use GrahamCampbell\Exceptions\ExceptionsServiceProvider;
 
 return [
@@ -145,13 +148,14 @@ return [
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Contract\ServiceProviders\LaravelServiceProvider',
-        FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider::class,
+        ApplicationLaravelServiceProvider::class,
         LaravelDepositServiceProvider::class,
         'FullRent\Core\Application\Providers\EventStoreServiceProvider',
         'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
 
         ExceptionsServiceProvider::class,
-        \FullRent\Core\QueryBus\LaravelQueryBusServiceProvider::class,
+        LaravelQueryBusServiceProvider::class,
+        CardPaymentGatewayProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

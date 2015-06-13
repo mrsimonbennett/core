@@ -21,6 +21,8 @@ class CreateDepositTable extends Migration
                 $table->float('deposit_amount');
                 $table->timestamp('deposit_due');
                 $table->boolean('fullrent_collection');
+                $table->boolean('paid')->default(false);
+                $table->timestamp('paid_at')->nullable();
                 $table->timestamp('setup_at');
 
             });
@@ -33,7 +35,7 @@ class CreateDepositTable extends Migration
      */
     public function down()
     {
-       Illuminate\Support\Facades\Schema::drop('deposits');
+        Illuminate\Support\Facades\Schema::drop('deposits');
     }
 
 }

@@ -7,11 +7,13 @@ use FullRent\Core\Deposit\Events\DepositPaid;
 use FullRent\Core\Deposit\Events\DepositSetUp;
 use FullRent\Core\Deposit\Exceptions\DepositAlreadyPaidException;
 use FullRent\Core\Deposit\Exceptions\PaymentIncorrectException;
+use FullRent\Core\Deposit\ValueObjects\CardDetails;
 use FullRent\Core\Deposit\ValueObjects\ContractId;
 use FullRent\Core\Deposit\ValueObjects\DepositAmount;
 use FullRent\Core\Deposit\ValueObjects\DepositId;
 use FullRent\Core\Deposit\ValueObjects\PaymentAmount;
 use FullRent\Core\Deposit\ValueObjects\TenantId;
+use FullRent\Core\Services\CardPayment\CardPaymentGateway;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -24,7 +26,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * If collected by fullrent we will place in a dps and upload the documents for that.
  * Otherwise just record its been paid
  *
- * In future we may have comments threads, to solve conflicts
+ * In future we may have comments threads, to solve deposits conflicts
  *
  * @package FullRent\Core\Deposit
  * @author Simon Bennett <simon@bennett.im>
@@ -104,16 +106,20 @@ final class Deposit extends EventSourcedAggregateRoot
 
     /**
      * Pay deposit with payment/card normally
-     * @param PaymentAmount $paymentAmount
+     *
+     * We pass in the card and the service we use for card payments.
+     *
+     * @param CardDetails $cardDetails
+     * @param CardPaymentGateway $cardPaymentGateway
      * @throws DepositAlreadyPaidException
-     * @throws PaymentIncorrectException
      */
-    public function payment(PaymentAmount $paymentAmount)
+    public function fullPayment(CardDetails $cardDetails, CardPaymentGateway $cardPaymentGateway)
     {
         $this->guardAgainstPayingDepositMoreThanOnce();
-        $this->guardAgainstPayingIncorrectAmount($paymentAmount);
 
-        $this->apply(new DepositPaid($this->depositId, $paymentAmount, DateTime::now()));
+        $paymentDetails = $cardPaymentGateway->charge($cardDetails, $this->depositAmount, "Payment of deposit");
+
+        $this->apply(new DepositPaid($this->depositId, new PaymentAmount($this->depositAmount->getAmount()), $paymentDetails, DateTime::now()));
 
     }
 
