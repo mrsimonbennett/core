@@ -33,6 +33,6 @@ final class LogEvents implements EventListenerInterface
         $name = explode('.',$domainMessage->getType());
 
         $name = preg_replace('/(?!^)[A-Z]{2,}(?=[A-Z][a-z])|[A-Z][a-z]/', ' $0', end($name));
-        $this->writer->debug(ucwords($name) . " ({$domainMessage->getType()})");
+        $this->writer->debug(trim(ucwords($name)) . " ({$domainMessage->getType()})");
     }
 }
