@@ -32,6 +32,6 @@ final class LaravelCommandBus implements CommandBus
     {
         $handler = $this->commandTranslator->toCommandHandler($command);
 
-        return $this->application->make($handler)->handle($command);
+        $this->application->make($handler)->handle($command);
     }
 }
