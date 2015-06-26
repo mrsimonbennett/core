@@ -3,11 +3,12 @@
 use Broadway\EventHandling\EventBusInterface;
 use Broadway\EventHandling\SimpleEventBus;
 use Broadway\EventStore\EventStoreInterface;
-use EventStore\Broadway\BroadwayEventStore;
-use EventStore\EventStore;
+use Broadway\Serializer\SerializerInterface;
+use Broadway\Serializer\SimpleInterfaceSerializer;
 use FullRent\Core\Application\Infrastructure\BroadWayToLaravelEvents;
 use FullRent\Core\Application\Infrastructure\LogEvents;
 use FullRent\Core\Application\Infrastructure\SlackNotifications;
+use FullRent\Core\Infrastructure\EventStore\LaravelEventStore;
 use Illuminate\Support\ServiceProvider;
 
 class EventStoreServiceProvider extends ServiceProvider
@@ -30,6 +31,8 @@ class EventStoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(SerializerInterface::class, SimpleInterfaceSerializer::class);
+
         $this->app->singleton(EventBusInterface::class, SimpleEventBus::class);
 
         /** @var EventBusInterface $eventBus */
@@ -38,8 +41,6 @@ class EventStoreServiceProvider extends ServiceProvider
         $eventBus->subscribe($this->app->make(BroadWayToLaravelEvents::class));
         $eventBus->subscribe($this->app->make(SlackNotifications::class));
 
-        $this->app->bind(EventStoreInterface::class, function () {
-            return new BroadwayEventStore(new EventStore(env('EVENT_STORE_HOST')));
-        });
+        $this->app->bind(EventStoreInterface::class, LaravelEventStore::class);
     }
 }

@@ -46,7 +46,7 @@ final class DepositMySqlListenerV2 extends EventListener
     protected function register()
     {
         return [
-            DepositPaid::class => 'whenDepositPaid',
+            'whenDepositPaid' => DepositPaid::class,
         ];
     }
 }

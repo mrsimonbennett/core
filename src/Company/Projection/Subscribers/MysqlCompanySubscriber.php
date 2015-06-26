@@ -2,6 +2,7 @@
 namespace FullRent\Core\Company\Projection\Subscribers;
 
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
+use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\Projection\Company;
@@ -32,12 +33,12 @@ final class MysqlCompanySubscriber
     public function companyHasBeenRegistered(CompanyHasBeenRegistered $beenRegistered)
     {
         $this->db->table('companies')->insert([
-                                                'id'         => (string)$beenRegistered->getCompanyId(),
-                                                'name'       => $beenRegistered->getCompanyName()->getName(),
-                                                'domain'     => $beenRegistered->getCompanyDomain()->getDomain(),
-                                                'created_at' => $beenRegistered->getCreatedAt(),
-                                                'updated_at' => DateTime::now(),
-                                            ]);
+                                                  'id'         => (string)$beenRegistered->getCompanyId(),
+                                                  'name'       => $beenRegistered->getCompanyName()->getName(),
+                                                  'domain'     => $beenRegistered->getCompanyDomain()->getDomain(),
+                                                  'created_at' => $beenRegistered->getCreatedAt(),
+                                                  'updated_at' => DateTime::now(),
+                                              ]);
     }
 
     /**
@@ -65,4 +66,23 @@ final class MysqlCompanySubscriber
                                                       'role'       => 'tenant',
                                                   ]);
     }
+
+    /**
+     * @param CompanySetUpDirectDebit $e
+     * @hears("FullRent.Core.Company.Events.CompanySetUpDirectDebit")
+     */
+    public function whenCompanySetUpDirectDebit(CompanySetUpDirectDebit $e)
+    {
+        $this->db
+            ->table('companies')
+            ->where('id', $e->getCompanyId())
+            ->update(
+                [
+                    'gocardless_merchant' => $e->getMerchantId(),
+                    'gocardless_token'    => $e->getAccessToken(),
+                    'gocardless_setup_at' => $e->getSetupAt(),
+                    'direct_debit_setup'  => true,
+                ]);
+    }
+
 }

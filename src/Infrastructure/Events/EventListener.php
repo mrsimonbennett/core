@@ -29,7 +29,7 @@ abstract class EventListener
      */
     public function subscribe($dispatcher)
     {
-        if (!app()->environment() == 'replay') {
+        if (app()->environment() !== 'replay') {
             $this->registerEvents($this->registerOnce(), $dispatcher);
         }
 
@@ -52,8 +52,8 @@ abstract class EventListener
      */
     private function registerEvents($subscribers, $dispatcher)
     {
-        foreach ($subscribers as $name => $method) {
-            $dispatcher->listen($this->transform($name),
+        foreach ($subscribers as $method => $name) {
+            $dispatcher->listen([0 => $this->transform($name)],
                                 get_class($this) . '@' . $method);
         }
     }

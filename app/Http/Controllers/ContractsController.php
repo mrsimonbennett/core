@@ -6,6 +6,7 @@ use FullRent\Core\Application\Http\Requests\SaveContractDatesHttpRequest;
 use FullRent\Core\Application\Http\Requests\SaveContractDocumentHttpRequest;
 use FullRent\Core\Application\Http\Requests\SaveContractRentHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Contract\Commands\LandlordSignContract;
 use FullRent\Core\Contract\Commands\LockContract;
 use FullRent\Core\Contract\Commands\SetContractPeriod;
@@ -15,12 +16,15 @@ use FullRent\Core\Contract\Commands\TenantSignContract;
 use FullRent\Core\Contract\Commands\TenantUploadEarningsDocument;
 use FullRent\Core\Contract\Commands\TenantUploadId;
 use FullRent\Core\Contract\Query\ContractReadRepository;
-use FullRent\Core\Contract\ValueObjects\ContractId;
+use FullRent\Core\Contract\Query\FindContractByIdQuery;
 use FullRent\Core\Contract\ValueObjects\PropertyId;
 use FullRent\Core\Deposit\Commands\PayDepositWithCard;
 use FullRent\Core\Deposit\Queries\FindAllDepositInformationForContractQuery;
 use FullRent\Core\Deposit\Queries\FindTenantsDepositQuery;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\Services\DirectDebit\DirectDebit;
+use FullRent\Core\Services\DirectDebit\DirectDebitUser;
+use FullRent\Core\Services\DirectDebit\GoCardLess\GoCardLessAccessTokens;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -81,7 +85,7 @@ final class ContractsController extends Controller
      */
     public function show($contractId)
     {
-        return $this->jsonResponse->success(['contract' => $this->contractReadRepository->getById(new ContractId($contractId))]);
+        return $this->jsonResponse->success(['contract' => $this->queryBus->query(new FindContractByIdQuery($contractId))]);
     }
 
     /**
@@ -183,6 +187,7 @@ final class ContractsController extends Controller
                                                    $request->get('tenant_id'),
                                                    $request->get('signature')));
     }
+
     public function getDepositInformation($contractId)
     {
         return $this->jsonResponse->success(['deposits' => $this->queryBus->query(new FindAllDepositInformationForContractQuery($contractId))]);
@@ -190,14 +195,51 @@ final class ContractsController extends Controller
 
     public function getDepositInformationForTenant($contractId, $tenantId)
     {
-        return $this->jsonResponse->success(['deposit' => $this->queryBus->query(new FindTenantsDepositQuery($contractId,$tenantId))]);
+        return $this->jsonResponse->success([
+                                                'deposit' => $this->queryBus->query(new FindTenantsDepositQuery($contractId,
+                                                                                                                $tenantId))
+                                            ]);
 
     }
 
     public function tenantPayDeposit($contractId, Request $request)
     {
-       $deposit =  $this->queryBus->query(new FindTenantsDepositQuery($contractId,$request->get('tenant_id')));
+        $deposit = $this->queryBus->query(new FindTenantsDepositQuery($contractId, $request->get('tenant_id')));
 
-        $this->bus->execute(new PayDepositWithCard($deposit->id,$request->get('name'),$request->get('number'),$request->get('expiry'),$request->get('cvc')));
+        $this->bus->execute(new PayDepositWithCard($deposit->id,
+                                                   $request->get('name'),
+                                                   $request->get('number'),
+                                                   $request->get('expiry'),
+                                                   $request->get('cvc')));
+    }
+
+
+    /**
+     * @param $contractId
+     * @param Request $request
+     * @param DirectDebit $debit
+     * @return array
+     */
+    public function tenantAuthorizationUrl($contractId, Request $request, DirectDebit $debit)
+    {
+        $contract = $this->queryBus->query(new FindContractByIdQuery($contractId));
+        $company = $this->queryBus->query(new FindCompanyByIdQuery($contract->company_id));
+
+
+        return [
+            'authorization_url' => $debit->generatePreAuthorisationUrl($contract->rent,
+                                                                       new DirectDebitUser(),
+                                                                       "https://{$company->domain}.fullrentcore.local/contracts/{$contractId}/tenant/access_token",
+                                                                       new GoCardLessAccessTokens($company->gocardless_merchant,
+                                                                                                  $company->gocardless_token),
+                                                                       1,
+                                                                       'month',
+                                                                       12)
+        ];
+    }
+
+    public function tenantDirectDebitAccessToken($contractId, Request $request)
+    {
+
     }
 }

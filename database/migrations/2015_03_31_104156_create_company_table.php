@@ -17,7 +17,11 @@ class CreateCompanyTable extends Migration {
 			$table->char('id',36);
 			$table->string('name');
 			$table->string('domain');
-			$table->timestamps();
+            $table->string('gocardless_merchant')->nullalbe();
+            $table->string('gocardless_token')->nullalbe();
+            $table->timestamp('gocardless_setup_at')->nullalbe();
+            $table->boolean('direct_debit_setup')->default(false);
+            $table->timestamps();
 		});
 
 	}

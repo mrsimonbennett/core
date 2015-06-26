@@ -1,10 +1,7 @@
 <?php namespace FullRent\Core\Application\Console\Commands;
 
-use EventStore\EventStore;
-use EventStore\Exception\StreamNotFoundException;
-use EventStore\StreamFeed\EntryEmbedMode;
-use EventStore\StreamFeed\LinkRelation;
 use Illuminate\Console\Command;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,16 +26,22 @@ class ReplaceEvents extends Command
      * @var Dispatcher
      */
     private $dispatcher;
+    /**
+     * @var Connection
+     */
+    private $db;
 
     /**
      * Create a new command instance.
      *
      * @param Dispatcher $dispatcher
+     * @param DatabaseManager $db
      */
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct(Dispatcher $dispatcher, DatabaseManager $db)
     {
         parent::__construct();
         $this->dispatcher = $dispatcher;
+        $this->db = $db;
     }
 
     /**
@@ -48,59 +51,34 @@ class ReplaceEvents extends Command
      */
     public function fire()
     {
-        $this->line((memory_get_peak_usage(true)/1024/1024)." MiB");
+        $this->line('Rebuild Projections and system from the Event Store');
 
-        $es = new EventStore(getenv('EVENT_STORE_HOST'));
+        $this->line('Loading events from store');
+        $this->line((memory_get_peak_usage(true) / 1024 / 1024) . " MiB");
 
-            $this->line('Running: ' . ucfirst($this->argument('type')));
+        $allEvents = $this->db->connection('eventstore')->table('eventstore')->get();
+        $eventCount = count($allEvents);
+        $this->line("Found {$eventCount} to replay");
+        // $this->output->progressStart(count($allEvents));
 
-            try {
-                $feed = $es->openStreamFeed('events' , EntryEmbedMode::RICH());
-            } catch (StreamNotFoundException $ex) {
-                $this->error('Stream Not Found');
+        foreach ($allEvents as $eventRow) {
+            $payload = json_decode($eventRow->payload, true)['payload'];
+            $this->dispatcher->fire($eventRow->type,
+                (call_user_func(
+                    [
+                        str_replace('.', '\\', $eventRow->type),
+                        'deserialize'
+                    ],
+                    $payload
+                )));
+            $this->line($eventRow->type);
+            //$this->output->progressAdvance();
 
-                return;
-            }
-            $feed = $es
-                ->navigateStreamFeed(
-                    $feed,
-                    LinkRelation::FIRST()
-                );
+        }
 
-            $rel = LinkRelation::NEXT();
+        // $this->output->progressFinish();
 
-            $messages = [];
-
-            while ($feed !== null) {
-                foreach ($feed->getEntries() as $entry) {
-                    $event = $es->readEvent($entry->getEventUrl());
-                    if(is_null($event)) continue;
-                    $data = $event->getData();
-                    $messages[] = [
-                        'eventType'  => $entry->getType(),
-                        'data'       => $data,
-                        'eventClass' => str_replace('\\', '.',  $entry->getType())
-                    ];
-
-                }
-                $feed = $es
-                    ->navigateStreamFeed(
-                        $feed,
-                        $rel
-                    );
-            }
-            foreach (array_reverse($messages) as $message) {
-                $this->line($message['eventType'] . " " . (memory_get_usage(true)/1024/1024)." MiB");
-                $this->dispatcher->fire($message['eventClass'],
-                    (call_user_func(
-                        [
-                            $message['eventType'],
-                            'deserialize'
-                        ],
-                        $message['data']
-                    )));
-            }
-            $this->line((memory_get_peak_usage(true)/1024/1024)." MiB");
+        $this->line((memory_get_peak_usage(true) / 1024 / 1024) . " MiB");
 
     }
 

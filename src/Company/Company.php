@@ -3,12 +3,14 @@ namespace FullRent\Core\Company;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
+use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\Company\ValueObjects\TenantId;
+use FullRent\Core\Services\DirectDebit\DirectDebitAccountAuthorisation;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -63,6 +65,16 @@ final class Company extends EventSourcedAggregateRoot
     public function enrolTenant(TenantId $tenantId )
     {
         $this->apply(new TenantEnrolled($this->companyId, $tenantId, DateTime::now()));
+    }
+
+    /**
+     * @param $authCode
+     * @param DirectDebitAccountAuthorisation $accountAuthorisation
+     */
+    public function authorizeDirectDebit($authCode,DirectDebitAccountAuthorisation  $accountAuthorisation)
+    {
+        $accessTokens = $accountAuthorisation->getAccessToken($this->companyDomain,$authCode);
+        $this->apply(new CompanySetUpDirectDebit($this->companyId,$accessTokens->getMerchantId(),$accessTokens->getAccessToken(),DateTime::now()));
     }
 
     /**

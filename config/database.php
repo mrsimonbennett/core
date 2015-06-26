@@ -63,7 +63,17 @@ return [
 			'prefix'    => '',
 			'strict'    => false,
 		],
-
+        'eventstore' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_EVENTSTORE', 'localhost'),
+            'database'  => env('DB_DATABASE_EVENTSTORE', 'eventstore'),
+            'username'  => env('DB_USERNAME_EVENTSTORE', 'dbuser'),
+            'password'  => env('DB_PASSWORD_EVENTSTORE', '123'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
 		'pgsql' => [
 			'driver'   => 'pgsql',
 			'host'     => env('DB_HOST', 'localhost'),

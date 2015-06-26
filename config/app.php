@@ -1,9 +1,11 @@
 <?php
 
 use FullRent\Core\Application\Providers\CardPaymentGatewayProvider;
+use FullRent\Core\Application\Providers\DirectDebitServiceProvider;
 use FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider;
 use FullRent\Core\Deposit\ServiceProviders\LaravelDepositServiceProvider;
 use FullRent\Core\QueryBus\LaravelQueryBusServiceProvider;
+use FullRent\Core\RentBook\RentBookServiceProvider;
 use GrahamCampbell\Exceptions\ExceptionsServiceProvider;
 
 return [
@@ -156,6 +158,12 @@ return [
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
+        DirectDebitServiceProvider::class,
+
+        /**
+         * REnt Book
+         */
+        RentBookServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

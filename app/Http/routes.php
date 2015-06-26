@@ -3,17 +3,27 @@
 use FullRent\Core\Application\Http\Controllers\ApplicationController;
 use FullRent\Core\Application\Http\Controllers\Auth\AuthController;
 use FullRent\Core\Application\Http\Controllers\CompanyController;
+use FullRent\Core\Application\Http\Controllers\CompanyDirectDebit;
 use FullRent\Core\Application\Http\Controllers\ContractsController;
 use FullRent\Core\Application\Http\Controllers\PropertiesController;
+use FullRent\Core\Application\Http\Controllers\Tenant\ContractsController as ContractsControllerTenant;
 use FullRent\Core\Application\Http\Controllers\UserController;
 use Illuminate\Routing\Router;
 
 /**
  * Companies
  */
-$router->post('companies', CompanyController::class . '@createCompany');
-$router->get('companies/exists/{domain}', CompanyController::class . '@checkExists');
-$router->get('companies/{domain}', CompanyController::class . '@show');
+$router->group(['prefix' => 'companies'],
+    function () use ($router) {
+        $router->post('', CompanyController::class . '@createCompany');
+        $router->get('exists/{domain}', CompanyController::class . '@checkExists');
+        $router->get('{domain}', CompanyController::class . '@show');
+
+        $router->get('{id}/direct-debit/authorization_url',CompanyDirectDebit::class . '@authorizationUrl');
+        $router->post('{id}/direct-debit/access_token',CompanyDirectDebit::class . '@accessToken');
+
+    }
+);
 /*
  * Properties
  */
@@ -41,24 +51,24 @@ $router->group(['prefix' => 'contracts/{id}'],
         $router->post('rent', ContractsController::class . '@saveRent');
         $router->post('documents', ContractsController::class . '@saveDocuments');
         $router->post('lock', ContractsController::class . '@lockContract');
-        $router->post('landlord-sign',ContractsController::class . '@landlordSignContract');
+        $router->post('landlord-sign', ContractsController::class . '@landlordSignContract');
 
-        $router->post('tenant-upload-id',ContractsController::class . '@tenantUploadIdDocument');
-        $router->post('tenant-upload-earnings',ContractsController::class . '@tenantUploadEarningsDocument');
-        $router->post('tenant-sign-contract',ContractsController::class . '@tenantSignContract');
+        $router->post('tenant-upload-id', ContractsController::class . '@tenantUploadIdDocument');
+        $router->post('tenant-upload-earnings', ContractsController::class . '@tenantUploadEarningsDocument');
+        $router->post('tenant-sign-contract', ContractsController::class . '@tenantSignContract');
 
-        $router->get('deposit-information',ContractsController::class . '@getDepositInformation');
-        $router->get('deposit/{tenantId}',ContractsController::class . '@getDepositInformationForTenant');
+        $router->get('deposit-information', ContractsController::class . '@getDepositInformation');
+        $router->get('deposit/{tenantId}', ContractsController::class . '@getDepositInformationForTenant');
 
-        $router->post('tenant-pay-deposit',ContractsController::class . '@tenantPayDeposit');
+        $router->post('tenant-pay-deposit', ContractsController::class . '@tenantPayDeposit');
+        $router->get('tenant/direct-debit/authorization_url', ContractsController::class . '@tenantAuthorizationUrl');
 
 
     }
 );
 
 
-        $router->get('/tenants/{id}/contracts', \FullRent\Core\Application\Http\Controllers\Tenant\ContractsController::class . '@getTenantsContracts');
-
+$router->get('/tenants/{id}/contracts', ContractsControllerTenant::class . '@getTenantsContracts');
 
 
 /**

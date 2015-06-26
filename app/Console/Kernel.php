@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Application\Console;
 
 use FullRent\Core\Application\Console\Commands\BuildApi;
+use FullRent\Core\Application\Console\Commands\BuildEventStore;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,6 +15,7 @@ class Kernel extends ConsoleKernel {
 	protected $commands = [
 		'FullRent\Core\Application\Console\Commands\ReplaceEvents',
         BuildApi::class,
+        BuildEventStore::class,
 
 	];
 
