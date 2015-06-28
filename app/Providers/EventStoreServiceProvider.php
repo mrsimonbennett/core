@@ -10,6 +10,7 @@ use FullRent\Core\Application\Infrastructure\LogEvents;
 use FullRent\Core\Application\Infrastructure\SlackNotifications;
 use FullRent\Core\Infrastructure\EventStore\LaravelEventStore;
 use Illuminate\Support\ServiceProvider;
+use Rhumsaa\Uuid\Console\Exception;
 
 class EventStoreServiceProvider extends ServiceProvider
 {
@@ -39,7 +40,7 @@ class EventStoreServiceProvider extends ServiceProvider
         $eventBus = $this->app->make(EventBusInterface::class);
         $eventBus->subscribe($this->app->make(LogEvents::class));
         $eventBus->subscribe($this->app->make(BroadWayToLaravelEvents::class));
-        $eventBus->subscribe($this->app->make(SlackNotifications::class));
+        //$eventBus->subscribe($this->app->make(SlackNotifications::class));
 
         $this->app->bind(EventStoreInterface::class, LaravelEventStore::class);
     }
