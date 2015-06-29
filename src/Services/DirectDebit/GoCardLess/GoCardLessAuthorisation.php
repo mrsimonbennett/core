@@ -67,4 +67,22 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
         return new GoCardLessAccessTokens($token['merchant_id'], $token['access_token']);
 
     }
+
+    /**
+     * @param $resourceId
+     * @param $resourceType
+     * @param $resourceUri
+     * @param $signature
+     * @param AccessTokens $accessTokens
+     * @return mixed
+     */
+    public function confirmPreAuthorisation(
+        $resourceId,
+        $resourceType,
+        $resourceUri,
+        $signature,
+        AccessTokens $accessTokens
+    ) {
+        throw new \Exception('Not implemented [confirmPreAuthorisation] method');
+    }
 }

@@ -20,4 +20,6 @@ interface DirectDebitAccountAuthorisation
      * @return AccessTokens
      */
     public function getAccessToken($companyUrl, $authorisationCode);
+
+
 }

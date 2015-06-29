@@ -29,6 +29,6 @@ final class BroadwayRentBookRepository extends EventSourcingRepository implement
      */
     public function load($id)
     {
-        return parent::load('rent-book' . $id);
+        return parent::load('rent-book-' . $id);
     }
 }

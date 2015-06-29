@@ -34,7 +34,7 @@ class Money implements SerializableInterface
      */
     public static function fromPounds($pounds)
     {
-        return new static((int)$pounds * 100);
+        return new static((int)($pounds * 100));
     }
 
     /**

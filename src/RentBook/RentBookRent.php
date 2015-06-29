@@ -3,7 +3,7 @@ namespace FullRent\Core\RentBook;
 
 use FullRent\Core\RentBook\ValueObjects\RentAmount;
 use FullRent\Core\RentBook\ValueObjects\RentBookRentId;
-use Nette\Utils\DateTime;
+use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class RentBookRent

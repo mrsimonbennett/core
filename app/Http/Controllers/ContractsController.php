@@ -5,6 +5,7 @@ use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\SaveContractDatesHttpRequest;
 use FullRent\Core\Application\Http\Requests\SaveContractDocumentHttpRequest;
 use FullRent\Core\Application\Http\Requests\SaveContractRentHttpRequest;
+use FullRent\Core\Application\Http\Requests\TenantDirectDebitAccessTokenHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Contract\Commands\LandlordSignContract;
@@ -22,6 +23,8 @@ use FullRent\Core\Deposit\Commands\PayDepositWithCard;
 use FullRent\Core\Deposit\Queries\FindAllDepositInformationForContractQuery;
 use FullRent\Core\Deposit\Queries\FindTenantsDepositQuery;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\RentBook\Commands\RentBookAuthorizeDirectDebit;
+use FullRent\Core\RentBook\Queries\FindRentBookQuery;
 use FullRent\Core\Services\DirectDebit\DirectDebit;
 use FullRent\Core\Services\DirectDebit\DirectDebitUser;
 use FullRent\Core\Services\DirectDebit\GoCardLess\GoCardLessAccessTokens;
@@ -227,7 +230,7 @@ final class ContractsController extends Controller
 
 
         return [
-            'authorization_url' => $debit->generatePreAuthorisationUrl($contract->rent,
+            'authorization_url' => $debit->generatePreAuthorisationUrl($contract->rent*4,
                                                                        new DirectDebitUser(),
                                                                        "https://{$company->domain}.fullrentcore.local/contracts/{$contractId}/tenant/access_token",
                                                                        new GoCardLessAccessTokens($company->gocardless_merchant,
@@ -238,8 +241,20 @@ final class ContractsController extends Controller
         ];
     }
 
-    public function tenantDirectDebitAccessToken($contractId, Request $request)
+    public function tenantDirectDebitAccessToken($contractId, TenantDirectDebitAccessTokenHttpRequest $request)
     {
+        $rentBook = $this->queryBus->query(new FindRentBookQuery($contractId, $request->get('tenant_id')));
+        $contract = $this->queryBus->query(new FindContractByIdQuery($contractId));
+        $company = $this->queryBus->query(new FindCompanyByIdQuery($contract->company_id));
+
+
+        $this->bus->execute(new RentBookAuthorizeDirectDebit($rentBook->id,
+                                                             $request->get('resource_id'),
+                                                             $request->get('resource_type'),
+                                                             $request->get('resource_uri'),
+                                                             $request->get('signature'),
+                                                             new GoCardLessAccessTokens($company->gocardless_merchant,
+                                                                                        $company->gocardless_token)));
 
     }
 }

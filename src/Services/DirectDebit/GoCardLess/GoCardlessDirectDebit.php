@@ -5,6 +5,7 @@ use FullRent\Core\Services\DirectDebit\AccessTokens;
 use FullRent\Core\Services\DirectDebit\Bill;
 use FullRent\Core\Services\DirectDebit\DirectDebit;
 use FullRent\Core\Services\DirectDebit\DirectDebitUser;
+use FullRent\Core\ValueObjects\DateTime;
 use GoCardless;
 use GoCardless_Client;
 
@@ -27,6 +28,7 @@ final class GoCardlessDirectDebit implements DirectDebit
             ['app_id' => getenv('CARDLESS_APP'), 'app_secret' => getenv('CARDLESS_SECRET')]
         );
     }
+
     /**
      * Generate the URL for setting up a pre authorized direct debit.
      *
@@ -55,9 +57,7 @@ final class GoCardlessDirectDebit implements DirectDebit
             'interval_length' => $rentInterval,
             'interval_unit'   => $rentUnit,
             'interval_count'  => $intervalCount + 1,
-            'user'            => array(
-
-            ),
+            'user'            => array(),
             'redirect_uri'    => $redirectUrl,
 
         );
@@ -74,7 +74,7 @@ final class GoCardlessDirectDebit implements DirectDebit
      * @param string $resourceType
      * @param string $resourceUri
      * @param string $signature
-     * @return string
+     * @return PreAuthorization
      */
     public function confirmPreAuthorization(
         AccessTokens $accessTokens,
@@ -83,20 +83,39 @@ final class GoCardlessDirectDebit implements DirectDebit
         $resourceUri,
         $signature
     ) {
-        throw new \Exception('Not implemented [confirmPreAuthorization] method');
+        $client = $this->generateClient($accessTokens);
+        $confirmation =  $client->confirm_resource(
+            [
+                'resource_id'   => $resourceId,
+                'resource_type' => $resourceType,
+                'resource_uri'  => $resourceUri,
+                'signature'     => $signature
+            ]
+        );
+        return new PreAuthorization($confirmation->id);
+
     }
 
     /**
      * @param AccessTokens $accessTokens
-     * @param $preAuthToken
+     * @param PreAuthorization $preAuthToken
      * @param $billName
      * @param $billAmount
      * @param $changeDate
      * @return Bill
      */
-    public function createBill(AccessTokens $accessTokens, $preAuthToken, $billName, $billAmount, $changeDate)
+    public function createBill(AccessTokens $accessTokens, PreAuthorization $preAuthToken, $billName, $billAmount,
+                               DateTime $changeDate)
     {
-        throw new \Exception('Not implemented [createBill] method');
+        $client = $this->generateClient($accessTokens);
+        $preAuth = $client->pre_authorization($preAuthToken->getId());
+
+        $bill = $preAuth->create_bill([
+                                          'name'               =>$billName,
+                                          'amount'             => $billAmount,
+                                          'charge_customer_at' => $changeDate->toDateString()
+                                      ]);
+        return Bill::fromGoCardless($bill);
     }
 
     private function generateClient(AccessTokens $accessTokens)

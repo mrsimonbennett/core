@@ -62,6 +62,7 @@ $router->group(['prefix' => 'contracts/{id}'],
 
         $router->post('tenant-pay-deposit', ContractsController::class . '@tenantPayDeposit');
         $router->get('tenant/direct-debit/authorization_url', ContractsController::class . '@tenantAuthorizationUrl');
+        $router->post('tenant/direct-debit/access_token', ContractsController::class . '@tenantDirectDebitAccessToken');
 
 
     }

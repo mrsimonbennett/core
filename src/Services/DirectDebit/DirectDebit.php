@@ -1,6 +1,10 @@
 <?php
 namespace FullRent\Core\Services\DirectDebit;
 
+use FullRent\Core\Services\DirectDebit\GoCardLess\PreAuthorization;
+use FullRent\Core\ValueObjects\DateTime;
+
+
 /**
  * interface DirectDebitTenant
  * @package FullRent\Core\Services\DirectDebit
@@ -39,7 +43,7 @@ interface DirectDebit
      * @param string $resourceType
      * @param string $resourceUri
      * @param string $signature
-     * @return string
+     * @return PreAuthorization
      */
     public function confirmPreAuthorization(
         AccessTokens $accessTokens,
@@ -51,11 +55,17 @@ interface DirectDebit
 
     /**
      * @param AccessTokens $accessTokens
-     * @param $preAuthToken
+     * @param PreAuthorization $preAuthToken
      * @param $billName
      * @param $billAmount
-     * @param $changeDate
+     * @param DateTime $changeDate
      * @return Bill
      */
-    public function createBill(AccessTokens $accessTokens, $preAuthToken, $billName, $billAmount, $changeDate);
+    public function createBill(
+        AccessTokens $accessTokens,
+        PreAuthorization $preAuthToken,
+        $billName,
+        $billAmount,
+        DateTime $changeDate
+    );
 }

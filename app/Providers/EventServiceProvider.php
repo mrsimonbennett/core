@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Application\Providers;
 
 use FullRent\Core\Deposit\Listeners\DepositMySqlListenerV2;
+use FullRent\Core\RentBook\Listeners\RentBookAuthorizedListener;
 use FullRent\Core\RentBook\Listeners\RentBookContractListener;
 use FullRent\Core\RentBook\Listeners\RentBookMysqlListener;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -28,6 +29,7 @@ class EventServiceProvider extends ServiceProvider
          */
         RentBookContractListener::class,
         RentBookMysqlListener::class,
+        RentBookAuthorizedListener::class,
     ];
 
     /**

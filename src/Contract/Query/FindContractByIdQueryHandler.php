@@ -43,14 +43,16 @@ final class FindContractByIdQueryHandler implements QueryHandler
                                       ->get();
 
         foreach ($contract->tenants as $tenant) {
+
             $rent_book = $this->db->table('rent_books')->where('contract_id', $query->getContractId())
-                                          ->where('tenant_id', $tenant->id)->first();
+                                  ->where('tenant_id', $tenant->id)->first();
 
             $tenant->rent_book = $rent_book;
-
-            $tenant->rent_book->rent = $this->db->table('rent_book_rent')
-                                                ->where('rent_book_id', $rent_book->id)
-                                                ->get();
+            if ($rent_book !== null) {
+                $tenant->rent_book->rent = $this->db->table('rent_book_rent')
+                                                    ->where('rent_book_id', $rent_book->id)
+                                                    ->get();
+            }
         }
 
         return $contract;

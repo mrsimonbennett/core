@@ -1,5 +1,7 @@
 <?php namespace FullRent\Core\Application\Http\Requests;
 
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Factory;
@@ -49,9 +51,9 @@ abstract class Request extends FormRequest {
             'uuid',
             function ($key, $value) {
                 try {
-                    new UUID($value);
+                    Assertion::uuid($value);
                     return true;
-                } catch (\InvalidArgumentException $ex) {
+                } catch (AssertionFailedException $ex) {
                     return false;
                 }
             },

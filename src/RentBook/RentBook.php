@@ -3,6 +3,8 @@ namespace FullRent\Core\RentBook;
 
 use Assert\Assertion;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\RentBook\Events\RentBookBillCreated;
+use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentDueSet;
 use FullRent\Core\RentBook\ValueObjects\ContractId;
@@ -10,6 +12,8 @@ use FullRent\Core\RentBook\ValueObjects\RentAmount;
 use FullRent\Core\RentBook\ValueObjects\RentBookId;
 use FullRent\Core\RentBook\ValueObjects\RentBookRentId;
 use FullRent\Core\RentBook\ValueObjects\TenantId;
+use FullRent\Core\Services\DirectDebit\AccessTokens;
+use FullRent\Core\Services\DirectDebit\DirectDebit;
 use FullRent\Core\ValueObjects\DateTime;
 use Illuminate\Support\Collection;
 
@@ -36,17 +40,13 @@ final class RentBook extends EventSourcedAggregateRoot
      */
     private $id;
     /**
-     * @var Collection
+     * @var Collection|RentBookRent[]
      */
     private $rentPaymentDates;
-
     /**
-     * Set up a rent payment dates collection helper
+     * @var PreAuthorization
      */
-    private function __construct()
-    {
-        $this->rentPaymentDates = new Collection();
-    }
+    private $preAuthToken;
 
     /**
      * Create Rent book for automatic payments
@@ -89,6 +89,44 @@ final class RentBook extends EventSourcedAggregateRoot
         $this->apply(new RentDueSet($this->id, RentBookRentId::random(), $paymentDue, DateTime::now()));
     }
 
+    /**
+     * @param DirectDebit $directDebit
+     * @param $resourceId
+     * @param $resourceType
+     * @param $resourceUri
+     * @param $signature
+     * @param AccessTokens $accessTokens
+     */
+    public function authorizeDirectDebit(
+        DirectDebit $directDebit,
+        $resourceId,
+        $resourceType,
+        $resourceUri,
+        $signature,
+        AccessTokens $accessTokens
+    ) {
+
+        $confirmation = $directDebit->confirmPreAuthorization($accessTokens,
+                                                              $resourceId,
+                                                              $resourceType,
+                                                              $resourceUri,
+                                                              $signature);
+
+        $this->apply(new RentBookDirectDebitPreAuthorized($this->id, $confirmation, DateTime::now()));
+    }
+
+    public function createBills(DirectDebit $directDebit, AccessTokens $accessTokens)
+    {
+        foreach ($this->rentPaymentDates as $rent) {
+            $bill = $directDebit->createBill($accessTokens,
+                                     $this->preAuthToken,
+                                     $rent->getPaymentDue()->format("F-Y") . ' Rent' ,
+                                     $this->rentAmount->getAmountInPounds(),
+                                     $rent->getPaymentDue());
+            $this->apply(new RentBookBillCreated($this->id,$bill,$rent->getRentBookRentId(), DateTime::now()));
+        }
+    }
+
 
     /**
      * Store the rent book id and the rent amount due each month
@@ -97,6 +135,8 @@ final class RentBook extends EventSourcedAggregateRoot
      */
     protected function applyRentBookOpenedAutomatic(RentBookOpenedAutomatic $e)
     {
+        $this->rentPaymentDates = new Collection();
+
         $this->id = $e->getRentBookId();
         $this->rentAmount = $e->getRentAmount();
     }
@@ -106,11 +146,16 @@ final class RentBook extends EventSourcedAggregateRoot
      *
      * @param RentDueSet $e
      */
-    protected function applyRentDue(RentDueSet $e)
+    protected function applyRentDueSet(RentDueSet $e)
     {
         $this->rentPaymentDates->push(new RentBookRent($e->getRentBookRentId(),
                                                        $e->getPaymentDue(),
                                                        $this->rentAmount));
+    }
+
+    protected function applyRentBookDirectDebitPreAuthorized(RentBookDirectDebitPreAuthorized $e)
+    {
+        $this->preAuthToken = $e->getPreAuthorization();
     }
 
     /**
@@ -118,6 +163,6 @@ final class RentBook extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return 'rent_book' . $this->id;
+        return 'rent-book-' . $this->id;
     }
 }
