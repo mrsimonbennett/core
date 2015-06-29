@@ -2,6 +2,7 @@
 namespace FullRent\Core\Property\Read\Subscribers;
 
 use FullRent\Core\Contract\Events\ContractDraftedFromApplication;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
@@ -14,7 +15,7 @@ use Illuminate\Database\DatabaseManager;
  * @package FullRent\Core\Property\Read\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PropertyHistorySubscriber
+final class PropertyHistorySubscriber extends EventListener
 {
     /**
      * @var Connection
@@ -31,7 +32,6 @@ final class PropertyHistorySubscriber
 
     /**
      * @param NewPropertyListed $newPropertyListed
-     * @hears("FullRent.Core.Property.Events.NewPropertyListed")
      */
     public function whenPropertyWasListed(NewPropertyListed $newPropertyListed)
     {
@@ -45,43 +45,54 @@ final class PropertyHistorySubscriber
 
     /**
      * @param PropertyAcceptingApplications $propertyAcceptingApplications
-     * @hears("FullRent.Core.Property.Events.PropertyAcceptingApplications")
      */
     public function whenPropertyAcceptingApplications(PropertyAcceptingApplications $propertyAcceptingApplications)
     {
         $this->db->table('property_history')->insert([
-                                                         'id'          => UuidIdentity::random(),
-                                                         'property_id' => $propertyAcceptingApplications->getPropertyId(),
-                                                         'event_name'  => 'Accepting Applicants',
-                                                         'event_happened'  => $propertyAcceptingApplications->getChangedAt(),
+                                                         'id'             => UuidIdentity::random(),
+                                                         'property_id'    => $propertyAcceptingApplications->getPropertyId(),
+                                                         'event_name'     => 'Accepting Applicants',
+                                                         'event_happened' => $propertyAcceptingApplications->getChangedAt(),
                                                      ]);
     }
 
     /**
      * @param PropertyClosedAcceptingApplications $propertyAcceptingApplications
-     * @hears("FullRent.Core.Property.Events.PropertyClosedAcceptingApplications")
      */
-    public function whenPropertyCloseAcceptingApplications(PropertyClosedAcceptingApplications $propertyAcceptingApplications)
-    {
+    public function whenPropertyCloseAcceptingApplications(
+        PropertyClosedAcceptingApplications $propertyAcceptingApplications
+    ) {
         $this->db->table('property_history')->insert([
-                                                         'id'          => UuidIdentity::random(),
-                                                         'property_id' => $propertyAcceptingApplications->getPropertyId(),
-                                                         'event_name'  => 'Closed Applicants',
-                                                         'event_happened'  => $propertyAcceptingApplications->getChangedAt(),
+                                                         'id'             => UuidIdentity::random(),
+                                                         'property_id'    => $propertyAcceptingApplications->getPropertyId(),
+                                                         'event_name'     => 'Closed Applicants',
+                                                         'event_happened' => $propertyAcceptingApplications->getChangedAt(),
                                                      ]);
     }
 
     /**
      * @param ContractDraftedFromApplication $e
-     * @hears("FullRent.Core.Contract.Events.ContractDraftedFromApplication")
      */
     public function whenContractIsDrafted(ContractDraftedFromApplication $e)
     {
         $this->db->table('property_history')->insert([
-                                                         'id'          => UuidIdentity::random(),
-                                                         'property_id' => $e->getPropertyId(),
-                                                         'event_name'  => 'Contract Drafted',
-                                                         'event_happened'  => $e->getDraftedAt(),
+                                                         'id'             => UuidIdentity::random(),
+                                                         'property_id'    => $e->getPropertyId(),
+                                                         'event_name'     => 'Contract Drafted',
+                                                         'event_happened' => $e->getDraftedAt(),
                                                      ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [
+            'whenPropertyWasListed'                  => NewPropertyListed::class,
+            'whenPropertyAcceptingApplications'      => PropertyAcceptingApplications::class,
+            'whenPropertyCloseAcceptingApplications' => PropertyClosedAcceptingApplications::class,
+            'whenContractIsDrafted'                  => ContractDraftedFromApplication::class,
+        ];
     }
 }

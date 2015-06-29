@@ -12,7 +12,6 @@
     "rhumsaa/uuid": "~2.7",
     "broadway/broadway": "0.5.0",
     "graham-campbell/exceptions": "~2.0",
-    "laravelcollective/annotations": "5.0.7",
     "cleentfaar/slack": "0.16.1",
     "stripe/stripe-php": "^2.0@dev",
     "gocardless/gocardless": "dev-master",

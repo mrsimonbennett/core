@@ -6,6 +6,7 @@ use FullRent\Core\Application\Events\ApplicationRejected;
 use FullRent\Core\Application\Query\ApplicationReadRepository;
 use FullRent\Core\Company\Projection\CompanyReadRepository;
 use FullRent\Core\Company\ValueObjects\CompanyId;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\User\Projections\UserReadRepository;
@@ -16,8 +17,9 @@ use FullRent\Core\User\ValueObjects\UserId;
  * @package FullRent\Core\Infrastructure\Email
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicationEmails
+final class ApplicationEmails extends EventListener
 {
+
     /**
      * @var EmailClient
      */
@@ -64,7 +66,6 @@ final class ApplicationEmails
 
     /**
      * @param ApplicationFinished $applicationFinished
-     * @hears("FullRent.Core.Application.Events.ApplicationFinished")
      */
     public function whenApplicationFinishesEmailLandlord(ApplicationFinished $applicationFinished)
     {
@@ -87,7 +88,6 @@ final class ApplicationEmails
 
     /**
      * @param ApplicationRejected $applicationRejected
-     * @hears("FullRent.Core.Application.Events.ApplicationRejected")
      */
     public function whenApplicationWasRejected(ApplicationRejected $applicationRejected)
     {
@@ -120,5 +120,24 @@ final class ApplicationEmails
         $company = $this->companyReadRepository->getById(new CompanyId($property->company_id));
 
         return array($application, $applicant, $property, $landlord, $company);
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+        return [
+            'whenApplicationFinishesEmailLandlord' => ApplicationFinished::class,
+            'whenApplicationWasRejected' => ApplicationRejected::class,
+        ];
     }
 }

@@ -2,6 +2,7 @@
 namespace FullRent\Core\Deposit\Listeners;
 
 use FullRent\Core\Deposit\Events\DepositPaid;
+use FullRent\Core\Deposit\Events\DepositSetUp;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 
@@ -41,12 +42,33 @@ final class DepositMySqlListenerV2 extends EventListener
     }
 
     /**
+     * When a deposit is setup, save this into mysql database
+     * @param DepositSetUp $e
+     */
+    public function whenDepositSetUp(DepositSetUp $e)
+    {
+        $this->db
+            ->query()
+            ->table('deposits')
+            ->insert([
+                         'id'                  => $e->getDepositId(),
+                         'contract_id'         => $e->getContractId(),
+                         'tenant_id'           => $e->getTenantId(),
+                         'deposit_amount'      => $e->getDepositAmount()->getAmountInPounds(),
+                         'deposit_due'         => $e->getDepositDue(),
+                         'fullrent_collection' => $e->getFullrentCollection(),
+                         'setup_at'            => $e->getSetupAt(),
+                     ]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
     {
         return [
-            'whenDepositPaid' => DepositPaid::class,
+            'whenDepositSetUp' => DepositSetUp::class,
+            'whenDepositPaid'  => DepositPaid::class,
         ];
     }
 }

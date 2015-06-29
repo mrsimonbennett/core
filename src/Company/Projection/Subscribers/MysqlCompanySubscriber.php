@@ -6,6 +6,7 @@ use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\Projection\Company;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\ValueObjects\DateTime;
 use Illuminate\Database\Connection;
 
@@ -14,7 +15,7 @@ use Illuminate\Database\Connection;
  * @package FullRent\Core\Company\Projection\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MysqlCompanySubscriber
+final class MysqlCompanySubscriber extends EventListener
 {
     /**
      * @var Connection
@@ -28,7 +29,6 @@ final class MysqlCompanySubscriber
 
     /**
      * @param CompanyHasBeenRegistered $beenRegistered
-     * @hears("FullRent.Core.Company.Events.CompanyHasBeenRegistered",)
      */
     public function companyHasBeenRegistered(CompanyHasBeenRegistered $beenRegistered)
     {
@@ -43,7 +43,6 @@ final class MysqlCompanySubscriber
 
     /**
      * @param LandlordEnrolled $landlordEnrolled
-     * @hears("FullRent.Core.Company.Events.LandlordEnrolled")
      */
     public function whenLandlordEnrolls(LandlordEnrolled $landlordEnrolled)
     {
@@ -56,7 +55,6 @@ final class MysqlCompanySubscriber
 
     /**
      * @param TenantEnrolled $e
-     * @hears("FullRent.Core.Company.Events.TenantEnrolled")
      */
     public function whenTenantEnrolled(TenantEnrolled $e)
     {
@@ -69,7 +67,6 @@ final class MysqlCompanySubscriber
 
     /**
      * @param CompanySetUpDirectDebit $e
-     * @hears("FullRent.Core.Company.Events.CompanySetUpDirectDebit")
      */
     public function whenCompanySetUpDirectDebit(CompanySetUpDirectDebit $e)
     {
@@ -85,4 +82,16 @@ final class MysqlCompanySubscriber
                 ]);
     }
 
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [
+            'companyHasBeenRegistered'    => CompanyHasBeenRegistered::class,
+            'whenLandlordEnrolls'         => LandlordEnrolled::class,
+            'whenTenantEnrolled'          => TenantEnrolled::class,
+            'whenCompanySetUpDirectDebit' => CompanySetUpDirectDebit::class,
+        ];
+    }
 }

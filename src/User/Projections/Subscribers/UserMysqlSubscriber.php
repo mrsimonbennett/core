@@ -2,6 +2,7 @@
 namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\User\Events\UserRegistered;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
@@ -11,7 +12,7 @@ use Illuminate\Database\DatabaseManager;
  * @package FullRent\Core\User\Projections\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserMysqlSubscriber
+final class UserMysqlSubscriber extends EventListener
 {
     /**
      * @var Connection
@@ -28,7 +29,6 @@ final class UserMysqlSubscriber
 
     /**
      * @param UserRegistered $userRegistered
-     * @hears("FullRent.Core.User.Events.UserRegistered")
      */
     public function whenUserRegistered(UserRegistered $userRegistered)
     {
@@ -42,5 +42,13 @@ final class UserMysqlSubscriber
                                               'has_address' => false,
                                               'updated_at'  => Carbon::now(),
                                           ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return ['whenUserRegistered' => UserRegistered::class];
     }
 }

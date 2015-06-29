@@ -27,24 +27,5 @@ final class DepositMysqlListener
         $this->db = $db;
     }
 
-    /**
-     * When a deposit is setup, save this into mysql database
-     * @param DepositSetUp $e
-     * @hears("FullRent.Core.Deposit.Events.DepositSetUp")
-     */
-    public function whenDepositSetUp(DepositSetUp $e)
-    {
-        $this->db
-            ->query()
-            ->table('deposits')
-            ->insert([
-                         'id'                  => $e->getDepositId(),
-                         'contract_id'         => $e->getContractId(),
-                         'tenant_id'           => $e->getTenantId(),
-                         'deposit_amount'      => $e->getDepositAmount()->getAmountInPounds(),
-                         'deposit_due'         => $e->getDepositDue(),
-                         'fullrent_collection' => $e->getFullrentCollection(),
-                         'setup_at'            => $e->getSetupAt(),
-                     ]);
-    }
+
 }

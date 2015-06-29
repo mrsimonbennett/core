@@ -6,6 +6,7 @@ use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Contract\Events\ContractLocked;
 use FullRent\Core\Contract\Query\ContractReadRepository;
 use FullRent\Core\Infrastructure\Email\EmailClient;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\User\Projections\UserReadRepository;
@@ -16,7 +17,7 @@ use FullRent\Core\User\ValueObjects\UserId;
  * @package FullRent\Core\Contract\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MailListener
+final class ContractMailListener extends EventListener
 {
     /**
      * @var EmailClient
@@ -62,7 +63,6 @@ final class MailListener
 
     /**
      * @param ContractLocked $contractLocked
-     * @hears("FullRent.Core.Contract.Events.ContractLocked")
      */
     public function whenContractLockedEmailTenantForPaperWork(ContractLocked $contractLocked)
     {
@@ -73,14 +73,32 @@ final class MailListener
         foreach ($contract->tenants as $tenant) {
             $this->emailClient->send('contracts.ask-tenant-to-sign',
                                      "The contract for {$property->address_firstline} is ready for you to review",
-                                     ['tenant'   => $tenant,
-                                      'property' => $property,
-                                      'company'  => $company,
-                                      'landlord' => $this->userReadRepository->getById(new UserId($property->landlord_id)),
-                                      'contract' => $contract,
+                                     [
+                                         'tenant'   => $tenant,
+                                         'property' => $property,
+                                         'company'  => $company,
+                                         'landlord' => $this->userReadRepository->getById(new UserId($property->landlord_id)),
+                                         'contract' => $contract,
                                      ],
                                      $tenant->known_as,
                                      $tenant->email);
         }
     }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+        return ['whenContractLockedEmailTenantForPaperWork' => ContractLocked::class];
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [];
+    }
+
 }

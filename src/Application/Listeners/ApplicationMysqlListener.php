@@ -7,50 +7,61 @@ use FullRent\Core\Application\Events\ApplicationApproved;
 use FullRent\Core\Application\Events\ApplicationFinished;
 use FullRent\Core\Application\Events\ApplicationRejected;
 use FullRent\Core\Application\Events\StartedApplication;
-use FullRent\Core\Infrastructure\Subscribers\BaseMysqlSubscriber;
+use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 
 /**
  * Class ApplicationMysqlListener
  * @package FullRent\Core\Application\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicationMysqlListener extends BaseMysqlSubscriber
+final class ApplicationMysqlListener extends EventListener
 {
     /**
-     * @param StartedApplication $startedApplication
-     * @hears("FullRent.Core.Application.Events.StartedApplication")
+     * @var MySqlClient
      */
-    public function whenApplicationWasStarted(StartedApplication $startedApplication)
+    private $client;
+
+    /**
+     * @param MySqlClient $client
+     */
+    public function __construct(MySqlClient $client)
     {
-        $this->db
+        $this->client = $client;
+    }
+    /**
+     * @param StartedApplication $e
+     */
+    public function whenApplicationWasStarted(StartedApplication $e)
+    {
+        $this->client->query()
             ->table('applications')
             ->insert(
                 [
-                    'id'           => $startedApplication->getApplicationId(),
-                    'applicant_id' => $startedApplication->getApplicantId(),
-                    'property_id'  => $startedApplication->getPropertyId(),
-                    'started_at'   => $startedApplication->getStartedAt()
+                    'id'           => $e->getApplicationId(),
+                    'applicant_id' => $e->getApplicantId(),
+                    'property_id'  => $e->getPropertyId(),
+                    'started_at'   => $e->getStartedAt()
                 ]
             );
     }
 
     /**
-     * @param ApplicantAboutInformationProvided $aboutInformationProvided
-     * @hears("FullRent.Core.Application.Events.ApplicantAboutInformationProvided")
+     * @param ApplicantAboutInformationProvided $e
      */
-    public function whenApplicationAboutInformationProvided(ApplicantAboutInformationProvided $aboutInformationProvided)
+    public function whenApplicationAboutInformationProvided(ApplicantAboutInformationProvided $e)
     {
-        $this->db
+        $this->client->query()
             ->table('applications')
-            ->where('id', $aboutInformationProvided->getApplicationId())
+            ->where('id', $e->getApplicationId())
             ->update(
                 [
-                    'about_description' => $aboutInformationProvided->getAboutYouApplication()->getAboutYou()
-                                                                    ->getAboutInformation(),
-                    'date_of_birth'     => $aboutInformationProvided->getAboutYouApplication()->getDateOfBirth()
-                                                                    ->getDateOfBirth(),
-                    'phone_number'      => $aboutInformationProvided->getAboutYouApplication()->getPhoneNumber()
-                                                                    ->getPhoneNumber()
+                    'about_description' => $e->getAboutYouApplication()->getAboutYou()
+                                             ->getAboutInformation(),
+                    'date_of_birth'     => $e->getAboutYouApplication()->getDateOfBirth()
+                                             ->getDateOfBirth(),
+                    'phone_number'      => $e->getAboutYouApplication()->getPhoneNumber()
+                                             ->getPhoneNumber()
                 ]
             );
 
@@ -58,63 +69,59 @@ final class ApplicationMysqlListener extends BaseMysqlSubscriber
     }
 
     /**
-     * @param ApplicantProvidedRentingInformation $event
-     * @hears("FullRent.Core.Application.Events.ApplicantProvidedRentingInformation")
+     * @param ApplicantProvidedRentingInformation $e
      */
-    public function whenApplicantSubmitsRentingInformation(ApplicantProvidedRentingInformation $event)
+    public function whenApplicantSubmitsRentingInformation(ApplicantProvidedRentingInformation $e)
     {
-        $this->db
+        $this->client->query()
             ->table('applications')
-            ->where('id', $event->getApplicationId())
+            ->where('id', $e->getApplicationId())
             ->update(
                 [
-                    'currently_renting' => $event->getRentingInformation()->isCurrentlyRenting(),
+                    'currently_renting' => $e->getRentingInformation()->isCurrentlyRenting(),
                 ]
             );
     }
 
     /**
-     * @param ApplicationFinished $event
-     * @hears("FullRent.Core.Application.Events.ApplicationFinished")
+     * @param ApplicationFinished $e
      */
-    public function whenApplicationFinishes(ApplicationFinished $event)
+    public function whenApplicationFinishes(ApplicationFinished $e)
     {
-        $this->db
+        $this->client->query()
             ->table('applications')
-            ->where('id', $event->getApplicationId())
+            ->where('id', $e->getApplicationId())
             ->update(
                 [
                     'finished'    => true,
-                    'finished_at' => $event->getFinishedAt(),
+                    'finished_at' => $e->getFinishedAt(),
                 ]
             );
     }
 
     /**
-     * @param ApplicationRejected $event
-     * @hears("FullRent.Core.Application.Events.ApplicationRejected")
+     * @param ApplicationRejected $e
      */
-    public function whenApplicationRejected(ApplicationRejected $event)
+    public function whenApplicationRejected(ApplicationRejected $e)
     {
-        $this->db
+        $this->client->query()
             ->table('applications')
-            ->where('id', $event->getApplicationId())
+            ->where('id', $e->getApplicationId())
             ->update(
                 [
                     'finished'        => false,
                     'rejected'        => true,
-                    'rejected_reason' => $event->getRejectReason(),
+                    'rejected_reason' => $e->getRejectReason(),
                 ]
             );
     }
 
     /**
      * @param ApplicationApproved $e
-     * @hears("FullRent.Core.Application.Events.ApplicationApproved")
      */
     public function whenApplicationApproved(ApplicationApproved $e)
     {
-        $this->db
+        $this->client->query()
             ->table('applications')
             ->where('id', $e->getApplicationId())
             ->update(
@@ -125,5 +132,20 @@ final class ApplicationMysqlListener extends BaseMysqlSubscriber
                     'approved_at' => $e->getApprovedAt()
                 ]
             );
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [
+            'whenApplicationWasStarted'               => StartedApplication::class,
+            'whenApplicationAboutInformationProvided' => ApplicantAboutInformationProvided::class,
+            'whenApplicantSubmitsRentingInformation'  => ApplicantProvidedRentingInformation::class,
+            'whenApplicationFinishes'                 => ApplicationFinished::class,
+            'whenApplicationRejected'                 => ApplicationRejected::class,
+            'whenApplicationApproved'                 => ApplicationApproved::class,
+        ];
     }
 }

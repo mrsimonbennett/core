@@ -11,18 +11,23 @@ use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\Events\TenantSignedContract;
 use FullRent\Core\Contract\Events\TenantUploadedEarningsDocument;
 use FullRent\Core\Contract\Events\TenantUploadedIdDocument;
-use FullRent\Core\Infrastructure\Subscribers\BaseMysqlSubscriber;
+use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 
 /**
  * Class MySqlContractListener
  * @package FullRent\Core\Contract\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MySqlContractListener extends BaseMysqlSubscriber
+final class ContractMysqlListener extends EventListener
 {
+    public function __construct(MySqlClient $client)
+    {
+        $this->db = $client->query();
+    }
+
     /**
      * @param ContractDraftedFromApplication $e
-     * @hears("FullRent.Core.Contract.Events.ContractDraftedFromApplication")
      */
     public function whenContractIsDrafted(ContractDraftedFromApplication $e)
     {
@@ -42,7 +47,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param TenantJoinedContract $e
-     * @hears("FullRent.Core.Contract.Events.TenantJoinedContract")
      */
     public function whenTenantJoinsContractInsertMysql(TenantJoinedContract $e)
     {
@@ -58,7 +62,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param ContractRentPeriodSet $e
-     * @hears("FullRent.Core.Contract.Events.ContractRentPeriodSet")
      */
     public function whenContractPeriodIsSet(ContractRentPeriodSet $e)
     {
@@ -75,7 +78,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param ContractRentInformationDrafted $e
-     * @hears("FullRent.Core.Contract.Events.ContractRentInformationDrafted")
      */
     public function whenContractRentIsDrafted(ContractRentInformationDrafted $e)
     {
@@ -97,7 +99,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param ContractSetRequiredDocuments $e
-     * @hears("FullRent.Core.Contract.Events.ContractSetRequiredDocuments")
      */
     public function whenContractDocumentsUpdated(ContractSetRequiredDocuments $e)
     {
@@ -126,7 +127,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param ContractLocked $e
-     * @hears("FullRent.Core.Contract.Events.ContractLocked")
      */
     public function whenContractIsLockedUpdateMysql(ContractLocked $e)
     {
@@ -145,7 +145,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param TenantUploadedIdDocument $e
-     * @hears("FullRent.Core.Contract.Events.TenantUploadedIdDocument")
      */
     public function whenContractIdDocumentProvided(TenantUploadedIdDocument $e)
     {
@@ -161,7 +160,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param TenantUploadedEarningsDocument $e
-     * @hears("FullRent.Core.Contract.Events.TenantUploadedEarningsDocument")
      */
     public function whenContractProofOfEarningsProvided(TenantUploadedEarningsDocument $e)
     {
@@ -177,7 +175,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param TenantSignedContract $e
-     * @hears("FullRent.Core.Contract.Events.TenantSignedContract")
      */
     public function whenTenantSignsContract(TenantSignedContract $e)
     {
@@ -196,7 +193,6 @@ final class MySqlContractListener extends BaseMysqlSubscriber
 
     /**
      * @param LandlordSignedContract $e
-     * @hears("FullRent.Core.Contract.Events.LandlordSignedContract")
      */
     public function whenLandlordSignsContract(LandlordSignedContract $e)
     {
@@ -212,5 +208,24 @@ final class MySqlContractListener extends BaseMysqlSubscriber
                          'landlord_signature'  => $e->getSignature(),
                      ]
                  );
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [
+            'whenContractIsDrafted'               => ContractDraftedFromApplication::class,
+            'whenTenantJoinsContractInsertMysql'  => TenantJoinedContract::class,
+            'whenContractPeriodIsSet'             => ContractRentPeriodSet::class,
+            'whenContractRentIsDrafted'           => ContractRentInformationDrafted::class,
+            'whenContractDocumentsUpdated'        => ContractSetRequiredDocuments::class,
+            'whenContractIsLockedUpdateMysql'     => ContractLocked::class,
+            'whenContractIdDocumentProvided'      => TenantUploadedIdDocument::class,
+            'whenContractProofOfEarningsProvided' => TenantUploadedEarningsDocument::class,
+            'whenTenantSignsContract'             => TenantSignedContract::class,
+            'whenLandlordSignsContract'           => LandlordSignedContract::class,
+        ];
     }
 }

@@ -3,20 +3,9 @@ namespace FullRent\Core\Application\Providers;
 
 use Collective\Annotations\AnnotationsServiceProvider as ServiceProvider;
 use FullRent\Core\Application\Infrastructure\WriteEventsToElasticSearch;
-use FullRent\Core\Application\Listeners\ApplicationMysqlListener;
-use FullRent\Core\Company\Projection\Subscribers\ApplicationEventListener;
-use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
-use FullRent\Core\Contract\Listeners\ApplicationListener;
-use FullRent\Core\Contract\Listeners\MailListener;
-use FullRent\Core\Contract\Listeners\MySqlContractListener;
-use FullRent\Core\Deposit\Listeners\ContractListener;
-use FullRent\Core\Deposit\Listeners\DepositMysqlListener;
-use FullRent\Core\Infrastructure\Email\ApplicationEmails;
-use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
-use FullRent\Core\Property\Read\Subscribers\PropertyHistorySubscriber;
-use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 
-class AnnotationsServiceProvider extends ServiceProvider {
+class AnnotationsServiceProvider extends ServiceProvider
+{
 
     /**
      * The classes to scan for event annotations.
@@ -24,19 +13,6 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $scanEvents = [
-        MysqlCompanySubscriber::class,
-        UserMysqlSubscriber::class,
-        MysqlPropertySubscriber::class,
-        PropertyHistorySubscriber::class,
-        ApplicationMysqlListener::class,
-        ApplicationEmails::class,
-        ApplicationListener::class,
-        MySqlContractListener::class,
-        MailListener::class,
-        ApplicationEventListener::class,
-        WriteEventsToElasticSearch::class,
-        ContractListener::class,
-        DepositMysqlListener::class,
     ];
 
     /**

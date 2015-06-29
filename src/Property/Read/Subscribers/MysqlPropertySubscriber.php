@@ -2,7 +2,8 @@
 namespace FullRent\Core\Property\Read\Subscribers;
 
 use Carbon\Carbon;
-use FullRent\Core\Infrastructure\Subscribers\BaseMysqlSubscriber;
+use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
@@ -12,57 +13,78 @@ use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
  * @package FullRent\Core\Property\Read\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MysqlPropertySubscriber extends BaseMysqlSubscriber
+final class MysqlPropertySubscriber extends EventListener
 {
     /**
-     * @param NewPropertyListed $newPropertyListed
-     * @hears("FullRent.Core.Property.Events.NewPropertyListed")
+     * @var MySqlClient
      */
-    public function whenPropertyWasListed(NewPropertyListed $newPropertyListed)
+    private $client;
+
+    /**
+     * @param MySqlClient $client
+     */
+    public function __construct(MySqlClient $client)
     {
-        $this->db
-            ->table('properties')
-            ->insert([
-                         'id' => $newPropertyListed->getPropertyId(),
-                         'address_firstline' => $newPropertyListed->getAddress()->getAddress(),
-                         'address_city' => $newPropertyListed->getAddress()->getCity(),
-                         'address_county' => $newPropertyListed->getAddress()->getCounty(),
-                         'address_country' => $newPropertyListed->getAddress()->getCountry(),
-                         'address_postcode' => $newPropertyListed->getAddress()->getPostcode(),
-                         'company_id' => $newPropertyListed->getCompany()->getCompanyId(),
-                         'landlord_id' => $newPropertyListed->getLandlord()->getLandlordId(),
-                         'bedrooms' => $newPropertyListed->getBathrooms(),
-                         'bathrooms' => $newPropertyListed->getBathrooms(),
-                         'parking' => $newPropertyListed->getParking(),
-                         'pets' => $newPropertyListed->getPets(),
-                         'created_at' => $newPropertyListed->getListedAt(),
-                         'updated_at' => Carbon::now(),
-                     ]);
+        $this->client = $client;
     }
 
     /**
-     * @param PropertyAcceptingApplications $propertyAcceptingApplications
-     * @hears("FullRent.Core.Property.Events.PropertyAcceptingApplications")
+     * @param NewPropertyListed $e
      */
-    public function  whenPropertyAcceptsApplications(PropertyAcceptingApplications $propertyAcceptingApplications)
+    public function whenPropertyWasListed(NewPropertyListed $e)
     {
-        $this->db
-            ->table('properties')
-            ->where('id', (string) $propertyAcceptingApplications->getPropertyId())
-            ->update(['accepting_applications' => 1]);
+        $this->client->query()
+                     ->table('properties')
+                     ->insert([
+                                  'id'                => $e->getPropertyId(),
+                                  'address_firstline' => $e->getAddress()->getAddress(),
+                                  'address_city'      => $e->getAddress()->getCity(),
+                                  'address_county'    => $e->getAddress()->getCounty(),
+                                  'address_country'   => $e->getAddress()->getCountry(),
+                                  'address_postcode'  => $e->getAddress()->getPostcode(),
+                                  'company_id'        => $e->getCompany()->getCompanyId(),
+                                  'landlord_id'       => $e->getLandlord()->getLandlordId(),
+                                  'bedrooms'          => $e->getBathrooms(),
+                                  'bathrooms'         => $e->getBathrooms(),
+                                  'parking'           => $e->getParking(),
+                                  'pets'              => $e->getPets(),
+                                  'created_at'        => $e->getListedAt(),
+                                  'updated_at'        => Carbon::now(),
+                              ]);
     }
 
     /**
-     * @param PropertyClosedAcceptingApplications $propertyClosedAcceptingApplications
-     * @hears("FullRent.Core.Property.Events.PropertyClosedAcceptingApplications")
+     * @param PropertyAcceptingApplications $e
      */
-    public function whenPropertyApplicationsClose(
-        PropertyClosedAcceptingApplications $propertyClosedAcceptingApplications
-    ) {
-        $this->db
-            ->table('properties')
-            ->where('id', $propertyClosedAcceptingApplications->getPropertyId())
-            ->update(['accepting_applications' => false]);
+    public function  whenPropertyAcceptsApplications(PropertyAcceptingApplications $e)
+    {
+        $this->client->query()
+                     ->table('properties')
+                     ->where('id', (string)$e->getPropertyId())
+                     ->update(['accepting_applications' => 1]);
+    }
 
+    /**
+     * @param PropertyClosedAcceptingApplications $e
+     */
+    public function whenPropertyApplicationsClose(PropertyClosedAcceptingApplications $e)
+    {
+        $this->client->query()
+                     ->table('properties')
+                     ->where('id', $e->getPropertyId())
+                     ->update(['accepting_applications' => false]);
+
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [
+            'whenPropertyWasListed'           => NewPropertyListed::class,
+            'whenPropertyAcceptsApplications' => PropertyAcceptingApplications::class,
+            'whenPropertyApplicationsClose'   => PropertyClosedAcceptingApplications::class,
+        ];
     }
 }
