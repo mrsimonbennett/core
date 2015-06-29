@@ -3,6 +3,8 @@ namespace FullRent\Core\RentBook\Listeners;
 
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\RentBook\Events\RentBookBillCreated;
+use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentDueSet;
 
@@ -56,6 +58,34 @@ final class RentBookMysqlListener extends EventListener
     }
 
     /**
+     * When the tenant preauthorizes there payments mark it as done
+     *
+     * @param RentBookDirectDebitPreAuthorized $e
+     */
+    public function whenRentBookSetup(RentBookDirectDebitPreAuthorized $e)
+    {
+        $this->client->query()
+                     ->table('rent_books')
+                     ->where('id', $e->getRentBookId())
+                     ->update(
+                         [
+                             'setup' => true,
+                         ]
+                     );
+    }
+
+    /**
+     * @param RentBookBillCreated $e
+     */
+    public function whenRentBookBillCreated(RentBookBillCreated $e)
+    {
+        $this->client->query()->table('rent_book_rent')->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => $e->getBill()->getStatus(),
+                              ]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
@@ -63,6 +93,8 @@ final class RentBookMysqlListener extends EventListener
         return [
             'whenRentBookOpenedAutomatic' => RentBookOpenedAutomatic::class,
             'whenRentBookPaymentDueSet'   => RentDueSet::class,
+            'whenRentBookSetup'           => RentBookDirectDebitPreAuthorized::class,
+            'whenRentBookBillCreated'     => RentBookBillCreated::class,
         ];
     }
 }

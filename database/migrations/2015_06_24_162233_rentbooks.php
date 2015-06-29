@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class Rentbooks extends Migration {
+class Rentbooks extends Migration
+{
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         \Illuminate\Support\Facades\Schema::create('rent_books',
@@ -18,6 +19,7 @@ class Rentbooks extends Migration {
                 $table->char('contract_id', 36);
                 $table->char('tenant_id', 36);
                 $table->float('rent_amount');
+                $table->boolean('setup')->default(false);
                 $table->timestamp('opened_at');
             });
     }

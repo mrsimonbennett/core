@@ -46,6 +46,38 @@ final class RentBookBillCreated implements SerializableInterface
     }
 
     /**
+     * @return RentBookId
+     */
+    public function getRentBookId()
+    {
+        return $this->rentBookId;
+    }
+
+    /**
+     * @return Bill
+     */
+    public function getBill()
+    {
+        return $this->bill;
+    }
+
+    /**
+     * @return RentBookRentId
+     */
+    public function getRentBookRentId()
+    {
+        return $this->rentBookRentId;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @param array $data
      * @return mixed The object instance
      */

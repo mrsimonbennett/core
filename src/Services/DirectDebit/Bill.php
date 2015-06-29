@@ -89,6 +89,70 @@ final class Bill implements SerializableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getGocardlessFees()
+    {
+        return $this->gocardlessFees;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getFullrentFees()
+    {
+        return $this->fullrentFees;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getLandlordReceive()
+    {
+        return $this->landlordReceive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getChargeCustomerAt()
+    {
+        return $this->chargeCustomerAt;
+    }
+
+    /**
      * @param array $data
      * @return mixed The object instance
      */

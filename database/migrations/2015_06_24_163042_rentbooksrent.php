@@ -17,6 +17,7 @@ class Rentbooksrent extends Migration
             function (Blueprint $table) {
                 $table->char('id',36);
                 $table->char('rent_book_id', 36);
+                $table->string('status');
                 $table->timestamp('due');
             });
     }
