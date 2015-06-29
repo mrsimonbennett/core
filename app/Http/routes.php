@@ -66,6 +66,7 @@ $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsCo
  * Users
  */
 $router->resource('users', 'UserController');
+$router->post('users/{id}/remember-token','UserController@rememberMe');
 
 /*
  * Auth
