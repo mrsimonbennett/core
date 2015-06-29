@@ -153,7 +153,6 @@ return [
         ApplicationLaravelServiceProvider::class,
         LaravelDepositServiceProvider::class,
         'FullRent\Core\Application\Providers\EventStoreServiceProvider',
-        'FullRent\Core\Application\Providers\AnnotationsServiceProvider',
 
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,

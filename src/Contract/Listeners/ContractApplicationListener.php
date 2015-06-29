@@ -6,13 +6,14 @@ use FullRent\Core\Application\Query\ApplicationReadRepository;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Contract\Commands\DraftContractFromApplication;
 use FullRent\Core\Contract\Commands\JoinTenantToContract;
+use FullRent\Core\Infrastructure\Events\EventListener;
 
 /**
  * Class ApplicationListener
  * @package FullRent\Core\Contract\Listerners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicationListener
+final class ContractApplicationListener extends EventListener
 {
     /**
      * @var CommandBus
@@ -35,8 +36,6 @@ final class ApplicationListener
 
     /**
      * @param ApplicationApproved $event
-     * @hears("FullRent.Core.Application.Events.ApplicationApproved")
-     * @repeatable(false)
      */
     public function whenApplicationApproved(ApplicationApproved $event)
     {
@@ -49,5 +48,21 @@ final class ApplicationListener
                                                                     $application->property->company_id,
                                                                     $application->property->landlord_id));
         $this->commandBus->execute(new JoinTenantToContract($contractId, $application->applicant_id));
+    }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+        return ['whenApplicationApproved' => ApplicationApproved::class,];
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [];
     }
 }

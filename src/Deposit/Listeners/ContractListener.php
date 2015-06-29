@@ -5,6 +5,7 @@ use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
 use FullRent\Core\Deposit\Commands\SetupDeposit;
+use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
 
 /**
@@ -15,7 +16,7 @@ use FullRent\Core\QueryBus\QueryBus;
  * @package FullRent\Core\Deposit\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractListener
+final class ContractListener extends EventListener
 {
     /**
      * @var CommandBus
@@ -42,8 +43,7 @@ final class ContractListener
      * This handler only fires when a contract is signed, and not on event rebuild
      *
      * @param LandlordSignedContract $e
-     * @hears("FullRent.Core.Contract.Events.LandlordSignedContract")
-     * @repeatable(false)
+
      */
     public function whenContractedCompleted(LandlordSignedContract $e)
     {
@@ -59,5 +59,21 @@ final class ContractListener
 
         }
 
+    }
+
+    /**
+     * @return array
+     */
+    protected function register()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+        return ['whenContractedCompleted' => LandlordSignedContract::class];
     }
 }
