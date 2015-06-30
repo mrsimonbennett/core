@@ -2,7 +2,7 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
-use FullRent\Core\User\Exceptions\UserNotFoundException;
+use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\UserId;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ final class UserController extends Controller
             $user = $this->userRepository->getById(new UserId($userId));
 
             return (array)$user;
-        } catch (UserNotFoundException $ex) {
+        } catch (UserNotFound $ex) {
             return null;
         }
     }

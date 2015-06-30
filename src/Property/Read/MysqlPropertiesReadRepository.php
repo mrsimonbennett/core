@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Property\Read;
 
-use FullRent\Core\Property\Exceptions\PropertyNotFoundException;
+use FullRent\Core\Property\Exceptions\PropertyNotFound;
 use FullRent\Core\Property\ValueObjects\CompanyId;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use Illuminate\Database\Connection;
@@ -39,13 +39,13 @@ final class MysqlPropertiesReadRepository implements PropertiesReadRepository
 
     /**
      * @param PropertyId $propertyId
-     * @throws PropertyNotFoundException
+     * @throws PropertyNotFound
      * @return stdClass
      */
     public function getById(PropertyId $propertyId)
     {
         if (is_null($property = $this->db->table('properties')->where('id', $propertyId)->first())) {
-            throw new PropertyNotFoundException;
+            throw new PropertyNotFound;
         }
 
         return $property;

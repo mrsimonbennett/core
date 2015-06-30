@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\Auth;
 
-use FullRent\Core\User\Exceptions\UserNotFoundException;
+use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\Email;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -43,7 +43,7 @@ final class AuthController extends Controller
             else{
                 return null;
             }
-        }catch(UserNotFoundException $ex){
+        }catch(UserNotFound $ex){
             return null;
         }
     }

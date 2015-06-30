@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\User\Projections;
 
-use FullRent\Core\User\Exceptions\UserNotFoundException;
+use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\UserId;
 use Illuminate\Database\Connection;
@@ -31,12 +31,12 @@ final class MysqlUserReadRepository implements UserReadRepository
     /**
      * @param Email $email
      * @return stdClass
-     * @throws UserNotFoundException
+     * @throws UserNotFound
      */
     public function getByEmail(Email $email)
     {
         if (is_null($user = $this->db->table('users')->where('email', $email)->first())) {
-            throw new UserNotFoundException();
+            throw new UserNotFound();
         } else {
             return $user;
         }
@@ -45,12 +45,12 @@ final class MysqlUserReadRepository implements UserReadRepository
     /**
      * @param UserId $userId
      * @return stdClass
-     * @throws UserNotFoundException
+     * @throws UserNotFound
      */
     public function getById(UserId $userId)
     {
         if (is_null($user = $this->db->table('users')->where('id', $userId)->first())) {
-            throw new UserNotFoundException();
+            throw new UserNotFound();
         } else {
             $companies = $this->db->table('companies')
                                 ->join('company_users', 'company_users.company_id', '=', 'companies.id')

@@ -23,6 +23,8 @@ $router->group(['prefix' => 'properties'],
     function () use ($router) {
         $router->post('accept-applications', 'PropertiesController@acceptApplication');
         $router->post('close-applications', 'PropertiesController@closeApplication');
+        $router->post('email-applications', 'PropertiesController@emailApplicant');
+
         $router->get('{id}/history', 'PropertiesController@getHistory');
         $router->post('', 'PropertiesController@listNewProperty');
         $router->get('', 'PropertiesController@index');
