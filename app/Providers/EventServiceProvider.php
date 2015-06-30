@@ -2,6 +2,7 @@
 
 use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
 use FullRent\Core\Deposit\Listeners\DepositMySqlListenerV2;
+use FullRent\Core\Property\Listener\PropertyApplicationEmailListener;
 use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\RentBook\Listeners\RentBookAuthorizedListener;
 use FullRent\Core\RentBook\Listeners\RentBookContractListener;
@@ -68,7 +69,7 @@ class EventServiceProvider extends ServiceProvider
         ApplicationEmails::class,
         ContractApplicationListener::class,
         ApplicationEventListener::class,
-
+        PropertyApplicationEmailListener::class,
 
         /**
          * Contracts

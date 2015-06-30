@@ -6,7 +6,7 @@ namespace FullRent\Core\Property\Exceptions;
  * @package FullRent\Core\Property\Exceptions
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PropertyNotFoundException extends \Exception
+final class PropertyNotFound extends \Exception
 {
    
 }

@@ -2,12 +2,15 @@
 namespace FullRent\Core\Property;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
+use FullRent\Core\Property\Exceptions\PropertyClosedToApplications;
 use FullRent\Core\Property\ValueObjects\Address;
+use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
 use FullRent\Core\Property\ValueObjects\Parking;
@@ -25,7 +28,7 @@ final class Property extends EventSourcedAggregateRoot
     /**
      * @var PropertyId
      */
-    private $propertyId;
+    private $id;
     /**
      * @var Address
      */
@@ -106,7 +109,7 @@ final class Property extends EventSourcedAggregateRoot
             $acceptingAt = DateTime::now();
         }
 
-        $this->apply(new PropertyAcceptingApplications($this->propertyId, $acceptingAt));
+        $this->apply(new PropertyAcceptingApplications($this->id, $acceptingAt));
     }
 
     public function closeApplications(DateTime $closedAt = null)
@@ -119,15 +122,27 @@ final class Property extends EventSourcedAggregateRoot
             $closedAt = DateTime::now();
         }
 
-        $this->apply(new PropertyClosedAcceptingApplications($this->propertyId, $closedAt));
+        $this->apply(new PropertyClosedAcceptingApplications($this->id, $closedAt));
+    }
+
+    /**
+     * @param ApplicantEmail $applicantEmail
+     * @throws PropertyClosedToApplications
+     */
+    public function emailApplication(ApplicantEmail $applicantEmail)
+    {
+        if (!$this->acceptingApplicationsFrom) {
+            throw new PropertyClosedToApplications;
+        }
+        $this->apply(new ApplicantInvitedToApplyByEmail($this->id, $applicantEmail, DateTime::now()));
     }
 
     /**
      * @param NewPropertyListed $newPropertyListed
      */
-    public function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
+    protected function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
     {
-        $this->propertyId = $newPropertyListed->getPropertyId();
+        $this->id = $newPropertyListed->getPropertyId();
         $this->address = $newPropertyListed->getAddress();
         $this->company = $newPropertyListed->getCompany();
         $this->landlord = $newPropertyListed->getLandlord();
@@ -138,14 +153,13 @@ final class Property extends EventSourcedAggregateRoot
         $this->listedAt = $newPropertyListed->getListedAt();
     }
 
-    public function applyPropertyAcceptingApplications(PropertyAcceptingApplications $propertyAcceptingApplications)
+    protected function applyPropertyAcceptingApplications(PropertyAcceptingApplications $e)
     {
         $this->acceptingApplicationsFrom = true;
     }
 
-    public function applyPropertyClosedAcceptingApplications(
-        PropertyClosedAcceptingApplications $propertyClosedAcceptingApplications
-    ) {
+    protected function applyPropertyClosedAcceptingApplications(PropertyClosedAcceptingApplications $e)
+    {
         $this->acceptingApplicationsFrom = false;
     }
 
@@ -154,6 +168,8 @@ final class Property extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return 'property-' . (string)$this->propertyId;
+        return 'property-' . (string)$this->id;
     }
+
+
 }

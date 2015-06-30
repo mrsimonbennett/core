@@ -7,6 +7,7 @@ use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Property\Commands\AcceptApplications;
 use FullRent\Core\Property\Commands\CloseApplications;
+use FullRent\Core\Property\Commands\EmailApplication;
 use FullRent\Core\Property\Commands\ListNewProperty;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
@@ -126,6 +127,13 @@ final class PropertiesController extends Controller
         }
     }
 
+    /**
+     * @param EmailApplicantHttpRequest $request
+     */
+    public function emailApplicant(Request $request)
+    {
+        $this->bus->execute(new EmailApplication($request->get('property_id'),$request->get('email')));
+    }
     /**
      * @param $propertyId
      * @return \Illuminate\Http\JsonResponse
