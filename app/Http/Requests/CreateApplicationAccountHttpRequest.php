@@ -21,7 +21,7 @@ class CreateApplicationAccountHttpRequest extends Request {
 	public function rules()
 	{
 		return [
-			//'user_email' => 'required|email|unique:users,email',
+			'user_email' => 'required|email|unique:users,email',
 			'user_legal_name' => 'required',
 			'user_know_as' => 'required',
 			'user_password' => 'required|min:8',
