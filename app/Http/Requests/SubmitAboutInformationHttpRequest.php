@@ -26,9 +26,9 @@ class SubmitAboutInformationHttpRequest extends Request
     public function rules()
     {
         return [
-            'about' => 'about_description',
-            'dob'   => 'date_of_birth',
-            'phone' => 'phone_number'
+            'about_description' => 'required',
+            'date_of_birth'     => 'required|date_format:d/m/Y',
+            'phone_number'      => 'required'
         ];
     }
 
