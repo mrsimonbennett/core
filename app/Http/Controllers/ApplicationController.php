@@ -37,18 +37,15 @@ use Illuminate\Routing\Controller;
  */
 final class ApplicationController extends Controller
 {
-    /**
-     * @var CommandBus
-     */
+
+    /** @var CommandBus */
     private $commandBus;
-    /**
-     * @var JsonResponse
-     */
-    private $jsonResponse;
-    /**
-     * @var ApplicationReadRepository
-     */
+
+    /** @var ApplicationReadRepository */
     private $applicationReadRepository;
+
+    /** @var JsonResponse */
+    private $jsonResponse;
 
     /**
      * @param CommandBus $commandBus
@@ -61,8 +58,9 @@ final class ApplicationController extends Controller
         ApplicationReadRepository $applicationReadRepository
     ) {
         $this->commandBus = $commandBus;
-        $this->jsonResponse = $jsonResponse;
+
         $this->applicationReadRepository = $applicationReadRepository;
+        $this->jsonResponse = $jsonResponse;
     }
 
     /**
@@ -116,15 +114,22 @@ final class ApplicationController extends Controller
      */
     public function residential(SubmitRentingInformationHttpRequest $request, $propertyId, $applicationId)
     {
-        $command = new SubmitRentingInformation(new ApplicationId($applicationId),new RentingInformation((bool)$request->currently_renting));
+        $command = new SubmitRentingInformation(new ApplicationId($applicationId),
+                                                new RentingInformation((bool)$request->currently_renting));
         $this->commandBus->execute($command);
 
         return $this->jsonResponse->success();
     }
 
+    /**
+     * @param $propertyId
+     * @param $applicationId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function finish($propertyId, $applicationId)
     {
         $this->commandBus->execute(new FinishApplication(new ApplicationId($applicationId)));
+
         return $this->jsonResponse->success();
     }
 
@@ -136,17 +141,24 @@ final class ApplicationController extends Controller
      */
     public function reject(RejectApplicationHttpRequest $request, $propertyId, $applicationId)
     {
-        $this->commandBus->execute(new RejectApplication($applicationId,$request->get('reason','')));
+        $this->commandBus->execute(new RejectApplication($applicationId, $request->get('reason', '')));
+
         return $this->jsonResponse->success();
     }
 
 
-    public function approve($propertyId,$applicationId)
+    /**
+     * @param $propertyId
+     * @param $applicationId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approve($propertyId, $applicationId)
     {
         $this->commandBus->execute(new ApproveApplication(new ApplicationId($applicationId)));
 
         return $this->jsonResponse->success();
     }
+
     /**
      * If the user does not already have a application we will just make one.
      * @param Request $request
@@ -174,17 +186,22 @@ final class ApplicationController extends Controller
         }
     }
 
+    /**
+     * @param $propertyId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function forProperty($propertyId)
     {
         return $this->jsonResponse->success([
                                                 'applications' => $this->applicationReadRepository->finishedByProperty(new PropertyId($propertyId))
                                             ]);
     }
+
     /**
      * @param $applicationId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function showApplication($propertyId,$applicationId)
+    public function showApplication($propertyId, $applicationId)
     {
         return $this->jsonResponse->success(
             [
