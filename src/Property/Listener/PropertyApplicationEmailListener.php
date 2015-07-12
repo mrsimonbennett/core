@@ -20,6 +20,7 @@ final class PropertyApplicationEmailListener extends EventListener
      * @var QueryBus
      */
     private $queryBus;
+
     /**
      * @var EmailClient
      */
@@ -43,15 +44,23 @@ final class PropertyApplicationEmailListener extends EventListener
 
 
         $this->mailer->send('applications.invitation',
-                                 "You have been invited to submit an application for {$property->address_firstline} by {$landlord->known_as}",
-                                 [
-                                     'landlord' => $landlord,
-                                     'property' => $property,
-                                     'company'  => $company,
-                                 ],
-                                 'Tenant',
-                                 $e->getApplicantEmail()->getEmail());
+                            "You have been invited to submit an application for {$property->address_firstline} by {$landlord->known_as}",
+                            [
+                                'landlord' => $landlord,
+                                'property' => $property,
+                                'company'  => $company,
+                            ],
+                            'Tenant',
+                            $e->getApplicantEmail()->getEmail());
 
+    }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+        return ['whenApplicantInvitedToApplyByEmail' => ApplicantInvitedToApplyByEmail::class];
     }
 
     /**
@@ -59,6 +68,6 @@ final class PropertyApplicationEmailListener extends EventListener
      */
     protected function register()
     {
-        return ['whenApplicantInvitedToApplyByEmail' => ApplicantInvitedToApplyByEmail::class];
+        return [];
     }
 }

@@ -3,6 +3,7 @@ namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
 use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
@@ -45,10 +46,23 @@ final class UserMysqlSubscriber extends EventListener
     }
 
     /**
+     * @param UserPasswordReset $e
+     */
+    public function whenUserPasswordReset(UserPasswordReset $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getUserId())
+                 ->update(['password' => $e->getPassword()]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
     {
-        return ['whenUserRegistered' => UserRegistered::class];
+        return [
+            'whenUserRegistered'    => UserRegistered::class,
+            'whenUserPasswordReset' => UserPasswordReset::class,
+        ];
     }
 }

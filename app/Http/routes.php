@@ -68,7 +68,7 @@ $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsCo
  * Users
  */
 $router->resource('users', 'UserController');
-$router->post('users/{id}/remember-token','UserController@rememberMe');
+$router->post('users/{id}/remember-token', 'UserController@rememberMe');
 
 /*
  * Auth
@@ -77,6 +77,8 @@ $router->group(['prefix' => 'auth'],
     function () use ($router) {
         $router->post('login', ['uses' => 'Auth\AuthController@postLogin']);
         $router->put('token', ['uses' => 'Auth\AuthController@putToken']);
+        $router->post('password/email', ['uses' => 'Auth\PasswordController@email']);
+        $router->post('password/reset/{token}', ['uses' => 'Auth\PasswordController@reset']);
     });
 
 

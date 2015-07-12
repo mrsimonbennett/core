@@ -7,6 +7,7 @@ use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\RentBook\Listeners\RentBookAuthorizedListener;
 use FullRent\Core\RentBook\Listeners\RentBookContractListener;
 use FullRent\Core\RentBook\Listeners\RentBookMysqlListener;
+use FullRent\Core\User\Listener\UserEmailListener;
 use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -55,6 +56,7 @@ class EventServiceProvider extends ServiceProvider
          * User
          */
         UserMysqlSubscriber::class,
+        UserEmailListener::class,
 
         /**
          * Properties

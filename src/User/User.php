@@ -3,11 +3,15 @@ namespace FullRent\Core\User;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\User\Events\UserHasChangedName;
+use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
+use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
+use FullRent\Core\User\Exceptions\InvalidPasswordResetRequest;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
+use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
 
@@ -18,24 +22,15 @@ use FullRent\Core\ValueObjects\DateTime;
  */
 final class User extends EventSourcedAggregateRoot
 {
-    /**
-     * @var UserId
-     */
+    /** @var UserId */
     private $userId;
-    /**
-     * @var Name
-     */
-    private $name;
-    /**
-     * @var Email
-     */
-    private $email;
-    /**
-     * @var Password
-     */
-    private $password;
 
-    private $createdAt;
+    /** @var Email */
+    private $email;
+
+    /**  @var PasswordResetToken */
+    private $resetToken;
+
 
     /**
      * @param UserId $userId
@@ -69,15 +64,45 @@ final class User extends EventSourcedAggregateRoot
     }
 
     /**
+     * Request a password reset
+     */
+    public function requestPasswordReset()
+    {
+        //Build token
+        $token = PasswordResetToken::random($this->email);
+        $this->apply(new UserHasRequestedPasswordReset($this->userId,
+                                                       $this->email,
+                                                       $token,
+                                                       DateTime::now()->addHours(4),
+                                                       DateTime::now()));
+    }
+
+    /**
+     * Change the user password using the user provided token
+     *
+     * @param Password $password
+     * @param PasswordResetToken $passwordResetToken
+     * @throws InvalidPasswordResetRequest If the token is not correct/outdated
+     */
+    public function resetUserPassword(Password $password, PasswordResetToken $passwordResetToken)
+    {
+        if (isset($this->resetToken) && $this->resetToken->equals($passwordResetToken)) {
+            $this->apply(new UserPasswordReset($this->userId, $password, DateTime::now()));
+            return;
+        }
+
+        throw new InvalidPasswordResetRequest();
+
+    }
+
+
+    /**
      * @param UserRegistered $userRegistered
      */
     protected function applyUserRegistered(UserRegistered $userRegistered)
     {
         $this->userId = $userRegistered->getUserId();
-        $this->name = $userRegistered->getName();
         $this->email = $userRegistered->getEmail();
-        $this->password = $userRegistered->getPassword();
-        $this->createdAt = $userRegistered->getCreatedAt();
     }
 
     /**
@@ -89,11 +114,16 @@ final class User extends EventSourcedAggregateRoot
     }
 
     /**
-     * @param UserHasChangedName $userHasChangedName
+     * If the code is still valid we will set it in a field if not set the field back to null
+     * @param UserHasRequestedPasswordReset $e
      */
-    protected function applyUserHasChangedName(UserHasChangedName $userHasChangedName)
+    protected function applyUserHasRequestedPasswordReset(UserHasRequestedPasswordReset $e)
     {
-        $this->name = $userHasChangedName->getName();
+        $this->resetToken = null;
+        if ($e->getValidTill()->isFuture()) {
+            $this->resetToken = $e->getPasswordResetToken();
+        }
+
     }
 
     /**
@@ -101,6 +131,7 @@ final class User extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return 'user-'.(string)$this->userId;
+        return 'user-' . (string)$this->userId;
     }
+
 }
