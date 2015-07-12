@@ -22,4 +22,12 @@ final class EventStoreUserRepository extends EventSourcingRepository implements 
         parent::__construct($eventStore, $eventBus, User::class, new PublicConstructorAggregateFactory());
     }
 
+    /**
+     * @param mixed $id
+     * @return \Broadway\Domain\AggregateRoot|\Broadway\EventSourcing\EventSourcedAggregateRoot
+     */
+    public function load($id)
+    {
+        return parent::load('user-'. $id);
+    }
 }
