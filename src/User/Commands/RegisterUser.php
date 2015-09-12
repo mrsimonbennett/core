@@ -11,7 +11,7 @@ use FullRent\Core\User\ValueObjects\UserId;
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterUser 
+final class RegisterUser
 {
     /**
      * @var UserId

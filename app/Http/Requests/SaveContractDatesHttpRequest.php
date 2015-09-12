@@ -28,8 +28,12 @@ final class SaveContractDatesHttpRequest extends Request
     public function rules()
     {
         return [
-            'start' => 'required',
-            'end'   => 'required',
+            'start'            => 'required',
+            'end'              => 'required',
+            'rent'             => 'required',
+            'rent_payable'     => 'required',
+            'first_rent'       => 'required',
         ];
+
     }
 }

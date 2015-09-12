@@ -9,6 +9,7 @@ use stdClass;
 /**
  * Interface UserRepository
  * @package FullRent\Core\User\Projections
+ * @deprecated Please use the query bus
  * @author Simon Bennett <simon@bennett.im>
  */
 interface UserReadRepository

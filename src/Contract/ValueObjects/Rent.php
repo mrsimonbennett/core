@@ -15,35 +15,50 @@ final class Rent implements SerializableInterface
      * @var RentAmount
      */
     private $rentAmount;
+
     /**
      * @var RentDueDay
      */
     private $rentDueDay;
+
     /**
      * @var DateTime
      */
     private $firstPayment;
+
     /**
      * @var bool
      */
     private $fullRentRentCollection;
 
+    /** @var DateTime */
+    private $start;
+
+    /** @var DateTime */
+    private $end;
+
     /**
      * @param RentAmount $rentAmount
      * @param RentDueDay $rentDueDay
      * @param DateTime $firstPayment
+     * @param DateTime $start
+     * @param DateTime $end
      * @param bool $fullRentRentCollection
      */
     public function __construct(
         RentAmount $rentAmount,
         RentDueDay $rentDueDay,
         DateTime $firstPayment,
+        DateTime $start,
+        DateTime $end,
         $fullRentRentCollection = false
     ) {
         $this->rentAmount = $rentAmount;
         $this->rentDueDay = $rentDueDay;
         $this->firstPayment = $firstPayment;
         $this->fullRentRentCollection = $fullRentRentCollection;
+        $this->start = $start;
+        $this->end = $end;
     }
 
     /**
@@ -78,6 +93,22 @@ final class Rent implements SerializableInterface
         return $this->fullRentRentCollection;
     }
 
+    /**
+     * @return DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
 
     /**
      * @return mixed The object instance
@@ -87,6 +118,8 @@ final class Rent implements SerializableInterface
         return new static(RentAmount::deserialize($data['rent']),
                           new RentDueDay($data['due']),
                           DateTime::deserialize($data['first_payment']),
+                          DateTime::deserialize($data['start']),
+                          DateTime::deserialize($data['end']),
                           isset($data['fullrent_collection']) ? $data['fullrent_collection'] : false
         );
     }
@@ -101,6 +134,8 @@ final class Rent implements SerializableInterface
             'due'                 => $this->rentDueDay->getRentDueDay(),
             'first_payment'       => $this->firstPayment->serialize(),
             'fullrent_collection' => $this->fullRentRentCollection,
+            'start'               => $this->start->serialize(),
+            'end'                 => $this->end->serialize(),
         ];
     }
 }

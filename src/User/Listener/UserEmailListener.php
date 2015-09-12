@@ -5,6 +5,7 @@ use FullRent\Core\Infrastructure\Email\EmailClient;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
+use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Queries\FindUserById;
 
@@ -67,12 +68,29 @@ final class UserEmailListener extends EventListener
                                  $user->email);
     }
 
+    public function whenUserInvited(UserInvited $e)
+    {
+        sleep(2);
+        $user = $this->queryBus->query(new FindUserById($e->getUserId()));
+        $company = current($user->companies); // @todo Fix this
+        $this->emailClient->send('users.invited',
+                                 'You Have been invited To Fullrent',
+                                 [
+                                     'company' => $company,
+                                     'user'    => $user,
+                                     'token'   => $e->getInviteToken()->getCode(),
+                                 ],
+                                 '',
+                                 $user->email);
+    }
+
     /**
      * @return array
      */
     protected function register()
     {
-        return ['whenUserPasswordReset' => UserPasswordReset::class];
+        return [
+        ];
     }
 
     /**
@@ -82,6 +100,9 @@ final class UserEmailListener extends EventListener
     {
         return [
             'whenPasswordResetRequested' => UserHasRequestedPasswordReset::class,
+            'whenUserPasswordReset'      => UserPasswordReset::class,
+            'whenUserInvited' => UserInvited::class,
+
         ];
     }
 }

@@ -13,6 +13,7 @@ $router->group(['prefix' => 'companies'],
 
         $router->get('{id}/direct-debit/authorization_url', 'CompanyDirectDebit@authorizationUrl');
         $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
+        $router->post('invite', 'CompanyController@invite');
 
     }
 );
@@ -37,11 +38,13 @@ $router->group(['prefix' => 'properties'],
 
     }
 );
+$router->post('contracts', 'ContractsController@store');
+$router->get('contracts','ContractsController@indexAll');
 $router->group(['prefix' => 'contracts/{id}'],
     function () use ($router) {
         $router->get('', 'ContractsController@show');
 
-        $router->post('dates', 'ContractsController@saveDates');
+      /*  $router->post('dates', 'ContractsController@saveDates');
         $router->post('rent', 'ContractsController@saveRent');
         $router->post('documents', 'ContractsController@saveDocuments');
         $router->post('lock', 'ContractsController@lockContract');
@@ -52,7 +55,7 @@ $router->group(['prefix' => 'contracts/{id}'],
         $router->post('tenant-sign-contract', 'ContractsController@tenantSignContract');
 
         $router->get('deposit-information', 'ContractsController@getDepositInformation');
-        $router->get('deposit/{tenantId}', 'ContractsController@getDepositInformationForTenant');
+        $router->get('deposit/{tenantId}', 'ContractsController@getDepositInformationForTenant');*/
 
         $router->post('tenant-pay-deposit', 'ContractsController@tenantPayDeposit');
         $router->get('tenant/direct-debit/authorization_url', 'ContractsController@tenantAuthorizationUrl');
@@ -67,6 +70,8 @@ $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsCo
 /**
  * Users
  */
+$router->get('users/me', 'UserController@me');
+
 $router->resource('users', 'UserController');
 $router->post('users/{id}/remember-token', 'UserController@rememberMe');
 
@@ -79,6 +84,9 @@ $router->group(['prefix' => 'auth'],
         $router->put('token', ['uses' => 'Auth\AuthController@putToken']);
         $router->post('password/email', ['uses' => 'Auth\PasswordController@email']);
         $router->post('password/reset/{token}', ['uses' => 'Auth\PasswordController@reset']);
+
+        $router->post('invited/{token}', ['uses' => 'Auth\AuthController@invited']);
+
     });
 
 

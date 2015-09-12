@@ -1,6 +1,8 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\Auth;
 
+use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\User\Commands\CompletedApplication;
 use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\Email;
@@ -19,32 +21,56 @@ final class AuthController extends Controller
      * @var UserReadRepository
      */
     private $userRepository;
+
     /**
      * @var Hasher
      */
     private $hasher;
 
+    /** @var CommandBus */
+    private $commandBus;
+
     /**
      * @param UserReadRepository $userRepository
      * @param Hasher $hasher
+     * @param CommandBus $commandBus
      */
-    public function __construct(UserReadRepository $userRepository, Hasher $hasher)
+    public function __construct(UserReadRepository $userRepository, Hasher $hasher, CommandBus $commandBus)
     {
         $this->userRepository = $userRepository;
         $this->hasher = $hasher;
+        $this->commandBus = $commandBus;
     }
+
     public function postLogin(Request $request)
     {
-        try{
+        try {
             $user = $this->userRepository->getByEmail(new Email($request->get('email')));
             if ($this->hasher->check($request->get('password'), $user->password)) {
-                return (array)$user;
-            }
-            else{
+                return ['user' => (array)$user,'token' => md5(time())];
+            } else {
                 return null;
             }
-        }catch(UserNotFound $ex){
+        } catch (UserNotFound $ex) {
             return null;
         }
+    }
+
+    /**
+     * @param $token
+     * @param Request $request
+     */
+    public function invited($token, Request $request)
+    {
+        //Create command for a invited user
+
+        $completedApplicationCommand = new CompletedApplication($token,
+                                                                $request->get('email'),
+                                                                $request->get('password'),
+                                                                $request->get('legal_name'),
+                                                                $request->get('known_as'));
+
+        $this->commandBus->execute($completedApplicationCommand);
+
     }
 }

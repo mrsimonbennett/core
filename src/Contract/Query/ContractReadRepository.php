@@ -29,4 +29,10 @@ interface ContractReadRepository
      * @return \stdClass
      */
     public function getByTenantId(TenantId $tenantId);
+
+    /**
+     * @param $companyId
+     * @return mixed
+     */
+    public function getByCompany($companyId);
 }

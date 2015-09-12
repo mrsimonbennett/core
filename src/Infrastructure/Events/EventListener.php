@@ -8,6 +8,8 @@ namespace FullRent\Core\Infrastructure\Events;
  */
 abstract class EventListener
 {
+    protected $priority = 0;
+
     /**
      * @return array
      */
@@ -54,7 +56,7 @@ abstract class EventListener
     {
         foreach ($subscribers as $method => $name) {
             $dispatcher->listen([0 => $this->transform($name)],
-                                get_class($this) . '@' . $method);
+                                get_class($this) . '@' . $method,$this->priority);
         }
     }
 }

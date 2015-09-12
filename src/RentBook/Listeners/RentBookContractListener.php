@@ -4,6 +4,7 @@ namespace FullRent\Core\RentBook\Listeners;
 use DateInterval;
 use DatePeriod;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
 use FullRent\Core\Infrastructure\Events\EventListener;
@@ -22,6 +23,7 @@ final class RentBookContractListener extends EventListener
      * @var CommandBus
      */
     private $commandBus;
+
     /**
      * @var QueryBus
      */
@@ -45,11 +47,11 @@ final class RentBookContractListener extends EventListener
      * @todo Add in manally rent book generator
      * @param LandlordSignedContract $e
      */
-    public function whenContractFinished(LandlordSignedContract $e)
+    public function whenContractFinished(ContractDrafted $e)
     {
         $contract = $this->queryBus->query(new FindContractByIdQuery($e->getContractId()));
-        if($contract->fullrent_rent_collection)
-        {
+
+        if ($contract->fullrent_rent_collection) {
             $this->fullrentCollection($contract);
         }
 
@@ -61,7 +63,7 @@ final class RentBookContractListener extends EventListener
     protected function registerOnce()
     {
         return [
-            'whenContractFinished' => LandlordSignedContract::class,
+            'whenContractFinished' => ContractDrafted::class,
         ];
     }
 
@@ -91,6 +93,8 @@ final class RentBookContractListener extends EventListener
      */
     private function fullrentCollection($contract)
     {
+        \Log::debug(json_encode($contract));
+
         list($startDate, $endDate, $firstRent) = $this->formatKeyDates($contract);
 
         $rentDueDay = $contract->rent_payable;
@@ -107,6 +111,15 @@ final class RentBookContractListener extends EventListener
         if ($firstRent < $rentDays[0]) {
             $rentDays[0] = $firstRent;
         }
+
+      
+        for ($i = 0; $i < count($rentDays); $i++) {
+            if($rentDays[$i]->isPast())
+            {
+                $rentDays[$i] = DateTime::now()->addDay();
+            }
+        }
+
         foreach ($contract->tenants as $tenant) {
             $this->commandBus->execute(new OpenAutomaticRentBook(uuid(),
                                                                  $contract->id,

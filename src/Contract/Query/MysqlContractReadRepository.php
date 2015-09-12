@@ -71,4 +71,23 @@ final class MysqlContractReadRepository extends BaseMysqlSubscriber implements C
 
         return $contracts;
     }
+
+    public function getByCompany($companyId)
+    {
+        $contracts = $this->db->table('contract_tenants')
+                              ->where('company_id', $companyId)
+                              ->join('contracts', 'contracts.id', '=', 'contract_tenants.contract_id')
+                              ->get();
+        foreach ($contracts as $contract) {
+            $contract->property = $this->db->table('properties')->where('id', $contract->property_id)->first();
+            $contract->tenants = $this->db->table('contract_tenants')
+                                          ->where('contract_id', $contract->id)
+                                          ->join('users', 'users.id', '=', 'contract_tenants.tenant_id')
+                                          ->get();
+
+        }
+
+
+        return $contracts;    }
+
 }

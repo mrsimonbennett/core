@@ -19,6 +19,7 @@ final class UserController extends Controller
      * @var UserReadRepository
      */
     private $userRepository;
+
     /**
      * @var MySqlClient
      */
@@ -52,8 +53,18 @@ final class UserController extends Controller
     /**
      * @param Request $request
      */
+    public function me(Request $request)
+    {
+        $user = $this->userRepository->getById(new UserId('0439fdfe-1e37-4e5f-b300-312d96314180'));
+        return ['user' => (array)$user,'token' => md5(time())];
+
+    }
+
+    /**
+     * @param Request $request
+     */
     public function rememberMe(Request $request, $userId)
     {
-        $this->client->query()->table('users')->where('id', $userId)->update(['remember_token'=> $request->token]);
+        $this->client->query()->table('users')->where('id', $userId)->update(['remember_token' => $request->token]);
     }
 }

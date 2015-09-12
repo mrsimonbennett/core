@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Property\Read\Subscribers;
 
-use FullRent\Core\Contract\Events\ContractDraftedFromApplication;
+use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
@@ -71,9 +71,9 @@ final class PropertyHistorySubscriber extends EventListener
     }
 
     /**
-     * @param ContractDraftedFromApplication $e
+     * @param ContractDrafted $e
      */
-    public function whenContractIsDrafted(ContractDraftedFromApplication $e)
+    public function whenContractIsDrafted(ContractDrafted $e)
     {
         $this->db->table('property_history')->insert([
                                                          'id'             => UuidIdentity::random(),
@@ -92,7 +92,7 @@ final class PropertyHistorySubscriber extends EventListener
             'whenPropertyWasListed'                  => NewPropertyListed::class,
             'whenPropertyAcceptingApplications'      => PropertyAcceptingApplications::class,
             'whenPropertyCloseAcceptingApplications' => PropertyClosedAcceptingApplications::class,
-            'whenContractIsDrafted'                  => ContractDraftedFromApplication::class,
+            'whenContractIsDrafted'                  => ContractDrafted::class,
         ];
     }
 }

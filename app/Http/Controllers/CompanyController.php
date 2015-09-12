@@ -4,13 +4,17 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Company\Commands\EnrolTenant;
 use FullRent\Core\Company\Commands\RegisterCompany;
-use FullRent\Core\Company\CompanyRepository;
 use FullRent\Core\Company\Exceptions\CompanyNotFoundException;
 use FullRent\Core\Company\Projection\CompanyReadRepository;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\User\Commands\InviteUser;
 use FullRent\Core\User\Commands\RegisterUser;
+use FullRent\Core\User\Exceptions\UserNotFound;
+use FullRent\Core\User\Queries\FindUserByEmailQuery;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
@@ -29,36 +33,40 @@ final class CompanyController extends Controller
      * @var CommandBus
      */
     private $bus;
+
     /**
      * @var JsonResponse
      */
     private $jsonResponse;
-    /**
-     * @var CompanyRepository
-     */
-    private $companyRepository;
+
     /**
      * @var CompanyReadRepository
      */
     private $companyReadRepository;
 
+    /** @var QueryBus */
+    private $queryBus;
+
     /**
      * @param CommandBus $bus
      * @param JsonResponse $jsonResponse
      * @param CompanyReadRepository $companyReadRepository
+     * @param QueryBus $queryBus
      */
     public function __construct(
         CommandBus $bus,
         JsonResponse $jsonResponse,
-        CompanyReadRepository $companyReadRepository
+        CompanyReadRepository $companyReadRepository,
+        QueryBus $queryBus
     ) {
         $this->bus = $bus;
         $this->jsonResponse = $jsonResponse;
         $this->companyReadRepository = $companyReadRepository;
+        $this->queryBus = $queryBus;
     }
 
     /**
-     * @param Request $request
+     * @param CreateCompanyHttpRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function createCompany(CreateCompanyHttpRequest $request)
@@ -72,7 +80,7 @@ final class CompanyController extends Controller
 
         $registerUserCommand = new RegisterUser(
             UserId::fromIdentity($registerCompanyCommand->getLandlordId()),
-            new Name($request->get('user_legal_name'), $request->get('user_know_as', '')),
+            new Name($request->get('user_legal_name'), $request->get('user_know_as', $request->get('user_legal_name'))),
             new Email($request->get('user_email')),
             new Password(bcrypt($request->get('user_password')))
         );
@@ -105,5 +113,23 @@ final class CompanyController extends Controller
     public function checkExists($companyDomain)
     {
         return $this->jsonResponse->success(['exists' => $this->companyReadRepository->doesDomainExist(new CompanyDomain($companyDomain))]);
+    }
+
+    /**
+     * Invite a user ot fullrent system. If they exist we just enrol them otherwise we create them an account
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function invite(Request $request)
+    {
+        try {
+            $userId = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')))->id;
+        } catch (UserNotFound $ex) {
+            $userId = uuid();
+            $this->bus->execute(new InviteUser($userId, $request->get('email')));
+        }
+        $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
+
+        return $this->jsonResponse->success(['user_id' => (string)$userId]);
     }
 }
