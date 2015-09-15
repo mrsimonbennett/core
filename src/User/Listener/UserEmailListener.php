@@ -73,6 +73,10 @@ final class UserEmailListener extends EventListener
         sleep(2);
         $user = $this->queryBus->query(new FindUserById($e->getUserId()));
         $company = current($user->companies); // @todo Fix this
+        \Log::debug(json_decode(json_encode($company), true));
+        \Log::debug(json_decode(json_encode($user), true));
+        \Log::debug($e->getInviteToken()->getCode());
+
         $this->emailClient->send('users.invited',
                                  'You Have been invited To Fullrent',
                                  [
@@ -101,7 +105,7 @@ final class UserEmailListener extends EventListener
         return [
             'whenPasswordResetRequested' => UserHasRequestedPasswordReset::class,
             'whenUserPasswordReset'      => UserPasswordReset::class,
-            'whenUserInvited' => UserInvited::class,
+            'whenUserInvited'            => UserInvited::class,
 
         ];
     }
