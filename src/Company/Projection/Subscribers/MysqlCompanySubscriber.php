@@ -17,6 +17,8 @@ use Illuminate\Database\Connection;
  */
 final class MysqlCompanySubscriber extends EventListener
 {
+    protected $priority = 10;
+
     /**
      * @var Connection
      */

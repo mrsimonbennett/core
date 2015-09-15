@@ -16,6 +16,9 @@ use FullRent\Core\User\Queries\FindUserById;
  */
 final class UserEmailListener extends EventListener
 {
+    protected $priority = 0;
+
+
     /** @var EmailClient */
     private $emailClient;
 
@@ -70,7 +73,6 @@ final class UserEmailListener extends EventListener
 
     public function whenUserInvited(UserInvited $e)
     {
-        sleep(2);
         $user = $this->queryBus->query(new FindUserById($e->getUserId()));
         $company = current($user->companies); // @todo Fix this
         \Log::debug(json_decode(json_encode($company), true));

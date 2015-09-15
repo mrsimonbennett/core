@@ -15,6 +15,7 @@ use FullRent\Core\Property\ValueObjects\PropertyId;
  */
 final class ApplicationEventListener extends EventListener
 {
+
     /**
      * @var CommandBus
      */

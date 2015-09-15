@@ -17,6 +17,8 @@ use Illuminate\Database\DatabaseManager;
  */
 final class UserMysqlSubscriber extends EventListener
 {
+    protected $priority = 10;
+
     /**
      * @var Connection
      */
