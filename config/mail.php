@@ -55,7 +55,7 @@ return [
 
 	'from' => ['address' => 'automatic@fullrent.co.uk', 'name' => 'FullRent'],
 
-	'replyto' => ['address' => 'info@fullrent.co.uk', 'name' => 'FullRent Support'],
+	'replyto' => ['address' => 'support@fullrent.co.uk', 'name' => 'FullRent Support'],
 
 	/*
 	|--------------------------------------------------------------------------
