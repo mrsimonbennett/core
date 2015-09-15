@@ -124,11 +124,13 @@ final class CompanyController extends Controller
     {
         try {
             $userId = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')))->id;
+            $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
+
         } catch (UserNotFound $ex) {
             $userId = uuid();
+            $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
             $this->bus->execute(new InviteUser($userId, $request->get('email')));
         }
-        $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
 
         return $this->jsonResponse->success(['user_id' => (string)$userId]);
     }
