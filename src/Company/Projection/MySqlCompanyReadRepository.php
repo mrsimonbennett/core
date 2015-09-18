@@ -45,6 +45,7 @@ final class MySqlCompanyReadRepository implements CompanyReadRepository
                               ->join('company_users', 'company_users.user_id', '=', 'users.id')
                               ->where('company_users.company_id', $company->id)
                               ->get();
+
             $company->users = $users;
 
             return $company;

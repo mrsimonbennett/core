@@ -106,3 +106,5 @@ $router->group(['prefix' => 'applications'],
         $router->get('{propertyId}/{applicationId}', 'ApplicationController@showApplication');
     }
 );
+
+$router->any('/gocardless/webhook','GoCardless\GoCardlessWebHooksController@hook');
