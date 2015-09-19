@@ -38,13 +38,27 @@ final class GoCardlessWebHooksController extends Controller
         $webhook = file_get_contents('php://input');
         $webhookArray = json_decode($webhook, true);
 
-        if ($client->validate_webhook($webhookArray['payload'])) {
-            foreach ($webhookArray['payload'] as $payloadType => $payloadArray) {
-                \Log::debug($payloadType);
-                foreach ($payloadArray as $payload) {
-                    \Log::debug($payload);
-                }
+        $payload = $webhookArray['payload'];
+        if ($client->validate_webhook($payload)) {
+
+            $resourceType = $payload['resource_type'];
+            \Log::debug('Action: ' . $payload['action']);
+
+            switch ($resourceType) {
+                case 'bill':
+                    foreach ($payload['bills'] as $bill) {
+                        \Log::debug($bill);
+                    }
+                    break;
+                case 'pre_authorization':
+                    foreach ($payload['pre_authorization'] as $preAuth) {
+                        \Log::debug($preAuth);
+                    }
+
+                    break;
+
             }
+
 
             return new Response('Invalid signature', 200);
 
