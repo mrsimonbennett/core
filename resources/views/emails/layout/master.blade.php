@@ -225,10 +225,6 @@
                 <table>
                     <tr>
                         <td align="center">
-                            <p>Don't like these annoying emails? <a href="https://fullrent.co.uk/unsubscribe">
-                                    <unsubscribe>Unsubscribe</unsubscribe>
-                                </a>.
-                            </p>
                             <p style="font-size: 10px">
                                 FullRent Ltd is registered in England and Wales. Company No 08863223, registered office
                                 17 Knox Close, Norwich, NR1 4LN.
