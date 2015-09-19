@@ -6,6 +6,8 @@ use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
+use FullRent\Core\RentBook\Events\RentBookPreAuthCancelled;
+use FullRent\Core\RentBook\Events\RentBookPreAuthExpired;
 use FullRent\Core\RentBook\Events\RentDueSet;
 use FullRent\Core\RentBook\ValueObjects\ContractId;
 use FullRent\Core\RentBook\ValueObjects\RentAmount;
@@ -35,14 +37,17 @@ final class RentBook extends EventSourcedAggregateRoot
      * @var RentAmount
      */
     private $rentAmount;
+
     /**
      * @var RentBookId
      */
     private $id;
+
     /**
      * @var Collection|RentBookRent[]
      */
     private $rentPaymentDates;
+
     /**
      * @var PreAuthorization
      */
@@ -119,14 +124,29 @@ final class RentBook extends EventSourcedAggregateRoot
     {
         foreach ($this->rentPaymentDates as $rent) {
             $bill = $directDebit->createBill($accessTokens,
-                                     $this->preAuthToken,
-                                     $rent->getPaymentDue()->format("F-Y") . ' Rent' ,
-                                     $this->rentAmount->getAmountInPounds(),
-                                     $rent->getPaymentDue());
-            $this->apply(new RentBookBillCreated($this->id,$bill,$rent->getRentBookRentId(), DateTime::now()));
+                                             $this->preAuthToken,
+                                             $rent->getPaymentDue()->format("F-Y") . ' Rent',
+                                             $this->rentAmount->getAmountInPounds(),
+                                             $rent->getPaymentDue());
+            $this->apply(new RentBookBillCreated($this->id, $bill, $rent->getRentBookRentId(), DateTime::now()));
         }
     }
 
+    /**
+     * Cancel Pre Auth
+     */
+    public function cancelPreAuth()
+    {
+        $this->apply(new RentBookPreAuthCancelled($this->id, DateTime::now()));
+    }
+
+    /**
+     * Expire Pre Auth
+     */
+    public function expirePreAuth()
+    {
+        $this->apply(new RentBookPreAuthExpired($this->id,DateTime::now()));
+    }
 
     /**
      * Store the rent book id and the rent amount due each month

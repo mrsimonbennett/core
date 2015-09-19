@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\GoCardless;
 
-use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\QueryBus\QueryBus;
 use GoCardless_Client;
 use Illuminate\Http\Request;
@@ -31,7 +30,7 @@ final class GoCardlessWebHooksController extends Controller
 
     public function hook(Request $request)
     {
-       // $company = $this->queryBus->query(new FindCompanyByIdQuery($request->company_id));
+        // $company = $this->queryBus->query(new FindCompanyByIdQuery($request->company_id));
 
 
         $client = $this->buildClient();
@@ -40,7 +39,15 @@ final class GoCardlessWebHooksController extends Controller
         $webhookArray = json_decode($webhook, true);
 
         if ($client->validate_webhook($webhookArray['payload'])) {
-            \Log::debug($webhookArray);
+            foreach ($webhookArray['payload'] as $payloadType => $payloadArray) {
+                \Log::debug($payloadType);
+                foreach ($payloadArray as $payload) {
+                    \Log::debug($payload);
+                }
+            }
+
+            return new Response('Invalid signature', 200);
+
         }
 
         return new Response('Invalid signature', 403);
@@ -53,8 +60,8 @@ final class GoCardlessWebHooksController extends Controller
     {
         return new GoCardless_Client(
             [
-                'app_id'       => getenv('CARDLESS_APP'),
-                'app_secret'   => getenv('CARDLESS_SECRET'),
+                'app_id'     => getenv('CARDLESS_APP'),
+                'app_secret' => getenv('CARDLESS_SECRET'),
 
             ]
         );

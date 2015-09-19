@@ -20,6 +20,7 @@ class Rentbooks extends Migration
                 $table->char('tenant_id', 36);
                 $table->float('rent_amount');
                 $table->boolean('setup')->default(false);
+                $table->string('pre_auth_id');
                 $table->timestamp('opened_at');
             });
     }

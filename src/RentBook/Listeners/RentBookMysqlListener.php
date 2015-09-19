@@ -69,7 +69,8 @@ final class RentBookMysqlListener extends EventListener
                      ->where('id', $e->getRentBookId())
                      ->update(
                          [
-                             'setup' => true,
+                             'setup'       => true,
+                             'pre_auth_id' => $e->getPreAuthorization()->getId(),
                          ]
                      );
     }
