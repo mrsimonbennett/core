@@ -3,7 +3,12 @@ namespace FullRent\Core\RentBook;
 
 use Assert\Assertion;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\RentBook\Events\GoCardlessAcknowledgedRentBookBill;
+use FullRent\Core\RentBook\Events\RentBookBillCancelled;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
+use FullRent\Core\RentBook\Events\RentBookBillFailed;
+use FullRent\Core\RentBook\Events\RentBookBillPaid;
+use FullRent\Core\RentBook\Events\RentBookBillWithdrawn;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentBookPreAuthCancelled;
@@ -120,6 +125,10 @@ final class RentBook extends EventSourcedAggregateRoot
         $this->apply(new RentBookDirectDebitPreAuthorized($this->id, $confirmation, DateTime::now()));
     }
 
+    /**
+     * @param DirectDebit $directDebit
+     * @param AccessTokens $accessTokens
+     */
     public function createBills(DirectDebit $directDebit, AccessTokens $accessTokens)
     {
         foreach ($this->rentPaymentDates as $rent) {
@@ -145,7 +154,72 @@ final class RentBook extends EventSourcedAggregateRoot
      */
     public function expirePreAuth()
     {
-        $this->apply(new RentBookPreAuthExpired($this->id,DateTime::now()));
+        $this->apply(new RentBookPreAuthExpired($this->id, DateTime::now()));
+    }
+
+    /**
+     * @param string $billId GoCardless Bill Id
+     */
+    public function goCardlessAcknowledgingBill($billId)
+    {
+        $rentBookRent = $this->findRentBookRentByBillId($billId);
+
+        $this->apply(new GoCardlessAcknowledgedRentBookBill($this->id,
+                                                            $billId,
+                                                            $rentBookRent->getRentBookRentId(),
+                                                            DateTime::now()));
+    }
+
+    /**
+     * @param string $billId GoCardless Bill Id
+     */
+    public function failBill($billId)
+    {
+        $rentBookRent = $this->findRentBookRentByBillId($billId);
+
+        $this->apply(new RentBookBillFailed($this->id, $billId, $rentBookRent->getRentBookRentId(), DateTime::now()));
+    }
+
+    /**
+     * @param $billId
+     */
+    public function cancelBill($billId)
+    {
+        $rentBookRent = $this->findRentBookRentByBillId($billId);
+
+        $this->apply(new RentBookBillCancelled($this->id,
+                                               $billId,
+                                               $rentBookRent->getRentBookRentId(),
+                                               DateTime::now()));
+    }
+
+    /**
+     * @param $billId
+     * @param DateTime $paidAt
+     */
+    public function payBill($billId, DateTime $paidAt)
+    {
+        $rentBookRent = $this->findRentBookRentByBillId($billId);
+
+        $this->apply(new RentBookBillPaid($this->id,
+                                          $billId,
+                                          $rentBookRent->getRentBookRentId(),
+                                          $paidAt,
+                                          DateTime::now()));
+    }
+
+    /**
+     * @param $billId
+     */
+    public function withdrawnBill($billId)
+    {
+        $rentBookRent = $this->findRentBookRentByBillId($billId);
+
+        $this->apply(new RentBookBillWithdrawn($this->id,
+                                               $billId,
+                                               $rentBookRent->getRentBookRentId(),
+                                               DateTime::now()));
+
     }
 
     /**
@@ -168,11 +242,28 @@ final class RentBook extends EventSourcedAggregateRoot
      */
     protected function applyRentDueSet(RentDueSet $e)
     {
-        $this->rentPaymentDates->push(new RentBookRent($e->getRentBookRentId(),
-                                                       $e->getPaymentDue(),
-                                                       $this->rentAmount));
+        $this->rentPaymentDates->put(
+            (string)$e->getRentBookRentId(),
+            new RentBookRent($e->getRentBookRentId(),
+                             $e->getPaymentDue(),
+                             $this->rentAmount)
+        );
     }
 
+    /**
+     * @param RentBookBillCreated $e
+     */
+    protected function applyRentBookBillCreated(RentBookBillCreated $e)
+    {
+        /** @var RentBookRent $rent */
+        $rent = $this->rentPaymentDates->get($e->getRentBookRentId());
+
+        $rent->setBill($e->getBill());
+    }
+
+    /**
+     * @param RentBookDirectDebitPreAuthorized $e
+     */
     protected function applyRentBookDirectDebitPreAuthorized(RentBookDirectDebitPreAuthorized $e)
     {
         $this->preAuthToken = $e->getPreAuthorization();
@@ -184,5 +275,19 @@ final class RentBook extends EventSourcedAggregateRoot
     public function getAggregateRootId()
     {
         return 'rent-book-' . $this->id;
+    }
+
+    /**
+     * @param $billId
+     * @return RentBookRent
+     */
+    protected function findRentBookRentByBillId($billId)
+    {
+        /** @var RentBookRent $rentBookRent */
+        $rentBookRent = $this->rentPaymentDates->filter(function (RentBookRent $var) use ($billId) {
+            return $var->getGocardlessBillId() == $billId;
+        });
+
+        return $rentBookRent;
     }
 }

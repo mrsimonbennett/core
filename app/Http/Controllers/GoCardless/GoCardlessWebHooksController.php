@@ -1,7 +1,15 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\GoCardless;
 
+use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\RentBook\Commands\CancelRentBookBill;
+use FullRent\Core\RentBook\Commands\CancelRentBookPreAuth;
+use FullRent\Core\RentBook\Commands\CreatingRentBookBill;
+use FullRent\Core\RentBook\Commands\ExpireRentBookPreAuth;
+use FullRent\Core\RentBook\Commands\FailRentBookBill;
+use FullRent\Core\RentBook\Commands\PayRentBookBill;
+use FullRent\Core\RentBook\Commands\WithdrawRentBookBill;
 use GoCardless_Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,15 +25,20 @@ final class GoCardlessWebHooksController extends Controller
     /** @var QueryBus */
     private $queryBus;
 
+    /** @var CommandBus */
+    private $commandBus;
+
     /**
      * GoCardlessWebHooksController constructor.
      * @param QueryBus $queryBus
+     * @param CommandBus $commandBus
      */
-    public function __construct(QueryBus $queryBus)
+    public function __construct(QueryBus $queryBus, CommandBus $commandBus)
     {
         $this->queryBus = $queryBus;
         \GoCardless::$environment = env('CARDLESS_ENV');
 
+        $this->commandBus = $commandBus;
     }
 
     public function hook(Request $request)
@@ -47,12 +60,34 @@ final class GoCardlessWebHooksController extends Controller
             switch ($resourceType) {
                 case 'bill':
                     foreach ($payload['bills'] as $bill) {
-                        \Log::debug($bill);
+                        switch ($payload['action']) {
+                            case 'created':
+                                $this->commandBus->execute(new CreatingRentBookBill($bill['source_id'], $bill['id']));
+                                break;
+                            case 'failed':
+                                $this->commandBus->execute(new FailRentBookBill($bill['source_id'], $bill['id']));
+                                break;
+                            case 'cancelled':
+                                $this->commandBus->execute(new CancelRentBookBill($bill['source_id'], $bill['id']));
+                                break;
+                            case 'paid':
+                                $this->commandBus->execute(new PayRentBookBill($bill['source_id'],
+                                                                               $bill['id'],
+                                                                               $bill['paid_at']));
+                                break;
+                            case 'withdrawn':
+                                $this->commandBus->execute(new WithdrawRentBookBill($bill['source_id'], $bill['id']));
+                                break;
+                        }
                     }
                     break;
                 case 'pre_authorization':
-                    foreach ($payload['pre_authorization'] as $preAuth) {
-                        \Log::debug($preAuth);
+                    foreach ($payload['pre_authorizations'] as $preAuth) {
+                        if ($payload['action'] == 'cancelled') {
+                            $this->commandBus->execute(new CancelRentBookPreAuth($preAuth['id']));
+                        } elseif ($payload['action'] == 'expired') {
+                            $this->commandBus->execute(new ExpireRentBookPreAuth($preAuth['id']));
+                        }
                     }
 
                     break;

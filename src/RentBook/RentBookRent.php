@@ -3,6 +3,7 @@ namespace FullRent\Core\RentBook;
 
 use FullRent\Core\RentBook\ValueObjects\RentAmount;
 use FullRent\Core\RentBook\ValueObjects\RentBookRentId;
+use FullRent\Core\Services\DirectDebit\Bill;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -24,6 +25,16 @@ final class RentBookRent
      * @var RentAmount
      */
     private $rentAmount;
+
+    /**
+     * @var Bill
+     */
+    private $bill;
+
+    /**
+     * @var string
+     */
+    private $gocardlessBillId;
 
     /**
      * @param RentBookRentId $rentBookRentId
@@ -59,6 +70,31 @@ final class RentBookRent
     public function getRentAmount()
     {
         return $this->rentAmount;
+    }
+
+    /**
+     * @param Bill $bill
+     */
+    public function setBill(Bill $bill)
+    {
+        $this->gocardlessBillId = $bill->getId();
+        $this->bill = $bill;
+    }
+
+    /**
+     * @return Bill
+     */
+    public function getBill()
+    {
+        return $this->bill;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGocardlessBillId()
+    {
+        return $this->gocardlessBillId;
     }
 
 }

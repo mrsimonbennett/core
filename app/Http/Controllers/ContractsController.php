@@ -134,11 +134,11 @@ final class ContractsController extends Controller
         $contract = $this->queryBus->query(new FindContractByIdQuery($contractId));
         $company = $this->queryBus->query(new FindCompanyByIdQuery($contract->company_id));
 
-
+        $domain = env('CARDLESS_REDIRECT');
         return [
             'authorization_url' => $debit->generatePreAuthorisationUrl($contract->rent * 4,
                                                                        new DirectDebitUser(),
-                                                                       "https://{$company->domain}.fullrentcore.local/contracts/{$contractId}/tenant/access_token",
+                                                                       "https://{$company->domain}.{$domain}/contracts/{$contractId}/tenant/access_token",
                                                                        new GoCardLessAccessTokens($company->gocardless_merchant,
                                                                                                   $company->gocardless_token),
                                                                        1,

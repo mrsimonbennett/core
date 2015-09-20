@@ -3,7 +3,10 @@ namespace FullRent\Core\RentBook\Listeners;
 
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\RentBook\Events\GoCardlessAcknowledgedRentBookBill;
+use FullRent\Core\RentBook\Events\RentBookBillCancelled;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
+use FullRent\Core\RentBook\Events\RentBookBillFailed;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentDueSet;
@@ -80,9 +83,64 @@ final class RentBookMysqlListener extends EventListener
      */
     public function whenRentBookBillCreated(RentBookBillCreated $e)
     {
-        $this->client->query()->table('rent_book_rent')->where('id', $e->getRentBookRentId())
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
                      ->update([
-                                  'status' => $e->getBill()->getStatus(),
+                                  'status' => 'requesting',
+                              ]);
+    }
+
+    /**
+     * @param GoCardlessAcknowledgedRentBookBill $e
+     */
+    public function whenGoCardlessAcknowledgedRentBookBill(GoCardlessAcknowledgedRentBookBill $e)
+    {
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => 'pending',
+                              ]);
+    }
+
+    public function whenRentBookBillFailed(RentBookBillFailed $e)
+    {
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => 'failed',
+                              ]);
+    }
+
+    public function whenRentBookBillCancelled(RentBookBillCancelled $e)
+    {
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => 'cancelled',
+                              ]);
+    }
+
+    public function whenRentBookBillPaid(RentBookBillPaid $e)
+    {
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => 'paid',
+                              ]);
+    }
+
+    public function whenRentBookBillWithdrawn(RentBookBillWithdrawn $e)
+    {
+        $this->client->query()
+                     ->table('rent_book_rent')
+                     ->where('id', $e->getRentBookRentId())
+                     ->update([
+                                  'status' => 'withdrawn',
                               ]);
     }
 
@@ -92,10 +150,15 @@ final class RentBookMysqlListener extends EventListener
     protected function register()
     {
         return [
-            'whenRentBookOpenedAutomatic' => RentBookOpenedAutomatic::class,
-            'whenRentBookPaymentDueSet'   => RentDueSet::class,
-            'whenRentBookSetup'           => RentBookDirectDebitPreAuthorized::class,
-            'whenRentBookBillCreated'     => RentBookBillCreated::class,
+            'whenRentBookOpenedAutomatic'            => RentBookOpenedAutomatic::class,
+            'whenRentBookPaymentDueSet'              => RentDueSet::class,
+            'whenRentBookSetup'                      => RentBookDirectDebitPreAuthorized::class,
+            'whenRentBookBillCreated'                => RentBookBillCreated::class,
+            'whenGoCardlessAcknowledgedRentBookBill' => GoCardlessAcknowledgedRentBookBill::class,
+            'whenRentBookBillFailed'                 => RentBookBillFailed::class,
+            'whenRentBookBillCancelled'              => RentBookBillCancelled::class,
+            'whenRentBookBillPaid'                   => RentBookBillPaid::class,
+            'whenRentBookBillWithdrawn'              => RentBookBillWithdrawn::class
         ];
     }
 }
