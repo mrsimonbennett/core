@@ -55,8 +55,8 @@ final class CompanyDirectDebit extends Controller
     public function authorizationUrl($id)
     {
         $company = $this->queryBus->query(new FindCompanyByIdQuery($id));
-
-        return $this->jsonResponse->success(['authorize_url' => $this->directDebit->generateAuthorisationUrl("https://{$company->domain}.fullrentcore.local/direct-debit/access_token")]);
+        $domain = env('CARDLESS_REDIRECT');
+        return $this->jsonResponse->success(['authorize_url' => $this->directDebit->generateAuthorisationUrl("https://{$company->domain}.{$domain}/direct-debit/access_token")]);
     }
 
     /**
