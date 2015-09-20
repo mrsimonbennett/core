@@ -6,10 +6,10 @@
     <table>
         <tr>
             <td class="padding">
-                <p><a href="https://{{$company->domain}}.fullrentcore.local/auth/password-reset/{{$token}}"
+                <p><a href="https://{{$company->domain}}.{{env('CARDLESS_REDIRECT')}}/auth/password-reset/{{$token}}"
                       class="btn-primary">Choose a new password</a></p>
 
-                <p class="small">Need the raw link? <br> https://{{$company->domain}}.fullrentcore.local/auth/password-reset/{{$token}}</p>
+                <p class="small">Need the raw link? <br> https://{{$company->domain}}.{{env('CARDLESS_REDIRECT')}}/auth/password-reset/{{$token}}</p>
             </td>
         </tr>
     </table>

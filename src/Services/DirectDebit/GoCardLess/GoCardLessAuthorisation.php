@@ -3,7 +3,6 @@ namespace FullRent\Core\Services\DirectDebit\GoCardLess;
 
 use FullRent\Core\Services\DirectDebit\AccessTokens;
 use FullRent\Core\Services\DirectDebit\DirectDebitAccountAuthorisation;
-use FullRent\Core\Services\DirectDebit\Landlord;
 use GoCardless_Client;
 use Illuminate\Config\Repository;
 
@@ -33,6 +32,7 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
 
 
     }
+
     /**
      *
      * @param string $redirectUrl
@@ -46,7 +46,8 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
             'merchant'     => []
         );
 
-        return $this->gocardlessClient->authorize_url($authorize_url_options);    }
+        return $this->gocardlessClient->authorize_url($authorize_url_options);
+    }
 
     /**
      * @param string $companyUrl
@@ -55,10 +56,12 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
      */
     public function getAccessToken($companyUrl, $authorisationCode)
     {
+        $domain = env('CARDLESS_REDIRECT');
+
         $params = array(
             'client_id'    => getenv('CARDLESS_APP'),
             'code'         => $authorisationCode,
-            'redirect_uri' => "https://{$companyUrl}.fullrentcore.local/direct-debit/access_token",
+            'redirect_uri' => "https://{$companyUrl}.{$domain}/direct-debit/access_token",
             'grant_type'   => 'authorization_code',
         );
 

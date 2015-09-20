@@ -6,9 +6,9 @@
     <table>
         <tr>
             <td class="padding">
-                <p><a href="https://{{$company->domain}}.fullrentcore.local/a/{{$property->id}}"
+                <p><a href="https://{{$company->domain}}.{{env('CARDLESS_REDIRECT')}}/a/{{$property->id}}"
                       class="btn-primary">Click to Apply to {{$property->address_firstline}}</a></p>
-                <p class="small">(If the button does not work copy and paste <br> https://{{$company->domain}}.fullrentcore.local/a/{{$property->id}} into your browser)</p>
+                <p class="small">(If the button does not work copy and paste <br> https://{{$company->domain}}.{{env('CARDLESS_REDIRECT')}}/a/{{$property->id}} into your browser)</p>
             </td>
         </tr>
     </table>
