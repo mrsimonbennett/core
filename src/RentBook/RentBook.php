@@ -256,7 +256,7 @@ final class RentBook extends EventSourcedAggregateRoot
     protected function applyRentBookBillCreated(RentBookBillCreated $e)
     {
         /** @var RentBookRent $rent */
-        $rent = $this->rentPaymentDates->get($e->getRentBookRentId());
+        $rent = $this->rentPaymentDates->get((string)$e->getRentBookRentId());
 
         $rent->setBill($e->getBill());
     }
