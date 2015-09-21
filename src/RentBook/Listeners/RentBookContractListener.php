@@ -6,6 +6,7 @@ use DatePeriod;
 use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Contract\Events\LandlordSignedContract;
+use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
@@ -47,9 +48,11 @@ final class RentBookContractListener extends EventListener
      * @todo Add in manally rent book generator
      * @param LandlordSignedContract $e
      */
-    public function whenContractFinished(ContractDrafted $e)
+    public function whenTenantJoinedContract(TenantJoinedContract $e)
     {
         $contract = $this->queryBus->query(new FindContractByIdQuery($e->getContractId()));
+
+        \Log::debug(json_decode(json_encode($contract), true));
 
         if ($contract->fullrent_rent_collection) {
             $this->fullrentCollection($contract);
@@ -63,7 +66,7 @@ final class RentBookContractListener extends EventListener
     protected function registerOnce()
     {
         return [
-            'whenContractFinished' => ContractDrafted::class,
+            'whenTenantJoinedContract' => TenantJoinedContract::class,
         ];
     }
 
@@ -112,10 +115,9 @@ final class RentBookContractListener extends EventListener
             $rentDays[0] = $firstRent;
         }
 
-      
+
         for ($i = 0; $i < count($rentDays); $i++) {
-            if($rentDays[$i]->isPast())
-            {
+            if ($rentDays[$i]->isPast()) {
                 $rentDays[$i] = DateTime::now()->addDay();
             }
         }
