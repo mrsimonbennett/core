@@ -288,6 +288,6 @@ final class RentBook extends EventSourcedAggregateRoot
             return $var->getGocardlessBillId() == $billId;
         });
 
-        return $rentBookRent;
+        return $rentBookRent->first();
     }
 }
