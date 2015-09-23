@@ -11,7 +11,7 @@ use Broadway\EventStore\EventStoreInterface;
  * @package FullRent\Core\Application
  * @author Simon Bennett <simon@bennett.im>
  */
-final class BoardWayApplicationRepository extends EventSourcingRepository implements ApplicationRepository
+final class BroadWayApplicationRepository extends EventSourcingRepository implements ApplicationRepository
 {
     /**
      * @param EventStoreInterface $eventStore

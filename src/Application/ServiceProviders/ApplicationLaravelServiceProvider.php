@@ -2,7 +2,7 @@
 namespace FullRent\Core\Application\ServiceProviders;
 
 use FullRent\Core\Application\ApplicationRepository;
-use FullRent\Core\Application\BoardWayApplicationRepository;
+use FullRent\Core\Application\BroadWayApplicationRepository;
 use FullRent\Core\Application\Query\ApplicationReadRepository;
 use FullRent\Core\Application\Query\MysqlApplicationReadRepository;
 use Illuminate\Support\ServiceProvider;
@@ -22,7 +22,7 @@ final class ApplicationLaravelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ApplicationRepository::class, BoardWayApplicationRepository::class);
+        $this->app->bind(ApplicationRepository::class, BroadWayApplicationRepository::class);
         $this->app->bind(ApplicationReadRepository::class, MysqlApplicationReadRepository::class);
     }
 }
