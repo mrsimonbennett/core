@@ -4,6 +4,7 @@ namespace FullRent\Core\User;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserHasChangedName;
+use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
@@ -17,6 +18,7 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class User
@@ -36,6 +38,9 @@ final class User extends EventSourcedAggregateRoot
 
     /**  @var InviteToken */
     private $inviteToken;
+
+    /** @var Timezone */
+    private $timezone;
 
 
     /**
@@ -84,6 +89,11 @@ final class User extends EventSourcedAggregateRoot
     public function changeName(Name $name)
     {
         $this->apply(new UserHasChangedName($name));
+    }
+
+    public function changeTimezone(Timezone $timezone)
+    {
+        $this->apply(new UserHasChangedTimezone($timezone));
     }
 
     /**
@@ -153,6 +163,14 @@ final class User extends EventSourcedAggregateRoot
     protected function applyUsersEmailHasChanged(UsersEmailHasChanged $usersEmailHasChanged)
     {
         $this->email = $usersEmailHasChanged->getEmail();
+    }
+
+    /**
+     * @param UserHasChangedTimezone $userHasChangedTimezone
+     */
+    protected function applyUserHasChangedTimezone(UserHasChangedTimezone $userHasChangedTimezone)
+    {
+        $this->timezone = $userHasChangedTimezone->getTimezone();
     }
 
     /**
