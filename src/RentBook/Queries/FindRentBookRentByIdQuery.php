@@ -2,34 +2,35 @@
 namespace FullRent\Core\RentBook\Queries;
 
 /**
- * Class FindRentBookQueryById
+ * Class FindRentBookRentByIdQuery
  * @package FullRent\Core\RentBook\Queries
  * @author Simon Bennett <simon@bennett.im>
  */
-final class FindRentBookQueryById
+final class FindRentBookRentByIdQuery
 {
     /** @var string */
-    private $rentBookId;
+    private $rentId;
 
     /** @var bool */
     private $details;
 
     /**
-     * @param string $rentBookId
+     * FindRentBookRentByIdQuery constructor.
+     * @param string $rentId
      * @param bool $details
      */
-    public function __construct($rentBookId, $details)
+    public function __construct($rentId, $details)
     {
-        $this->rentBookId = $rentBookId;
+        $this->rentId = $rentId;
         $this->details = $details;
     }
 
     /**
      * @return string
      */
-    public function getRentBookId()
+    public function getRentId()
     {
-        return $this->rentBookId;
+        return $this->rentId;
     }
 
     /**
@@ -39,6 +40,5 @@ final class FindRentBookQueryById
     {
         return $this->details;
     }
-
 
 }
