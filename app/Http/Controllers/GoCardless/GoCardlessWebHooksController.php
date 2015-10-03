@@ -76,7 +76,7 @@ final class GoCardlessWebHooksController extends Controller
                                                                                $bill['paid_at']));
                                 break;
                             case 'withdrawn':
-                                $this->commandBus->execute(new WithdrawRentBookBill($bill['source_id'], $bill['id']));
+                                $this->commandBus->execute(new WithdrawRentBookBill( $bill['id'],$bill['source_id']));
                                 break;
                         }
                     }

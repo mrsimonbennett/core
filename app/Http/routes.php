@@ -40,6 +40,9 @@ $router->group(['prefix' => 'properties'],
 );
 $router->post('contracts', 'ContractsController@store');
 $router->get('contracts','ContractsController@indexAll');
+$router->get('rentbooks/{rentBookId}','RentBookController@getRentBook');
+$router->get('rentbooks/{rentBookId}/rent/{rentId}','RentBookRentController@getRent');
+
 $router->group(['prefix' => 'contracts/{id}'],
     function () use ($router) {
         $router->get('', 'ContractsController@show');
