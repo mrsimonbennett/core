@@ -3,6 +3,7 @@ namespace FullRent\Core\Company;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
+use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
@@ -24,14 +25,17 @@ final class Company extends EventSourcedAggregateRoot
      * @var Landlord[]
      */
     private $landlords;
+
     /**
      * @var CompanyId
      */
     private $companyId;
+
     /**
      * @var CompanyName
      */
     private $companyName;
+
     /**
      * @var CompanyDomain
      */
@@ -62,7 +66,7 @@ final class Company extends EventSourcedAggregateRoot
     /**
      * @param TenantId $tenantId
      */
-    public function enrolTenant(TenantId $tenantId )
+    public function enrolTenant(TenantId $tenantId)
     {
         $this->apply(new TenantEnrolled($this->companyId, $tenantId, DateTime::now()));
     }
@@ -71,10 +75,21 @@ final class Company extends EventSourcedAggregateRoot
      * @param $authCode
      * @param DirectDebitAccountAuthorisation $accountAuthorisation
      */
-    public function authorizeDirectDebit($authCode,DirectDebitAccountAuthorisation  $accountAuthorisation)
+    public function authorizeDirectDebit($authCode, DirectDebitAccountAuthorisation $accountAuthorisation)
     {
-        $accessTokens = $accountAuthorisation->getAccessToken($this->companyDomain,$authCode);
-        $this->apply(new CompanySetUpDirectDebit($this->companyId,$accessTokens->getMerchantId(),$accessTokens->getAccessToken(),DateTime::now()));
+        $accessTokens = $accountAuthorisation->getAccessToken($this->companyDomain, $authCode);
+        $this->apply(new CompanySetUpDirectDebit($this->companyId,
+                                                 $accessTokens->getMerchantId(),
+                                                 $accessTokens->getAccessToken(),
+                                                 DateTime::now()));
+    }
+
+    /**
+     * @param CompanyName $companyName
+     */
+    public function changeName(CompanyName $companyName)
+    {
+        $this->apply(new CompanyNameChanged($this->companyId, $companyName, DateTime::now()));
     }
 
     /**
@@ -94,6 +109,7 @@ final class Company extends EventSourcedAggregateRoot
     {
         $this->landlords[(string)$landlordEnrolled->getLandlord()->getLandlordId()] = $landlordEnrolled->getLandlord();
     }
+
     protected function applyTenantEnrolled(TenantEnrolled $e)
     {
         $this->tenants[(string)$e->getTenantId()] = $e->getTenantId();
@@ -104,6 +120,6 @@ final class Company extends EventSourcedAggregateRoot
      */
     public function getAggregateRootId()
     {
-        return 'company-'.(string)$this->companyId;
+        return 'company-' . (string)$this->companyId;
     }
 }

@@ -15,6 +15,8 @@ $router->group(['prefix' => 'companies'],
         $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
         $router->post('invite', 'CompanyController@invite');
 
+        $router->put('{id}/name','CompanyController@putName');
+
     }
 );
 /*
