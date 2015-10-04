@@ -18,7 +18,7 @@ final class FindRentBookQueryById
      * @param string $rentBookId
      * @param bool $details
      */
-    public function __construct($rentBookId, $details)
+    public function __construct($rentBookId, $details = false)
     {
         $this->rentBookId = $rentBookId;
         $this->details = $details;
