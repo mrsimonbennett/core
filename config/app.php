@@ -35,7 +35,7 @@ return [
 
     'url'             => 'http://localhost',
     'api_domain'      => env('API_DOMAIN', 'api.fullrentcore.local'),
-    'client_domain'   => env('CLIENT_DOMAIN', 'fullrentcore.local'),
+    'client_domain'   => env('CARDLESS_REDIRECT', 'fullrent.io.local'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
