@@ -1,0 +1,42 @@
+<?php
+namespace FullRent\Core\Company\Commands;
+
+/**
+ * Class ChangeCompanyName
+ * @package FullRent\Core\Company\Commands
+ * @author Simon Bennett <simon@bennett.im>
+ */
+final class ChangeCompanyName
+{
+    private $companyId;
+
+    private $companyName;
+
+    /**
+     * ChangeCompanyName constructor.
+     * @param $companyId
+     * @param $companyName
+     */
+    public function __construct($companyId, $companyName)
+    {
+        $this->companyId = $companyId;
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyId()
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+}
