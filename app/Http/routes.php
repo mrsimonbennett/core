@@ -16,6 +16,7 @@ $router->group(['prefix' => 'companies'],
         $router->post('invite', 'CompanyController@invite');
 
         $router->put('{id}/name','CompanyController@putName');
+        $router->put('{id}/domain','CompanyController@putDomain');
 
     }
 );

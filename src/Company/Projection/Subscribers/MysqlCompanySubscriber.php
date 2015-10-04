@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Company\Projection\Subscribers;
 
+use FullRent\Core\Company\Events\CompanyDomainChanged;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
@@ -101,6 +102,20 @@ final class MysqlCompanySubscriber extends EventListener
     }
 
     /**
+     * @param CompanyDomainChanged $e
+     */
+    public function whenCompanyDomainChanged(CompanyDomainChanged $e)
+    {
+        $this->db
+            ->table('companies')
+            ->where('id', $e->getCompanyId())
+            ->update(
+                [
+                    'domain' => $e->getCompanyDomain()->getDomain(),
+                ]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
@@ -111,6 +126,7 @@ final class MysqlCompanySubscriber extends EventListener
             'whenTenantEnrolled'          => TenantEnrolled::class,
             'whenCompanySetUpDirectDebit' => CompanySetUpDirectDebit::class,
             'whenCompanyNameChanged'      => CompanyNameChanged::class,
+            'whenCompanyDomainChanged'    => CompanyDomainChanged::class,
         ];
     }
 }

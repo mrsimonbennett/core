@@ -2,6 +2,7 @@
 namespace FullRent\Core\Company;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\Company\Events\CompanyDomainChanged;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
@@ -91,6 +92,15 @@ final class Company extends EventSourcedAggregateRoot
     {
         $this->apply(new CompanyNameChanged($this->companyId, $companyName, DateTime::now()));
     }
+
+    /**
+     * @param CompanyDomain $companyDomain
+     */
+    public function changeDomain(CompanyDomain $companyDomain)
+    {
+        $this->apply(new CompanyDomainChanged($this->companyId,$companyDomain,DateTime::now()));
+    }
+
 
     /**
      * @param CompanyHasBeenRegistered $companyHasBeenRegistered
