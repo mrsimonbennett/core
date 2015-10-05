@@ -2,8 +2,11 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
+use FullRent\Core\Application\Http\Requests\ChangeCompanyDomainHttpRequest;
 use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Company\Commands\ChangeCompanyDomain;
+use FullRent\Core\Company\Commands\ChangeCompanyName;
 use FullRent\Core\Company\Commands\EnrolTenant;
 use FullRent\Core\Company\Commands\RegisterCompany;
 use FullRent\Core\Company\Exceptions\CompanyNotFoundException;
@@ -133,5 +136,20 @@ final class CompanyController extends Controller
         }
 
         return $this->jsonResponse->success(['user_id' => (string)$userId]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function putName(Request $request, $id)
+    {
+        $this->bus->execute(new ChangeCompanyName($id, $request->get('company_name')));
+    }
+
+    public function putDomain(ChangeCompanyDomainHttpRequest $request, $id)
+    {
+        $this->bus->execute(new ChangeCompanyDomain($id,$request->get('company_domain')));
     }
 }

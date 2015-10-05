@@ -1,7 +1,9 @@
 <?php
 namespace FullRent\Core\Company\Projection\Subscribers;
 
+use FullRent\Core\Company\Events\CompanyDomainChanged;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
+use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
@@ -85,6 +87,35 @@ final class MysqlCompanySubscriber extends EventListener
     }
 
     /**
+     * @param CompanyNameChanged $e
+     */
+    public function whenCompanyNameChanged(CompanyNameChanged $e)
+    {
+        $this->db
+            ->table('companies')
+            ->where('id', $e->getCompanyId())
+            ->update(
+                [
+                    'name' => $e->getCompanyName()->getName(),
+                ]);
+
+    }
+
+    /**
+     * @param CompanyDomainChanged $e
+     */
+    public function whenCompanyDomainChanged(CompanyDomainChanged $e)
+    {
+        $this->db
+            ->table('companies')
+            ->where('id', $e->getCompanyId())
+            ->update(
+                [
+                    'domain' => $e->getCompanyDomain()->getDomain(),
+                ]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
@@ -94,6 +125,8 @@ final class MysqlCompanySubscriber extends EventListener
             'whenLandlordEnrolls'         => LandlordEnrolled::class,
             'whenTenantEnrolled'          => TenantEnrolled::class,
             'whenCompanySetUpDirectDebit' => CompanySetUpDirectDebit::class,
+            'whenCompanyNameChanged'      => CompanyNameChanged::class,
+            'whenCompanyDomainChanged'    => CompanyDomainChanged::class,
         ];
     }
 }
