@@ -1,5 +1,6 @@
 <?php
 
+use FullRent\Core\ApiAuth\ApiAuthServiceProvider;
 use FullRent\Core\Application\Providers\CardPaymentGatewayProvider;
 use FullRent\Core\Application\Providers\DirectDebitServiceProvider;
 use FullRent\Core\Application\ServiceProviders\ApplicationLaravelServiceProvider;
@@ -159,6 +160,7 @@ return [
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
         DirectDebitServiceProvider::class,
+        ApiAuthServiceProvider::class,
         /**
          * REnt Book
          */

@@ -1,5 +1,6 @@
 <?php namespace FullRent\Core\Application\Http;
 
+use FullRent\Core\Application\Http\Middleware\ApiAuthCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel {
@@ -28,6 +29,7 @@ class Kernel extends HttpKernel {
 		'auth' => 'FullRent\Core\Application\Http\Middleware\Authenticate',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'FullRent\Core\Application\Http\Middleware\RedirectIfAuthenticated',
-	];
+        'auth.api' =>         ApiAuthCheck::class,
+    ];
 
 }
