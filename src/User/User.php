@@ -39,16 +39,17 @@ final class User extends EventSourcedAggregateRoot
 
 
     /**
-     * @param UserId $userId
-     * @param Name $name
-     * @param Email $email
+     * @param UserId   $userId
+     * @param Name     $name
+     * @param Email    $email
      * @param Password $password
+     * @param Timezone $timezone
      * @return User
      */
-    public static function registerUser(UserId $userId, Name $name, Email $email, Password $password)
+    public static function registerUser(UserId $userId, Name $name, Email $email, Password $password, Timezone $timezone)
     {
         $user = new static();
-        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now()));
+        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now(), $timezone));
 
         return $user;
     }
@@ -135,6 +136,7 @@ final class User extends EventSourcedAggregateRoot
     {
         $this->userId = $userRegistered->getUserId();
         $this->email = $userRegistered->getEmail();
+        $this->timezone = $userRegistered->getTimezone();
     }
 
     /**

@@ -28,7 +28,7 @@ final class RegisterUserHandler implements CommandHandler
     public function handle(RegisterUser $registerUser)
     {
         $user = User::registerUser($registerUser->getUserId(), $registerUser->getName(), $registerUser->getEmail(),
-            $registerUser->getPassword());
+            $registerUser->getPassword(), $registerUser->getTimezone());
 
         $this->userRepository->save($user);
     }
