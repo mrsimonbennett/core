@@ -7,6 +7,7 @@ use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class UserRegistered
@@ -35,21 +36,25 @@ final class UserRegistered implements SerializableInterface
      * @var DateTime
      */
     private $createdAt;
+    /** @var Timezone */
+    private $timezone;
 
     /**
-     * @param UserId $userId
-     * @param Name $name
-     * @param Email $email
+     * @param UserId   $userId
+     * @param Name     $name
+     * @param Email    $email
      * @param Password $password
      * @param DateTime $createdAt
+     * @param Timezone $timezone
      */
-    public function __construct(UserId $userId, Name $name, Email $email, Password $password, DateTime $createdAt)
+    public function __construct(UserId $userId, Name $name, Email $email, Password $password, DateTime $createdAt, Timezone $timezone)
     {
         $this->userId = $userId;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
         $this->createdAt = $createdAt;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -95,7 +100,8 @@ final class UserRegistered implements SerializableInterface
             Name::deserialize($data['name']),
             Email::deserialize($data['email']),
             Password::deserialize($data['password']),
-            DateTime::deserialize($data['created'])
+            DateTime::deserialize($data['created']),
+            Timezone::deserialize($data['timezone'])
         );
     }
 
@@ -111,6 +117,7 @@ final class UserRegistered implements SerializableInterface
                 'email' => $this->email->serialize(),
                 'password' => $this->password->serialize(),
                 'created' => $this->createdAt->serialize(),
+                'timezone' => $this->timezone->serialize(),
             ];
     }
 
@@ -120,5 +127,13 @@ final class UserRegistered implements SerializableInterface
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return Timezone
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
     }
 }
