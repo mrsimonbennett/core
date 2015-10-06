@@ -17,6 +17,7 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class User
