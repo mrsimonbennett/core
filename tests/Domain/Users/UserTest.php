@@ -9,6 +9,7 @@ use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
+use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class UserTest
@@ -62,7 +63,7 @@ final class UserTest extends \TestCase
     protected function registerUser()
     {
         $user = User::registerUser(UserId::random(), new Name("Mr Simon Bennett", 'Simon'),
-            new Email('simon@bennett.im'), new Password('test'));
+            new Email('simon@bennett.im'), new Password('test'), new Timezone('User'));
 
         return $user;
     }
