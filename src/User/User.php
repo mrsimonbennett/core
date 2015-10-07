@@ -9,6 +9,7 @@ use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
+use FullRent\Core\User\Exceptions\InvalidInviteToken;
 use FullRent\Core\User\Exceptions\InvalidPasswordResetRequest;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\InviteToken;
