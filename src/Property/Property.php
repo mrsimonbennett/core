@@ -3,9 +3,11 @@ namespace FullRent\Core\Property;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use FullRent\Core\Property\Exceptions\ImageAlreadyAdded;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyClosedToApplications;
@@ -13,6 +15,7 @@ use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
+use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
@@ -65,6 +68,9 @@ final class Property extends EventSourcedAggregateRoot
      * @var DateTime
      */
     private $acceptingApplicationsFrom = false;
+
+    /** @var ImageId[] */
+    private $images = [];
 
 
     /**
@@ -138,6 +144,22 @@ final class Property extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param PropertyId $propertyId
+     * @param ImageId $imageId
+     * @throws ImageAlreadyAdded
+     */
+    public function attachImage(PropertyId $propertyId, ImageId $imageId)
+    {
+        foreach ($this->images as $imageId) {
+            if ($imageId->equal($imageId)) {
+                throw new ImageAlreadyAdded('This image has already been added to the property');
+            }
+        }
+
+        $this->apply(new ImageAttachedToProperty($propertyId, $imageId));
+    }
+
+    /**
      * @param NewPropertyListed $newPropertyListed
      */
     protected function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
@@ -161,6 +183,14 @@ final class Property extends EventSourcedAggregateRoot
     protected function applyPropertyClosedAcceptingApplications(PropertyClosedAcceptingApplications $e)
     {
         $this->acceptingApplicationsFrom = false;
+    }
+
+    /**
+     * @param ImageAttachedToProperty $e
+     */
+    protected function applyImageAttachedToProperty(ImageAttachedToProperty $e)
+    {
+        $this->images[] = $e->getImageId();
     }
 
     /**
