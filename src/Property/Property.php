@@ -144,11 +144,10 @@ final class Property extends EventSourcedAggregateRoot
     }
 
     /**
-     * @param PropertyId $propertyId
      * @param ImageId $imageId
      * @throws ImageAlreadyAdded
      */
-    public function attachImage(PropertyId $propertyId, ImageId $imageId)
+    public function attachImage(ImageId $imageId)
     {
         foreach ($this->images as $imageId) {
             if ($imageId->equal($imageId)) {
@@ -156,7 +155,7 @@ final class Property extends EventSourcedAggregateRoot
             }
         }
 
-        $this->apply(new ImageAttachedToProperty($propertyId, $imageId));
+        $this->apply(new ImageAttachedToProperty($this->id, $imageId));
     }
 
     /**
