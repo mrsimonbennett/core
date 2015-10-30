@@ -21,7 +21,7 @@ class CreatePropertyImagesTable extends Migration
                 $table->index('property_id');
                 $table->index('image_id');
 
-                $table->timestamps();
+                $table->timestamp('attached_at');
             });
 
     }

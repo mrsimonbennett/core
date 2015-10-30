@@ -33,6 +33,7 @@ final class PropertyImagesSubscriber extends EventListener
             ->insert([
                 'property_id' => $e->getPropertyId(),
                 'image_id'    => $e->getImageId(),
+                'attached_at' => $e->wasAttachedAt(),
             ]);
     }
 

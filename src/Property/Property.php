@@ -155,7 +155,7 @@ final class Property extends EventSourcedAggregateRoot
             }
         }
 
-        $this->apply(new ImageAttachedToProperty($this->id, $imageId));
+        $this->apply(new ImageAttachedToProperty($this->id, $imageId, DateTime::now()));
     }
 
     /**
