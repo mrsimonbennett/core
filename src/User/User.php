@@ -2,6 +2,7 @@
 namespace FullRent\Core\User;
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\User\Events\UserAmendedName;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserHasChangedName;
 use FullRent\Core\User\Events\UserHasChangedTimezone;
@@ -80,16 +81,10 @@ final class User extends EventSourcedAggregateRoot
      */
     public function changeEmail(Email $email)
     {
-        $this->apply(new UsersEmailHasChanged($email));
+        $this->apply(new UsersEmailHasChanged($this->userId,$email,DateTime::now()));
     }
 
-    /**
-     * @param Name $name
-     */
-    public function changeName(Name $name)
-    {
-        $this->apply(new UserHasChangedName($name));
-    }
+   
 
     public function changeTimezone(Timezone $timezone)
     {
@@ -136,6 +131,11 @@ final class User extends EventSourcedAggregateRoot
             return;
         }
         throw new InvalidInviteToken;
+    }
+
+    public function amendName(Name $name)
+    {
+        $this->apply(new UserAmendedName($this->userId,$name,DateTime::now()));
     }
 
     /**

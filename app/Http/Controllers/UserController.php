@@ -1,7 +1,10 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers;
 
+use FullRent\Core\Application\Http\Requests\UpdateUserBasicDetailsHTTPRequest;
+use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\User\Commands\AmendUsersName;
 use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\UserId;
@@ -25,14 +28,19 @@ final class UserController extends Controller
      */
     private $client;
 
+    /** @var CommandBus */
+    private $commandBus;
+
     /**
      * @param UserReadRepository $userRepository
      * @param MySqlClient $client
+     * @param CommandBus $commandBus
      */
-    public function __construct(UserReadRepository $userRepository, MySqlClient $client)
+    public function __construct(UserReadRepository $userRepository, MySqlClient $client, CommandBus $commandBus)
     {
         $this->userRepository = $userRepository;
         $this->client = $client;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -66,5 +74,14 @@ final class UserController extends Controller
     public function rememberMe(Request $request, $userId)
     {
         $this->client->query()->table('users')->where('id', $userId)->update(['remember_token' => $request->token]);
+    }
+
+    /**
+     * @param $userId
+     * @param UpdateUserBasicDetailsHTTPRequest $request
+     */
+    public function basicDetails($userId, UpdateUserBasicDetailsHTTPRequest $request)
+    {
+        $this->commandBus->execute(new AmendUsersName($userId,$request->legal_name,$request->known_as));
     }
 }

@@ -3,6 +3,7 @@ namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
 use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\User\Events\UserAmendedName;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
@@ -95,15 +96,29 @@ final class UserMysqlSubscriber extends EventListener
     }
 
     /**
+     * @param UserAmendedName $e
+     */
+    public function whenUserAmendsName(UserAmendedName $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getUserId())
+                 ->update([
+                              'legal_name' => $e->getName()->getLegalName(),
+                              'known_as'   => $e->getName()->getKnowAs(),
+                          ]);
+    }
+
+    /**
      * @return array
      */
     protected function register()
     {
         return [
-            'whenUserRegistered'    => UserRegistered::class,
-            'whenUserPasswordReset' => UserPasswordReset::class,
-            'whenUserInvited'       => UserInvited::class,
+            'whenUserRegistered'          => UserRegistered::class,
+            'whenUserPasswordReset'       => UserPasswordReset::class,
+            'whenUserInvited'             => UserInvited::class,
             'whenUserFinishedApplication' => UserFinishedApplication::class,
+            'whenUserAmendsName'          => UserAmendedName::class,
         ];
     }
 }
