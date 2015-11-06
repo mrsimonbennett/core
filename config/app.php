@@ -166,6 +166,8 @@ return [
          */
         RentBookServiceProvider::class,
         'Barryvdh\Cors\ServiceProvider',
+
+
     ],
     /*
     |--------------------------------------------------------------------------
