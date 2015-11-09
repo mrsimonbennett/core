@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Company;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Company\ValueObjects\LandlordId;
 
 /**
@@ -9,7 +9,7 @@ use FullRent\Core\Company\ValueObjects\LandlordId;
  * @package FullRent\Core\Company
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Landlord implements SerializableInterface
+final class Landlord implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var LandlordId

@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Application\ValueObjects\ApplicantId;
 use FullRent\Core\Application\ValueObjects\ApplicationId;
 use FullRent\Core\Application\ValueObjects\PropertyId;
@@ -12,7 +12,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Application\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class StartedApplication implements SerializableInterface
+final class StartedApplication implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var ApplicationId

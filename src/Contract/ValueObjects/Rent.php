@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Contract\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\ValueObjects\DateTime;
 
 /**
@@ -9,7 +9,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Contract
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Rent implements SerializableInterface
+final class Rent implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var RentAmount

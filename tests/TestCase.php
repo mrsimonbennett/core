@@ -2,7 +2,7 @@
 
 use App\Exceptions\Handler;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * @property CommandBus bus

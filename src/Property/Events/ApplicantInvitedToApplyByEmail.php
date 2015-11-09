@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Property\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\ValueObjects\DateTime;
@@ -11,7 +11,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Property\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicantInvitedToApplyByEmail implements SerializableInterface
+final class ApplicantInvitedToApplyByEmail implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var PropertyId

@@ -40,48 +40,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        DepositMySqlListenerV2::class,
-        /**
-         * Rent Book
-         */
-        RentBookContractListener::class,
-        RentBookMysqlListener::class,
-        RentBookAuthorizedListener::class,
-        RentBookRentHistoryListener::class,
-
-        /**
-         * Company
-         */
-        MysqlCompanySubscriber::class,
-
-        /**
-         * User
-         */
-        UserMysqlSubscriber::class,
-        UserEmailListener::class,
-
-        /**
-         * Properties
-         */
-        MysqlPropertySubscriber::class,
-        PropertyHistorySubscriber::class,
-
-        /**
-         * Applications
-         */
-        ApplicationMysqlListener::class,
-        ApplicationEmails::class,
-        ContractApplicationListener::class,
-        ApplicationEventListener::class,
-        PropertyApplicationEmailListener::class,
-
-        /**
-         * Contracts
-         */
-        ContractMysqlListener::class,
-        ContractMailListener::class,
-
-
 
     ];
 

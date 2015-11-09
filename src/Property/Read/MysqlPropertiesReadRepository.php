@@ -12,6 +12,7 @@ use stdClass;
  * Class MysqlPropertiesReadRepository
  * @package FullRent\Core\Property\Read
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Convert to Query Bus Please
  */
 final class MysqlPropertiesReadRepository implements PropertiesReadRepository
 {

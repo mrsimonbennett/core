@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Services\DirectDebit;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\ValueObjects\DateTime;
 use FullRent\Core\ValueObjects\Money\Money;
 
@@ -10,7 +10,7 @@ use FullRent\Core\ValueObjects\Money\Money;
  * @package FullRent\Core\Services\DirectDebit
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Bill implements SerializableInterface
+final class Bill implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var string

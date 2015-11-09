@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Company\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ChangeCompanyDomain
  * @package FullRent\Core\Company\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ChangeCompanyDomain
+final class ChangeCompanyDomain extends BaseCommand
 {
     /** @var string */
     private $companyId;
@@ -23,6 +25,7 @@ final class ChangeCompanyDomain
     {
         $this->companyId = $companyId;
         $this->companyDomain = $companyDomain;
+        parent::__construct();
     }
 
     /**

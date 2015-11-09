@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Contract;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Contract\Events\ContractLocked;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
@@ -14,6 +13,7 @@ use FullRent\Core\Contract\ValueObjects\PropertyId;
 use FullRent\Core\Contract\ValueObjects\Rent;
 use FullRent\Core\Contract\ValueObjects\TenantId;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 
 /**
@@ -21,7 +21,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Contract
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Contract extends EventSourcedAggregateRoot
+final class Contract extends AggregateRoot
 {
     /**
      * @var ContractId

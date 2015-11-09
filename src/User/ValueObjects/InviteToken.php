@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\User\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class InviteToken
  * @package FullRent\Core\User\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class InviteToken implements SerializableInterface
+final class InviteToken implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var string

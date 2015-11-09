@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\User;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserHasChangedName;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
@@ -19,13 +18,14 @@ use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
 use FullRent\Core\ValueObjects\Timezone;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class User
  * @package FullRent\Core\User
  * @author Simon Bennett <simon@bennett.im>
  */
-final class User extends EventSourcedAggregateRoot
+final class User extends AggregateRoot
 {
     /** @var UserId */
     private $userId;
@@ -41,15 +41,20 @@ final class User extends EventSourcedAggregateRoot
 
 
     /**
-     * @param UserId   $userId
-     * @param Name     $name
-     * @param Email    $email
+     * @param UserId $userId
+     * @param Name $name
+     * @param Email $email
      * @param Password $password
      * @param Timezone $timezone
      * @return User
      */
-    public static function registerUser(UserId $userId, Name $name, Email $email, Password $password, Timezone $timezone)
-    {
+    public static function registerUser(
+        UserId $userId,
+        Name $name,
+        Email $email,
+        Password $password,
+        Timezone $timezone
+    ) {
         $user = new static();
         $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now(), $timezone));
 

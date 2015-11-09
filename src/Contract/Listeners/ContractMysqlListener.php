@@ -11,15 +11,16 @@ use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\Events\TenantSignedContract;
 use FullRent\Core\Contract\Events\TenantUploadedEarningsDocument;
 use FullRent\Core\Contract\Events\TenantUploadedIdDocument;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class MySqlContractListener
  * @package FullRent\Core\Contract\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractMysqlListener extends EventListener
+final class ContractMysqlListener implements Subscriber, Projection
 {
     protected $priority = 100;
 
@@ -86,15 +87,15 @@ final class ContractMysqlListener extends EventListener
                 ]
             );
     }
-
+    
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenContractIsDrafted'              => ContractDrafted::class,
-            'whenTenantJoinsContractInsertMysql' => TenantJoinedContract::class,
+            ContractDrafted::class      => ['whenContractIsDrafted'],
+            TenantJoinedContract::class => ['whenTenantJoinsContractInsertMysql'],
         ];
     }
 }

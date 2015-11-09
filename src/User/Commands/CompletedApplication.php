@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class CompletedApplication
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompletedApplication
+final class CompletedApplication extends BaseCommand
 {
     /** @var string */
     private $token;
@@ -37,6 +39,7 @@ final class CompletedApplication
         $this->password = $password;
         $this->legalName = $legalName;
         $this->knownAs = $knownAs;
+        parent::__construct();
     }
 
     /**

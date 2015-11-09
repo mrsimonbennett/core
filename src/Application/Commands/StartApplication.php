@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Commands;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Application\ValueObjects\ApplicantId;
 use FullRent\Core\Application\ValueObjects\ApplicationId;
 use FullRent\Core\Application\ValueObjects\PropertyId;

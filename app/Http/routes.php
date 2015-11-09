@@ -1,21 +1,7 @@
 <?php
 /** @var Router $router */
 use Illuminate\Routing\Router;
-
-$router->group(['middleware' => 'cors', 'prefix' => 'api/v1'],
-    function (Router $router) {
-        $router->post('auth/token', 'Api\v1\Auth\AuthController@postTokenLogin');
-
-        $router->group([],
-            function (Router $router) {
-                $router->get('users/me', 'Api\v1\UserController@getMe');
-            }
-        );
-    }
-);
-
-
-$router->group(['middleware' => 'auth.api'],
+$router->group([],
     function ($router) {
 
         /**

@@ -7,13 +7,15 @@ use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class MysqlPropertySubscriber
  * @package FullRent\Core\Property\Read\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MysqlPropertySubscriber extends EventListener
+final class MysqlPropertySubscriber implements Projection, Subscriber
 {
     /**
      * @var MySqlClient
@@ -79,12 +81,12 @@ final class MysqlPropertySubscriber extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenPropertyWasListed'           => NewPropertyListed::class,
-            'whenPropertyAcceptsApplications' => PropertyAcceptingApplications::class,
-            'whenPropertyApplicationsClose'   => PropertyClosedAcceptingApplications::class,
+            NewPropertyListed::class => ['whenPropertyWasListed'],
+            PropertyAcceptingApplications::class => ['whenPropertyAcceptsApplications'],
+            PropertyClosedAcceptingApplications::class => ['whenPropertyApplicationsClose'],
         ];
     }
 }

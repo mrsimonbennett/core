@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ResetUsersPasswordRequest
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ResetUsersPasswordRequest
+final class ResetUsersPasswordRequest extends BaseCommand
 {
     /** @var string */
     private $email;
@@ -17,6 +19,7 @@ final class ResetUsersPasswordRequest
     public function __construct($email)
     {
         $this->email = $email;
+        parent::__construct();
     }
 
     /**

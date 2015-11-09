@@ -2,13 +2,14 @@
 namespace FullRent\Core\Property\Commands;
 
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class CloseApplications
  * @package FullRent\Core\Property\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CloseApplications 
+final class CloseApplications extends BaseCommand
 {
     /**
      * @var PropertyId
@@ -21,6 +22,7 @@ final class CloseApplications
     public function __construct(PropertyId $propertyId)
     {
         $this->propertyId = $propertyId;
+        parent::__construct();
     }
 
     /**

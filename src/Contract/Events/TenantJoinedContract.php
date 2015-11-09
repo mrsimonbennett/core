@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Contract\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Contract\ValueObjects\ContractId;
 use FullRent\Core\Contract\ValueObjects\TenantId;
 use FullRent\Core\ValueObjects\DateTime;
@@ -11,7 +11,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Contract\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class TenantJoinedContract implements SerializableInterface
+final class TenantJoinedContract implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var ContractId

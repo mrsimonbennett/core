@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects\Money;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use InvalidArgumentException;
 
 /**
  * Class Money
  * @author  Simon Bennett <simon@bennett.im>
  */
-class Money implements SerializableInterface
+class Money implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var int

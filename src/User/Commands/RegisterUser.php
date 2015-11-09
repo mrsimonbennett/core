@@ -6,13 +6,14 @@ use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\Timezone;
+use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class RegisterUser
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterUser
+final class RegisterUser extends BaseCommand
 {
     /**
      * @var UserId
@@ -49,6 +50,7 @@ final class RegisterUser
         $this->email = $email;
         $this->password = $password;
         $this->timezone = $timezone;
+        parent::__construct();
     }
 
     /**

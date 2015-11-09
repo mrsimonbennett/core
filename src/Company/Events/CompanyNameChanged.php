@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Company\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\ValueObjects\DateTime;
@@ -11,7 +11,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Company\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompanyNameChanged implements SerializableInterface
+final class CompanyNameChanged implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /** @var CompanyId */
     private $companyId;

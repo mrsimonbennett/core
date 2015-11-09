@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects\Person;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class HashedPassword
  * @package FullRent\Core\ValueObjects\Person
  * @author Simon Bennett <simon@bennett.im>
  */
-class HashedPassword implements SerializableInterface
+class HashedPassword implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var string

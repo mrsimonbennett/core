@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Services\CardPayment;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\ValueObjects\Money\Money;
 
 /**
@@ -9,7 +9,7 @@ use FullRent\Core\ValueObjects\Money\Money;
  * @package FullRent\Core\Services\CardPayment
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SuccessFullPayment implements SerializableInterface
+final class SuccessFullPayment implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var string

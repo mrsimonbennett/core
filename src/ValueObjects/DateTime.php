@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use Carbon\Carbon;
 
 /**
@@ -9,7 +9,7 @@ use Carbon\Carbon;
  * @package FullRent\Core\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DateTime extends Carbon implements SerializableInterface
+final class DateTime extends Carbon implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
 
     /**

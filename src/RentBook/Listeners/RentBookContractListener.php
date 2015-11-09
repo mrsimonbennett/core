@@ -3,22 +3,21 @@ namespace FullRent\Core\RentBook\Listeners;
 
 use DateInterval;
 use DatePeriod;
-use FullRent\Core\CommandBus\CommandBus;
-use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Events\TenantJoinedContract;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\RentBook\Commands\OpenAutomaticRentBook;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class RentBookContractListener
  * @package FullRent\Core\RentBook\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookContractListener extends EventListener
+final class RentBookContractListener implements Subscriber
 {
     /**
      * @var CommandBus
@@ -60,15 +59,6 @@ final class RentBookContractListener extends EventListener
 
     }
 
-    /**
-     * @return array
-     */
-    protected function registerOnce()
-    {
-        return [
-            'whenTenantJoinedContract' => TenantJoinedContract::class,
-        ];
-    }
 
     /**
      * @param $contract
@@ -81,14 +71,6 @@ final class RentBookContractListener extends EventListener
         $firstRent = (new DateTime($contract->first_rent))->startOfDay();
 
         return array($startDate, $endDate, $firstRent);
-    }
-
-    /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [];
     }
 
     /**
@@ -129,5 +111,23 @@ final class RentBookContractListener extends EventListener
                                                                  $contract->rent,
                                                                  $rentDays));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubscribedEvents()
+    {
+        return [
+            TenantJoinedContract::class => ['whenTenantJoinedContract'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function registerOnce()
+    {
+
     }
 }

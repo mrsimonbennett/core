@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'debug'           => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG'),
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -34,9 +34,9 @@ return [
     |
     */
 
-    'url'             => 'http://localhost',
-    'api_domain'      => env('API_DOMAIN', 'api.fullrentcore.local'),
-    'client_domain'   => env('CARDLESS_REDIRECT', 'fullrent.io.local'),
+    'url'           => 'http://localhost',
+    'api_domain'    => env('API_DOMAIN', 'api.fullrentcore.local'),
+    'client_domain' => env('CARDLESS_REDIRECT', 'fullrent.io.local'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -48,7 +48,7 @@ return [
     |
     */
 
-    'timezone'        => 'UTC',
+    'timezone' => 'UTC',
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'locale'          => 'en',
+    'locale' => 'en',
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -84,8 +84,8 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', 'SomeRandomString'),
-    'cipher'          => MCRYPT_RIJNDAEL_128,
+    'key'    => env('APP_KEY', 'SomeRandomString'),
+    'cipher' => MCRYPT_RIJNDAEL_128,
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -99,7 +99,7 @@ return [
     |
     */
 
-    'log'             => 'single',
+    'log' => 'single',
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -111,41 +111,53 @@ return [
     |
     */
 
-    'providers'       => [
+    'providers' => [
 
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-        'Illuminate\Auth\AuthServiceProvider',
-        'Illuminate\Bus\BusServiceProvider',
-        'Illuminate\Cache\CacheServiceProvider',
-        'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-        'Illuminate\Routing\ControllerServiceProvider',
-        'Illuminate\Cookie\CookieServiceProvider',
-        'Illuminate\Database\DatabaseServiceProvider',
-        'Illuminate\Encryption\EncryptionServiceProvider',
-        'Illuminate\Filesystem\FilesystemServiceProvider',
-        'Illuminate\Foundation\Providers\FoundationServiceProvider',
-        'Illuminate\Hashing\HashServiceProvider',
-        'Illuminate\Mail\MailServiceProvider',
-        'Illuminate\Pagination\PaginationServiceProvider',
-        'Illuminate\Pipeline\PipelineServiceProvider',
-        'Illuminate\Queue\QueueServiceProvider',
-        'Illuminate\Redis\RedisServiceProvider',
-        'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
-        'Illuminate\Session\SessionServiceProvider',
-        'Illuminate\Translation\TranslationServiceProvider',
-        'Illuminate\Validation\ValidationServiceProvider',
-        'Illuminate\View\ViewServiceProvider',
+        /*
+        * Laravel Framework Service Providers...
+        */
+        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
+        Illuminate\Auth\AuthServiceProvider::class,
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        Illuminate\Bus\BusServiceProvider::class,
+        Illuminate\Cache\CacheServiceProvider::class,
+        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+        Illuminate\Routing\ControllerServiceProvider::class,
+        Illuminate\Cookie\CookieServiceProvider::class,
+        Illuminate\Database\DatabaseServiceProvider::class,
+        Illuminate\Encryption\EncryptionServiceProvider::class,
+        Illuminate\Filesystem\FilesystemServiceProvider::class,
+        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        Illuminate\Hashing\HashServiceProvider::class,
+        Illuminate\Mail\MailServiceProvider::class,
+        Illuminate\Pagination\PaginationServiceProvider::class,
+        Illuminate\Pipeline\PipelineServiceProvider::class,
+        Illuminate\Queue\QueueServiceProvider::class,
+        Illuminate\Redis\RedisServiceProvider::class,
+        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class,
+        Illuminate\Validation\ValidationServiceProvider::class,
+        Illuminate\View\ViewServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
-        'FullRent\Core\Application\Providers\AppServiceProvider',
-        'FullRent\Core\Application\Providers\ConfigServiceProvider',
-        'FullRent\Core\Application\Providers\EventServiceProvider',
-        'FullRent\Core\Application\Providers\RouteServiceProvider',
-        'FullRent\Core\Application\Providers\CommandBusServiceProvider',
+        FullRent\Core\Application\Providers\AppServiceProvider::class,
+        FullRent\Core\Application\Providers\AuthServiceProvider::class,
+        FullRent\Core\Application\Providers\EventServiceProvider::class,
+        FullRent\Core\Application\Providers\RouteServiceProvider::class,
+
+
+        /**
+         * 3rd Party
+         */
+        SmoothPhp\LaravelAdapter\ServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
+
         /**
          * src
          */
@@ -155,7 +167,6 @@ return [
         'FullRent\Core\Contract\ServiceProviders\LaravelServiceProvider',
         ApplicationLaravelServiceProvider::class,
         LaravelDepositServiceProvider::class,
-        'FullRent\Core\Application\Providers\EventStoreServiceProvider',
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
@@ -165,7 +176,6 @@ return [
          * REnt Book
          */
         RentBookServiceProvider::class,
-        'Barryvdh\Cors\ServiceProvider',
 
 
     ],
@@ -180,7 +190,7 @@ return [
     |
     */
 
-    'aliases'         => [
+    'aliases' => [
 
         'App'       => 'Illuminate\Support\Facades\App',
         'Artisan'   => 'Illuminate\Support\Facades\Artisan',

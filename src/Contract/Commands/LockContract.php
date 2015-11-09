@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Contract\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class LockContract
  * @package FullRent\Core\Contract\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class LockContract
+final class LockContract extends BaseCommand
 {
     /**
      * @var string
@@ -19,6 +21,8 @@ final class LockContract
     public function __construct($contractId)
     {
         $this->contractId = $contractId;
+        parent::__construct();
+
     }
 
     /**

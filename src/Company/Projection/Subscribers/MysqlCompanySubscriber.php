@@ -8,16 +8,17 @@ use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
 use FullRent\Core\Company\Events\LandlordEnrolled;
 use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\Projection\Company;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\ValueObjects\DateTime;
 use Illuminate\Database\Connection;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class MysqlSubscriber
  * @package FullRent\Core\Company\Projection\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class MysqlCompanySubscriber extends EventListener
+final class MysqlCompanySubscriber implements Subscriber, Projection
 {
     protected $priority = 10;
 
@@ -118,15 +119,15 @@ final class MysqlCompanySubscriber extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'companyHasBeenRegistered'    => CompanyHasBeenRegistered::class,
-            'whenLandlordEnrolls'         => LandlordEnrolled::class,
-            'whenTenantEnrolled'          => TenantEnrolled::class,
-            'whenCompanySetUpDirectDebit' => CompanySetUpDirectDebit::class,
-            'whenCompanyNameChanged'      => CompanyNameChanged::class,
-            'whenCompanyDomainChanged'    => CompanyDomainChanged::class,
+            CompanyHasBeenRegistered::class => ['companyHasBeenRegistered'],
+            LandlordEnrolled::class         => ['whenLandlordEnrolls'],
+            TenantEnrolled::class           => ['whenTenantEnrolled'],
+            CompanySetUpDirectDebit::class  => ['whenCompanySetUpDirectDebit'],
+            CompanyNameChanged::class       => ['whenCompanyNameChanged'],
+            CompanyDomainChanged::class     => ['whenCompanyDomainChanged'],
         ];
     }
 }

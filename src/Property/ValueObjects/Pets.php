@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\Property\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class Pets
  * @package FullRent\Core\Property\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Pets implements SerializableInterface
+final class Pets implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var bool
