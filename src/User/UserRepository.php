@@ -1,7 +1,8 @@
 <?php
 namespace FullRent\Core\User;
 
-use Broadway\Domain\AggregateRoot;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
+
 
 /**
  * Interface UserRepository

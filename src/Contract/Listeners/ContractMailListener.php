@@ -6,35 +6,39 @@ use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Contract\Events\ContractLocked;
 use FullRent\Core\Contract\Query\ContractReadRepository;
 use FullRent\Core\Infrastructure\Email\EmailClient;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\UserId;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class MailListener
  * @package FullRent\Core\Contract\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractMailListener extends EventListener
+final class ContractMailListener implements Subscriber
 {
     /**
      * @var EmailClient
      */
     private $emailClient;
+
     /**
      * @var ContractReadRepository
      */
     private $contractReadRepository;
+
     /**
      * @var PropertiesReadRepository
      */
     private $propertiesReadRepository;
+
     /**
      * @var CompanyReadRepository
      */
     private $companyReadRepository;
+
     /**
      * @var UserReadRepository
      */
@@ -88,17 +92,10 @@ final class ContractMailListener extends EventListener
     /**
      * @return array
      */
-    protected function registerOnce()
+    public function getSubscribedEvents()
     {
-        return ['whenContractLockedEmailTenantForPaperWork' => ContractLocked::class];
+        return [
+            ContractLocked::class => ['whenContractLockedEmailTenantForPaperWork'],
+        ];
     }
-
-    /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [];
-    }
-
 }

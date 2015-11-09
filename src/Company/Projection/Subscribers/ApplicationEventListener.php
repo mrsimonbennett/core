@@ -2,24 +2,25 @@
 namespace FullRent\Core\Company\Projection\Subscribers;
 
 use FullRent\Core\Application\Events\StartedApplication;
-use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\EnrolTenant;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class ApplicationEventListener
  * @package FullRent\Core\Company\Projection\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicationEventListener extends EventListener
+final class ApplicationEventListener implements Subscriber
 {
 
     /**
      * @var CommandBus
      */
     private $bus;
+
     /**
      * @var PropertiesReadRepository
      */
@@ -44,16 +45,12 @@ final class ApplicationEventListener extends EventListener
         $this->bus->execute(new EnrolTenant($property->company_id, (string)$e->getApplicantId()));
     }
 
+
     /**
      * @return array
      */
-    protected function registerOnce()
+    public function getSubscribedEvents()
     {
-        return ['whenApplicationIsStarted' => StartedApplication::class];
-    }
-
-    protected function register()
-    {
-        return [];
+        return [StartedApplication::class => ['whenApplicationIsStarted']];
     }
 }

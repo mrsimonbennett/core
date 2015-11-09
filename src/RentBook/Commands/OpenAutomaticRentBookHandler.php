@@ -14,7 +14,7 @@ use FullRent\Core\RentBook\ValueObjects\TenantId;
  * @package FullRent\Core\RentBook\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class OpenAutomaticRentBookHandler implements CommandHandler
+final class OpenAutomaticRentBookHandler
 {
     /**
      * @var RentBookRepository

@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\User\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
@@ -12,7 +12,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\User\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserFinishedApplication implements SerializableInterface
+final class UserFinishedApplication implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /** @var UserId */
     private $userId;

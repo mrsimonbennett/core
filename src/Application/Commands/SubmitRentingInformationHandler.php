@@ -9,7 +9,7 @@ use FullRent\Core\CommandBus\CommandHandler;
  * @package FullRent\Core\Application\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SubmitRentingInformationHandler implements CommandHandler
+final class SubmitRentingInformationHandler
 {
     /**
      * @var ApplicationRepository

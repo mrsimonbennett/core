@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\RentBook\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class CreatingRentBookBill
  * @package FullRent\Core\RentBook\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CreatingRentBookBill
+final class CreatingRentBookBill extends BaseCommand
 {
     private $preAuthId;
 
@@ -21,6 +23,7 @@ final class CreatingRentBookBill
     {
         $this->preAuthId = $preAuthId;
         $this->billId = $billId;
+        parent::__construct();
     }
 
     /**

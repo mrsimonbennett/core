@@ -4,7 +4,7 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\CreateNewContractHttpRequest;
 use FullRent\Core\Application\Http\Requests\TenantDirectDebitAccessTokenHttpRequest;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Contract\Commands\DraftNewContract;
 use FullRent\Core\Contract\Commands\JoinTenantToContract;

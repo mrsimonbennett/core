@@ -1,7 +1,8 @@
 <?php
 namespace FullRent\Core\Application\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\EventSourcing\Event;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Application\ValueObjects\AboutYouApplication;
 use FullRent\Core\Application\ValueObjects\ApplicationId;
 
@@ -10,7 +11,7 @@ use FullRent\Core\Application\ValueObjects\ApplicationId;
  * @package FullRent\Core\Application\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ApplicantAboutInformationProvided implements SerializableInterface
+final class ApplicantAboutInformationProvided implements Serializable, Event
 {
     /**
      * @var ApplicationId

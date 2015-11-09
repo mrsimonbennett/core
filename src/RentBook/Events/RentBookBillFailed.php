@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\RentBook\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\RentBook\ValueObjects\RentBookId;
 use FullRent\Core\RentBook\ValueObjects\RentBookRentId;
 use FullRent\Core\ValueObjects\DateTime;
@@ -11,7 +11,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\RentBook\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookBillFailed implements SerializableInterface
+final class RentBookBillFailed implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /** @var RentBookId */
     private $id;

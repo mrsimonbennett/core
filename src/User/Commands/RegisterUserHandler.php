@@ -10,7 +10,7 @@ use FullRent\Core\User\UserRepository;
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterUserHandler implements CommandHandler
+final class RegisterUserHandler
 {
     /**
      * @var UserRepository

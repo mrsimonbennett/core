@@ -10,7 +10,7 @@ use FullRent\Core\CommandBus\CommandHandler;
  * @package FullRent\Core\Application\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class StartApplicationHandler implements CommandHandler
+final class StartApplicationHandler
 {
     /**
      * @var ApplicationRepository

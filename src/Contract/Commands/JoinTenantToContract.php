@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Contract\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class JoinTenantToContract
  * @package FullRent\Core\Contract\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class JoinTenantToContract
+final class JoinTenantToContract extends BaseCommand
 {
     /**
      * @var string
@@ -25,6 +27,7 @@ final class JoinTenantToContract
     {
         $this->contractId = $contractId;
         $this->tenantId = $tenantId;
+        parent::__construct();
     }
 
     /**

@@ -2,13 +2,14 @@
 namespace FullRent\Core\RentBook\Commands;
 
 use FullRent\Core\Services\DirectDebit\AccessTokens;
+use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class RentBookAuthorizeDirectDebit
  * @package FullRent\Core\RentBook\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookAuthorizeDirectDebit
+final class RentBookAuthorizeDirectDebit extends BaseCommand
 {
     private $rentBookId;
     private $resourceId;
@@ -36,6 +37,7 @@ final class RentBookAuthorizeDirectDebit
         $this->resourceUri = $resourceUri;
         $this->signature = $signature;
         $this->accessTokens = $accessTokens;
+        parent::__construct();
     }
 
     /**

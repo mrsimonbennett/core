@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\Auth;
 
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\User\Commands\CompletedApplication;
 use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;

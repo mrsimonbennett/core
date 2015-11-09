@@ -8,16 +8,17 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "laravel/framework": "5.0.*",
+    "laravel/framework": "5.1.*",
     "rhumsaa/uuid": "~2.7",
-    "broadway/broadway": "0.5.0",
     "graham-campbell/exceptions": "~2.0",
-    "cleentfaar/slack": "0.16.1",
     "stripe/stripe-php": "^2.0@dev",
     "gocardless/gocardless": "dev-master",
     "predis/predis": "~1.0",
     "barryvdh/laravel-cors": "0.7.x",
-    "guzzlehttp/guzzle": "~5.0"
+    "guzzlehttp/guzzle": "~5.0",
+    "firebase/php-jwt": "dev-master",
+    "smoothphp/cqrs-es-framework-laravel": "^1.0@dev",
+    "beberlei/assert": "^2.3@dev"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",

@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Contract\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class DraftNewContract
  * @package FullRent\Core\Contract\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DraftNewContract
+final class DraftNewContract extends BaseCommand
 {
     /** @var string */
     private $contractId;
@@ -63,6 +65,7 @@ final class DraftNewContract
         $this->rentPayable = $rentPayable;
         $this->fullrentRentCollection = $fullrentRentCollection;
         $this->landlordId = $landlordId;
+        parent::__construct();
     }
 
     /**

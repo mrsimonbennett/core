@@ -1,8 +1,8 @@
 <?php
 namespace FullRent\Core\Contract;
 
-use Broadway\Domain\AggregateRoot;
 use FullRent\Core\Contract\ValueObjects\ContractId;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Interface ContractRepository

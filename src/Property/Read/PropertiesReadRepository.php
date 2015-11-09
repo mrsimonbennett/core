@@ -10,6 +10,7 @@ use stdClass;
  * interface PropertiesReadRepository
  * @package FullRent\Core\Property\Read
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Convert to Query Bus Please
  */
 interface PropertiesReadRepository
 {

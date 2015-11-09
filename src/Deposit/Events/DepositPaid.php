@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Deposit\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Deposit\ValueObjects\DepositAmount;
 use FullRent\Core\Deposit\ValueObjects\DepositId;
 use FullRent\Core\Deposit\ValueObjects\PaymentAmount;
@@ -13,7 +13,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Deposit\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DepositPaid implements SerializableInterface
+final class DepositPaid implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var DepositId

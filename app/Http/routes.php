@@ -1,8 +1,7 @@
 <?php
 /** @var Router $router */
 use Illuminate\Routing\Router;
-
-$router->group(['middleware' => 'auth.api'],
+$router->group([],
     function ($router) {
 
         /**

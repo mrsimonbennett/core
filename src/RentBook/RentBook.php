@@ -2,7 +2,6 @@
 namespace FullRent\Core\RentBook;
 
 use Assert\Assertion;
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\RentBook\Events\GoCardlessAcknowledgedRentBookBill;
 use FullRent\Core\RentBook\Events\RentBookBillCancelled;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
@@ -23,6 +22,7 @@ use FullRent\Core\Services\DirectDebit\AccessTokens;
 use FullRent\Core\Services\DirectDebit\DirectDebit;
 use FullRent\Core\ValueObjects\DateTime;
 use Illuminate\Support\Collection;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class RentBook
@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
  * @package FullRent\Core\RentBook
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBook extends EventSourcedAggregateRoot
+final class RentBook extends AggregateRoot
 {
     /**
      * @var RentAmount

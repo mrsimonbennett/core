@@ -4,7 +4,7 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\ChangeCompanyDomainHttpRequest;
 use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\ChangeCompanyDomain;
 use FullRent\Core\Company\Commands\ChangeCompanyName;
 use FullRent\Core\Company\Commands\EnrolTenant;
@@ -24,7 +24,6 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\Timezone;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 
 /**
  * Class CompanyController
@@ -73,6 +72,7 @@ final class CompanyController extends Controller
      * @param CreateCompanyHttpRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function createCompany(CreateCompanyHttpRequest $request)
     {
         $registerCompanyCommand = new RegisterCompany(
@@ -127,15 +127,16 @@ final class CompanyController extends Controller
      */
     public function invite(Request $request)
     {
-        try {
-            $userId = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')))->id;
-            $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
-
-        } catch (UserNotFound $ex) {
+        $user = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')));
+        if($user == null)
+        {
             $userId = uuid();
             $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
             $this->bus->execute(new InviteUser($userId, $request->get('email')));
+        }else{
+            $userId = $user->id;
         }
+
 
         return $this->jsonResponse->success(['user_id' => (string)$userId]);
     }

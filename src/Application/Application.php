@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Application;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Application\Events\ApplicantAboutInformationProvided;
 use FullRent\Core\Application\Events\ApplicantProvidedRentingInformation;
 use FullRent\Core\Application\Events\ApplicationApproved;
@@ -16,38 +15,45 @@ use FullRent\Core\Application\ValueObjects\PropertyId;
 use FullRent\Core\Application\ValueObjects\RejectReason;
 use FullRent\Core\Application\ValueObjects\RentingInformation;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Application
  * @package FullRent\Core\Application
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Application extends EventSourcedAggregateRoot
+final class Application extends AggregateRoot
 {
     /**
      * @var ApplicationId
      */
     private $applicationId;
+
     /**
      * @var ApplicantId
      */
     private $applicantId;
+
     /**
      * @var PropertyId
      */
     private $propertyId;
+
     /**
      * @var DateTime
      */
     private $startedAt;
+
     /**
      * @var AboutYouApplication
      */
     private $aboutApplicationSection;
+
     /**
      * @var RentingInformation
      */
     private $rentingInformation;
+
     /**
      * @var bool
      */
@@ -116,7 +122,7 @@ final class Application extends EventSourcedAggregateRoot
     public function reject(RejectReason $reason, DateTime $rejectedAt = null)
     {
         if ($this->editable) {
-           // throw new ApplicationNotFinished;
+            // throw new ApplicationNotFinished;
         }
         if (is_null($rejectedAt)) {
             $rejectedAt = DateTime::now();
@@ -134,8 +140,9 @@ final class Application extends EventSourcedAggregateRoot
             $approvedAt = DateTime::now();
         }
 
-        $this->apply(new ApplicationApproved($this->applicationId,$approvedAt));
+        $this->apply(new ApplicationApproved($this->applicationId, $approvedAt));
     }
+
     /**
      * @param StartedApplication $startedApplication
      */
@@ -187,6 +194,7 @@ final class Application extends EventSourcedAggregateRoot
     {
 
     }
+
     /**
      * @return string
      */

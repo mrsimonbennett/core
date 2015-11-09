@@ -29,9 +29,6 @@ final class FindUserByEmailQueryHandler
                              ->where('email', $query->getEmail())
                              ->first();
 
-        if (is_null($user)) {
-            throw new UserNotFound();
-        }
 
         return $user;
 

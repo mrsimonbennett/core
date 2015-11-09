@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\GoCardless;
 
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\RentBook\Commands\CancelRentBookBill;
 use FullRent\Core\RentBook\Commands\CancelRentBookPreAuth;

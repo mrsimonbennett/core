@@ -1,18 +1,19 @@
 <?php
 namespace FullRent\Core\RentBook\Listeners;
 
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
 use FullRent\Core\RentBook\Events\RentBookBillPaid;
 use FullRent\Core\RentBook\Events\RentBookBillWithdrawn;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class RentBookRentHistoryListener
  * @package FullRent\Core\RentBook\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookRentHistoryListener extends EventListener
+final class RentBookRentHistoryListener implements Subscriber, Projection
 {
     /** @var MySqlClient */
     private $client;
@@ -61,24 +62,24 @@ final class RentBookRentHistoryListener extends EventListener
     }
 
     /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [
-            'whenRentBookBillCreated'   => RentBookBillCreated::class,
-            'whenRentBookBillPaid'      => RentBookBillPaid::class,
-            'whenRentBookBillWithdrawn' => RentBookBillWithdrawn::class,
-        ];
-    }
-
-    /**
-     * @param RentBookBillCreated $e
+     * @param $data
      */
     protected function insertHistory($data)
     {
         $this->client->query()
                      ->table('rent_book_rent_history')
                      ->insert($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubscribedEvents()
+    {
+        return [
+            RentBookBillCreated::class   => ['whenRentBookBillCreated'],
+            RentBookBillPaid::class      => ['whenRentBookBillPaid'],
+            RentBookBillWithdrawn::class => ['whenRentBookBillWithdrawn'],
+        ];
     }
 }

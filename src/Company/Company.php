@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Company;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyDomainChanged;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
@@ -14,13 +13,14 @@ use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\Company\ValueObjects\TenantId;
 use FullRent\Core\Services\DirectDebit\DirectDebitAccountAuthorisation;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Company
  * @package FullRent\Core\Company
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Company extends EventSourcedAggregateRoot
+final class Company extends AggregateRoot
 {
     /**
      * @var Landlord[]

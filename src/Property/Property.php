@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Property;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
@@ -17,50 +16,60 @@ use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Property
  * @package FullRent\Core\Property
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Property extends EventSourcedAggregateRoot
+final class Property extends AggregateRoot
 {
     /**
      * @var PropertyId
      */
     private $id;
+
     /**
      * @var Address
      */
     private $address;
+
     /**
      * @var Company
      */
     private $company;
+
     /**
      * @var Landlord
      */
     private $landlord;
+
     /**
      * @var BedRooms
      */
     private $bedRooms;
+
     /**
      * @var Bathrooms
      */
     private $bathrooms;
+
     /**
      * @var Parking
      */
     private $parking;
+
     /**
      * @var Pets
      */
     private $pets;
+
     /**
      * @var DateTime
      */
     private $listedAt;
+
     /**
      * @var DateTime
      */

@@ -3,22 +3,23 @@ namespace FullRent\Core\Contract\Listeners;
 
 use FullRent\Core\Application\Events\ApplicationApproved;
 use FullRent\Core\Application\Query\ApplicationReadRepository;
-use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Contract\Commands\DraftContractFromApplication;
 use FullRent\Core\Contract\Commands\JoinTenantToContract;
-use FullRent\Core\Infrastructure\Events\EventListener;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class ApplicationListener
  * @package FullRent\Core\Contract\Listerners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractApplicationListener extends EventListener
+final class ContractApplicationListener implements Subscriber
 {
     /**
      * @var CommandBus
      */
     private $commandBus;
+
     /**
      * @var ApplicationReadRepository
      */
@@ -53,16 +54,10 @@ final class ContractApplicationListener extends EventListener
     /**
      * @return array
      */
-    protected function registerOnce()
+    public function getSubscribedEvents()
     {
-        return ['whenApplicationApproved' => ApplicationApproved::class,];
-    }
-
-    /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [];
+        return [
+            ApplicationApproved::class => ['whenApplicationApproved'],
+        ];
     }
 }
