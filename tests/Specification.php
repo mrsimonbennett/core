@@ -82,8 +82,16 @@ abstract class Specification extends \TestCase
             $this->subject = new $subject;
 
             if (count($events) > 0) {
-                $this->subject->initializeState($events);
+                $this->subject->initializeState(new \SmoothPhp\Domain\DomainEventStream(array_map(function ($event) {
+                    return new \SmoothPhp\Domain\DomainMessage(0,
+                                                               0,
+                                                               new \SmoothPhp\Domain\Metadata(),
+                                                               $event,
+                                                               \SmoothPhp\Domain\DateTime::now());
+                },
+                    $events)));
             }
+
             $repo->method('load')->willReturn($this->subject);
             $repo->method('save')->will($this->returnCallback(function ($subject) {
                 $this->subject = $subject;
@@ -92,24 +100,15 @@ abstract class Specification extends \TestCase
             $this->handler($repo)->handle($this->when());
 
             $events = [];
-
             foreach ($this->subject->getUncommittedEvents() as $event) {
                 $events[] = $event->getPayload();
             }
             $this->producedEvents = $events;
 
 
-        } catch (Exception $e) {
-            throw $e;
+        } catch (DomainException $e) {
             $this->caughtException = $e;
         }
-    }
-
-    function Repocallback()
-    {
-        $args = func_get_args();
-        // ...
-        dd($args);
     }
 
     /**

@@ -65,4 +65,22 @@ final class StartSubscriptionTrailTest extends Specification
     {
         $this->assertInstanceOf(SubscriptionTrailStarted::class, $this->getEvents()[0]);
     }
+
+    public function testTrailIs14Days()
+    {
+        /** @var SubscriptionTrailStarted $event */
+        $event = $this->getEvents()[0];
+
+        $this->assertEquals(14, $event->getStartedAt()->diffInDays($event->getExpiresAt()));
+    }
+
+    public function testTrailEndsAtTheEndOfTheDay()
+    {
+        /** @var SubscriptionTrailStarted $event */
+        $event = $this->getEvents()[0];
+
+        $this->assertEquals(23, $event->getExpiresAt()->hour);
+        $this->assertEquals(59, $event->getExpiresAt()->minute);
+    }
+
 }
