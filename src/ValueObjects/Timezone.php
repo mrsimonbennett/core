@@ -1,6 +1,10 @@
 <?php namespace FullRent\Core\ValueObjects;
 
+<<<<<<< HEAD
 use SmoothPhp\Contracts\Serialization\Serializable;
+=======
+use Broadway\Serializer\SerializableInterface;
+>>>>>>> feature/user-settings
 
 /**
  * Class Timezone
@@ -8,7 +12,11 @@ use SmoothPhp\Contracts\Serialization\Serializable;
  * @package FullRent\Core\ValueObjects
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
+<<<<<<< HEAD
 final class Timezone implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
+=======
+final class Timezone implements SerializableInterface
+>>>>>>> feature/user-settings
 {
     /** @var string */
     private $timezone;
@@ -37,6 +45,7 @@ final class Timezone implements Serializable, \SmoothPhp\Contracts\EventSourcing
     {
         return ['timezone' => $this->timezone];
     }
+<<<<<<< HEAD
 
     /**
      * @return string
@@ -45,4 +54,6 @@ final class Timezone implements Serializable, \SmoothPhp\Contracts\EventSourcing
     {
         return (string) $this->timezone;
     }
+=======
+>>>>>>> feature/user-settings
 }

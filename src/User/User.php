@@ -1,8 +1,9 @@
 <?php
 namespace FullRent\Core\User;
 
+use FullRent\Core\User\Events\UserAmendedName;
 use FullRent\Core\User\Events\UserFinishedApplication;
-use FullRent\Core\User\Events\UserHasChangedName;
+use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
@@ -38,6 +39,9 @@ final class User extends AggregateRoot
 
     /**  @var InviteToken */
     private $inviteToken;
+
+    /** @var Timezone */
+    private $timezone;
 
 
     /**
@@ -83,15 +87,13 @@ final class User extends AggregateRoot
      */
     public function changeEmail(Email $email)
     {
-        $this->apply(new UsersEmailHasChanged($email));
+        $this->apply(new UsersEmailHasChanged($this->userId, $email, DateTime::now()));
     }
 
-    /**
-     * @param Name $name
-     */
-    public function changeName(Name $name)
+
+    public function changeTimezone(Timezone $timezone)
     {
-        $this->apply(new UserHasChangedName($name));
+        $this->apply(new UserHasChangedTimezone($timezone));
     }
 
     /**
@@ -136,6 +138,11 @@ final class User extends AggregateRoot
         throw new InvalidInviteToken;
     }
 
+    public function amendName(Name $name)
+    {
+        $this->apply(new UserAmendedName($this->userId, $name, DateTime::now()));
+    }
+
     /**
      * @param UserRegistered $userRegistered
      */
@@ -162,6 +169,14 @@ final class User extends AggregateRoot
     protected function applyUsersEmailHasChanged(UsersEmailHasChanged $usersEmailHasChanged)
     {
         $this->email = $usersEmailHasChanged->getEmail();
+    }
+
+    /**
+     * @param UserHasChangedTimezone $userHasChangedTimezone
+     */
+    protected function applyUserHasChangedTimezone(UserHasChangedTimezone $userHasChangedTimezone)
+    {
+        $this->timezone = $userHasChangedTimezone->getTimezone();
     }
 
     /**

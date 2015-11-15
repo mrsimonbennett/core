@@ -2,6 +2,11 @@
 namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
+<<<<<<< HEAD
+=======
+use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\User\Events\UserAmendedName;
+>>>>>>> feature/user-settings
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
@@ -96,15 +101,36 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                  ->update(['password' => $e->getPassword()]);
     }
     /**
+     * @param UserAmendedName $e
+     */
+    public function whenUserAmendsName(UserAmendedName $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getUserId())
+                 ->update([
+                              'legal_name' => $e->getName()->getLegalName(),
+                              'known_as'   => $e->getName()->getKnowAs(),
+                          ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
+<<<<<<< HEAD
             UserRegistered::class          => ['whenUserRegistered'],
             UserPasswordReset::class       => ['whenUserPasswordReset'],
             UserInvited::class             => ['whenUserInvited'],
             UserFinishedApplication::class => ['whenUserFinishedApplication'],
+=======
+            'whenUserRegistered'          => UserRegistered::class,
+            'whenUserPasswordReset'       => UserPasswordReset::class,
+            'whenUserInvited'             => UserInvited::class,
+            'whenUserFinishedApplication' => UserFinishedApplication::class,
+            'whenUserAmendsName'          => UserAmendedName::class,
+>>>>>>> feature/user-settings
         ];
     }
 }
