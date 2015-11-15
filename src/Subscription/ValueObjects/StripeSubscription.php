@@ -75,7 +75,12 @@ final class StripeSubscription implements Serializable
      */
     public function serialize()
     {
-        throw new \Exception('Not implemented [serialize] method');
+        return [
+            'subscription_id' => $this->subscriptionId,
+            'customer_id'     => $this->customerId,
+            'period_start'    => $this->periodStart->serialize(),
+            'period_end'      => $this->periodEnd->serialize(),
+        ];
     }
 
     /**
@@ -84,6 +89,9 @@ final class StripeSubscription implements Serializable
      */
     public static function deserialize(array $data)
     {
-        throw new \Exception('Not implemented [deserialize] method');
+        return new static($data['subscription_id'],
+                          $data['customer_id'],
+                          DateTime::deserialize($data['period_start']),
+                          DateTime::deserialize($data['period_end']));
     }
 }

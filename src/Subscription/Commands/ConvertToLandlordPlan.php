@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Subscription\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ConvertToLandlordPlan
  * @package FullRent\Core\Subscription\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ConvertToLandlordPlan
+final class ConvertToLandlordPlan extends BaseCommand
 {
     /** @var string */
     private $subscriptionId;
@@ -23,6 +25,7 @@ final class ConvertToLandlordPlan
     {
         $this->subscriptionId = $subscriptionId;
         $this->cardToken = $cardToken;
+        parent::__construct();
     }
 
     /**

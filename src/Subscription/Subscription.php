@@ -7,6 +7,7 @@ use FullRent\Core\Subscription\Events\SubscriptionTrailStarted;
 use FullRent\Core\Subscription\Services\CardPayment\CardPaymentGateWay;
 use FullRent\Core\Subscription\ValueObjects\CompanyId;
 use FullRent\Core\Subscription\ValueObjects\StripeCardToken;
+use FullRent\Core\Subscription\ValueObjects\StripeCustomer;
 use FullRent\Core\Subscription\ValueObjects\SubscriptionId;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
@@ -24,11 +25,21 @@ final class Subscription extends AggregateRoot
     private $id;
 
     /**
+     * @var CompanyId
+     */
+    private $companyId;
+
+    /**
+     * @var StripeCustomer
+     */
+    private $stripCustomer;
+
+    /**
      * @param SubscriptionId $id
      * @param CompanyId $companyId
      * @return Subscription
      */
-    public static function startTrail(SubscriptionId $id, CompanyId $companyId)
+    public static function startTrail(SubscriptionId $id, CompanyId $companyId, CardPaymentGateWay $cardPaymentGateWay)
     {
         $subscription = new static();
         $subscription->apply(new SubscriptionTrailStarted($id,
@@ -36,7 +47,18 @@ final class Subscription extends AggregateRoot
                                                           DateTime::now(),
                                                           DateTime::now()->addDays(14)->endOfDay()));
 
+        $subscription->registerStripeCustomer($cardPaymentGateWay);
+
         return $subscription;
+    }
+
+    /**
+     * @param CardPaymentGateWay $cardPaymentGateWay
+     */
+    private function registerStripeCustomer(CardPaymentGateWay $cardPaymentGateWay)
+    {
+        $stripeCustomer = $cardPaymentGateWay->registerCustomerWithNoCard($this->id, $this->companyId);
+        $this->apply(new SubscriptionStripeCustomerRegistered($this->id, $stripeCustomer, DateTime::now()));
     }
 
     /**
@@ -45,10 +67,7 @@ final class Subscription extends AggregateRoot
      */
     public function convertToLandlordPlan(StripeCardToken $stripeCardToken, CardPaymentGateWay $cardPayment)
     {
-        $stripCustomer = $cardPayment->registerCustomer($stripeCardToken, $this->id);
-        $this->apply(new SubscriptionStripeCustomerRegistered($this->id, $stripCustomer, DateTime::now()));
-
-        $subscription = $cardPayment->subscribeToPlan($stripCustomer, 'landlord');
+        $subscription = $cardPayment->subscribeToPlan($stripeCardToken, $this->stripCustomer, 'landlord');
         $this->apply(new SubscriptionToLandlordPlanCreated($this->id, $subscription));
     }
 
@@ -56,6 +75,12 @@ final class Subscription extends AggregateRoot
     protected function applySubscriptionTrailStarted(SubscriptionTrailStarted $e)
     {
         $this->id = $e->getId();
+        $this->companyId = $e->getCompanyId();
+    }
+
+    protected function applySubscriptionStripeCustomerRegistered(SubscriptionStripeCustomerRegistered $e)
+    {
+        $this->stripCustomer = $e->getStripCustomer();
     }
 
     /**

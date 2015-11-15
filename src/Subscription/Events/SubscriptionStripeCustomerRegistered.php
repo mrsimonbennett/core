@@ -5,13 +5,14 @@ use FullRent\Core\Subscription\ValueObjects\StripeCustomer;
 use FullRent\Core\Subscription\ValueObjects\SubscriptionId;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class SubscriptionStripeCustomerRegistered
  * @package FullRent\Core\Subscription\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SubscriptionStripeCustomerRegistered implements Event
+final class SubscriptionStripeCustomerRegistered implements Event, Serializable
 {
     /** @var SubscriptionId */
     private $id;
@@ -59,4 +60,26 @@ final class SubscriptionStripeCustomerRegistered implements Event
         return $this->happened_at;
     }
 
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return [
+            'id'              => (string)$this->id,
+            'stripe_customer' => $this->stripCustomer->serialize(),
+            'happened_at'     => $this->happened_at->serialize(),
+        ];
+    }
+
+    /**
+     * @param array $data
+     * @return static
+     */
+    public static function deserialize(array $data)
+    {
+        return new static(new SubscriptionId($data['id']),
+                          StripeCustomer::deserialize($data['stripe_customer']),
+                          DateTime::deserialize($data['happened_at']));
+    }
 }

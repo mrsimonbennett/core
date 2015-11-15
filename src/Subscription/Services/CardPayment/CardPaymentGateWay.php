@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Subscription\Services\CardPayment;
 
+use FullRent\Core\Subscription\ValueObjects\CompanyId;
 use FullRent\Core\Subscription\ValueObjects\StripeCardToken;
 use FullRent\Core\Subscription\ValueObjects\StripeCustomer;
 use FullRent\Core\Subscription\ValueObjects\StripeSubscription;
@@ -14,16 +15,17 @@ use FullRent\Core\Subscription\ValueObjects\SubscriptionId;
 interface CardPaymentGateWay
 {
     /**
-     * @param StripeCardToken $stripeCardToken
      * @param SubscriptionId $subscriptionId
+     * @param CompanyId $companyId
      * @return StripeCustomer
      */
-    public function registerCustomer(StripeCardToken $stripeCardToken, SubscriptionId $subscriptionId);
+    public function registerCustomerWithNoCard(SubscriptionId $subscriptionId, CompanyId $companyId);
 
     /**
+     * @param StripeCardToken $stripeCardToken
      * @param StripeCustomer $stripCustomer
      * @param string plan
      * @return StripeSubscription
      */
-    public function subscribeToPlan(StripeCustomer $stripCustomer, $plan);
+    public function subscribeToPlan(StripeCardToken $stripeCardToken, StripeCustomer $stripCustomer, $plan);
 }

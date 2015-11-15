@@ -4,9 +4,13 @@ namespace Domain\Subscription;
 
 use FullRent\Core\Subscription\Commands\StartCompanyTrail;
 use FullRent\Core\Subscription\Commands\StartCompanyTrailHandler;
+use FullRent\Core\Subscription\Events\SubscriptionStripeCustomerRegistered;
 use FullRent\Core\Subscription\Events\SubscriptionTrailStarted;
 use FullRent\Core\Subscription\Repository\SubscriptionRepository;
+use FullRent\Core\Subscription\Services\CardPayment\CardPaymentGateWay;
 use FullRent\Core\Subscription\Subscription;
+use FullRent\Core\Subscription\ValueObjects\StripeCustomer;
+use FullRent\Core\ValueObjects\DateTime;
 use Specification;
 
 /**
@@ -40,7 +44,10 @@ final class StartSubscriptionTrailTest extends Specification
      */
     public function handler($repository)
     {
-        return new StartCompanyTrailHandler($repository);
+        $cardPayment = $this->getMockBuilder(CardPaymentGateWay::class)->getMock();
+        $cardPayment->method('registerCustomerWithNoCard')->willReturn(new StripeCustomer('foo123', DateTime::now()));
+
+        return new StartCompanyTrailHandler($repository, $cardPayment);
     }
 
     /**
@@ -60,12 +67,26 @@ final class StartSubscriptionTrailTest extends Specification
         return Subscription::class;
     }
 
-
-    public function testCompanyStartedTrail()
+    /**
+     *
+     */
+    public function testEventCount()
     {
-        $this->assertInstanceOf(SubscriptionTrailStarted::class, $this->getEvents()[0]);
+        $this->assertCount(2, $this->getEvents());
     }
 
+    /**
+     *
+     */
+    public function testEventTypesAndOrder()
+    {
+        $this->assertInstanceOf(SubscriptionTrailStarted::class, $this->getEvents()[0]);
+        $this->assertInstanceOf(SubscriptionStripeCustomerRegistered::class, $this->getEvents()[1]);
+    }
+
+    /**
+     *
+     */
     public function testTrailIs14Days()
     {
         /** @var SubscriptionTrailStarted $event */
@@ -74,6 +95,9 @@ final class StartSubscriptionTrailTest extends Specification
         $this->assertEquals(14, $event->getStartedAt()->diffInDays($event->getExpiresAt()));
     }
 
+    /**
+     *
+     */
     public function testTrailEndsAtTheEndOfTheDay()
     {
         /** @var SubscriptionTrailStarted $event */
@@ -81,6 +105,15 @@ final class StartSubscriptionTrailTest extends Specification
 
         $this->assertEquals(23, $event->getExpiresAt()->hour);
         $this->assertEquals(59, $event->getExpiresAt()->minute);
+    }
+
+    public function testCustomerId()
+    {
+        /** @var SubscriptionStripeCustomerRegistered $event */
+        $event = $this->getEvents()[1];
+
+
+        $this->assertEquals('foo123', $event->getStripCustomer()->getStripeCustomerId());
     }
 
 }

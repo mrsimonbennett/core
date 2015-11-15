@@ -35,7 +35,10 @@ final class ConvertToPayingAccountTest extends \Specification
             new SubscriptionTrailStarted(new SubscriptionId(uuid()),
                                          new CompanyId(uuid()),
                                          DateTime::now(),
-                                         DateTime::now()->addDays(14)->endOfDay())
+                                         DateTime::now()->addDays(14)->endOfDay()),
+            new SubscriptionStripeCustomerRegistered(new SubscriptionId(uuid()),
+                                                     new StripeCustomer('foo123', DateTime::now()),
+                                                     DateTime::now())
         ];
     }
 
@@ -54,7 +57,6 @@ final class ConvertToPayingAccountTest extends \Specification
     public function handler($repository)
     {
         $cardPayment = $this->getMockBuilder(CardPaymentGateWay::class)->getMock();
-        $cardPayment->method('registerCustomer')->willReturn(new StripeCustomer('foo123', DateTime::now()));
         $cardPayment->method('subscribeToPlan')->willReturn(new StripeSubscription('sub123',
                                                                                    'foo123',
                                                                                    DateTime::now(),
@@ -82,21 +84,13 @@ final class ConvertToPayingAccountTest extends \Specification
 
     public function testEventGenerated()
     {
-        $this->assertCount(2, $this->getEvents());
-    }
-
-    public function testCustomerId()
-    {
-        /** @var SubscriptionStripeCustomerRegistered $event */
-        $event = $this->getEvents()[0];
-
-        $this->assertEquals('foo123', $event->getStripCustomer()->getStripeCustomerId());
+        $this->assertCount(1, $this->getEvents());
     }
 
     public function testSubscription()
     {
         /** @var SubscriptionToLandlordPlanCreated $event */
-        $event = $this->getEvents()[1];
+        $event = $this->getEvents()[0];
         $this->assertEquals('sub123', $event->getSubscription()->getSubscriptionId());
         $this->assertEquals('foo123', $event->getSubscription()->getCustomerId());
     }

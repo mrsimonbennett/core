@@ -25,6 +25,7 @@ final class StartCompanyTrail extends BaseCommand
     {
         $this->companyId = $companyId;
         $this->subscriptionId = $subscriptionId;
+        parent::__construct();
     }
 
     /**

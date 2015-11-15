@@ -36,6 +36,9 @@ $router->group([],
                 $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
                 $router->post('invite', 'CompanyController@invite');
 
+                $router->post('{id}/subscription', 'CompanyController@subscription');
+
+
             }
         );
         /*
