@@ -69,7 +69,7 @@ final class DepositTest extends \TestCase
 
 
         $deposit = $this->buildDeposit();
-        $deposit->fullPayment($this->buildCard(), $this->app->make(CardPaymentGateway::class));
+       // $deposit->fullPayment($this->buildCard(), $this->app->make(CardPaymentGateway::class));
     }
 
 

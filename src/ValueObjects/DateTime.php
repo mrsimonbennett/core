@@ -9,9 +9,8 @@ use Carbon\Carbon;
  * @package FullRent\Core\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DateTime extends Carbon implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
+final class DateTime extends Carbon implements Serializable
 {
-
     /**
      * @param array $data
      * @return mixed The object instance

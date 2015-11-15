@@ -6,7 +6,7 @@ use FullRent\Core\ValueObjects\Money\Money;
 
 /**
  * Class SuccessFullPayment
- * @package FullRent\Core\Services\CardPayment
+ * @package FullRent\Core\Services\CardPaymentGateWay
  * @author Simon Bennett <simon@bennett.im>
  */
 final class SuccessFullPayment implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

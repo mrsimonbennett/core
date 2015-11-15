@@ -177,6 +177,8 @@ return [
          */
         RentBookServiceProvider::class,
 
+        \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
+
 
     ],
     /*
