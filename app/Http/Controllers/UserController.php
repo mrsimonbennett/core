@@ -2,14 +2,16 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Requests\UpdateUserBasicDetailsHTTPRequest;
-use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Application\Http\Requests\UpdateUserEmailHttpRequest;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\User\Commands\AmendUsersName;
+use FullRent\Core\User\Commands\ChangeUsersEmailAddress;
 use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\ValueObjects\UserId;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class UserController
@@ -64,7 +66,8 @@ final class UserController extends Controller
     public function me(Request $request)
     {
         $user = $this->userRepository->getById(new UserId('0439fdfe-1e37-4e5f-b300-312d96314180'));
-        return ['user' => (array)$user,'token' => md5(time())];
+
+        return ['user' => (array)$user, 'token' => md5(time())];
 
     }
 
@@ -82,6 +85,10 @@ final class UserController extends Controller
      */
     public function basicDetails($userId, UpdateUserBasicDetailsHTTPRequest $request)
     {
-        $this->commandBus->execute(new AmendUsersName($userId,$request->legal_name,$request->known_as));
+        $this->commandBus->execute(new AmendUsersName($userId, $request->legal_name, $request->known_as));
+    }
+    public function updateEmail($userId, UpdateUserEmailHttpRequest $request)
+    {
+        $this->commandBus->execute(new ChangeUsersEmailAddress($userId,$request->email));
     }
 }

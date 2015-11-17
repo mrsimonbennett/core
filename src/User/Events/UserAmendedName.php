@@ -1,17 +1,18 @@
 <?php
 namespace FullRent\Core\User\Events;
 
-use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\Contracts\EventSourcing\Event;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class UserAmendedName
  * @package FullRent\Core\User\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserAmendedName implements SerializableInterface
+final class UserAmendedName implements Serializable, Event
 {
     /** @var UserId */
     private $userId;

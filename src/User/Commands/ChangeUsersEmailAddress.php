@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ChangeUsersEmailAddress
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ChangeUsersEmailAddress
+final class ChangeUsersEmailAddress extends BaseCommand
 {
     /** @var string */
     private $userId;
@@ -23,6 +25,7 @@ final class ChangeUsersEmailAddress
     {
         $this->userId = $userId;
         $this->email = $email;
+        parent::__construct();
     }
 
     /**

@@ -2,6 +2,8 @@
 namespace FullRent\Core\User\Commands;
 
 use FullRent\Core\User\UserRepository;
+use FullRent\Core\User\ValueObjects\Email;
+use FullRent\Core\User\ValueObjects\UserId;
 
 /**
  * Class ChangeUsersEmailAddressHandler

@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class AmendUsersName
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class AmendUsersName
+final class AmendUsersName extends BaseCommand
 {
     /** @var string */
     private $userId;
@@ -28,6 +30,7 @@ final class AmendUsersName
         $this->userId = $userId;
         $this->legalName = $legalName;
         $this->knownAs = $knownAs;
+        parent::__construct();
     }
 
     /**

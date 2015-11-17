@@ -1,25 +1,17 @@
 <?php
 namespace FullRent\Core\User\Events;
 
-use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\User\ValueObjects\Email;
-<<<<<<< HEAD
-use SmoothPhp\Contracts\Serialization\Serializable;
-=======
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
->>>>>>> feature/user-settings
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class UsersEmailHasChanged
  * @package FullRent\Core\User\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-<<<<<<< HEAD
 final class UsersEmailHasChanged implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
-=======
-final class UsersEmailHasChanged implements SerializableInterface
->>>>>>> feature/user-settings
 {
     /**
      * @var Email
@@ -52,25 +44,9 @@ final class UsersEmailHasChanged implements SerializableInterface
         return $this->email;
     }
 
-    /**
-<<<<<<< HEAD
-     * @return array
-     */
-    public function serialize()
-    {
-        throw new \Exception('Not implemented [serialize] method');
-    }
-
-    /**
-     * @param array $data
-     * @return static
-     */
-    public static function deserialize(array $data)
-    {
-        throw new \Exception('Not implemented [deserialize] method');
-=======
-     * @return mixed The object instance
-     */
+    /*
+      * @return mixed The object instance
+      */
     public static function deserialize(array $data)
     {
         return new static(new UserId($data['user_id']),
@@ -88,6 +64,22 @@ final class UsersEmailHasChanged implements SerializableInterface
             'email'      => $this->email->serialize(),
             'changed_at' => $this->changedAt->serialize()
         ];
->>>>>>> feature/user-settings
+
+    }
+
+    /**
+     * @return UserId
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getChangedAt()
+    {
+        return $this->changedAt;
     }
 }

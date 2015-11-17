@@ -2,15 +2,12 @@
 namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
-<<<<<<< HEAD
-=======
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\User\Events\UserAmendedName;
->>>>>>> feature/user-settings
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
+use FullRent\Core\User\Events\UsersEmailHasChanged;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
@@ -100,6 +97,7 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                  ->where('id', $e->getUserId())
                  ->update(['password' => $e->getPassword()]);
     }
+
     /**
      * @param UserAmendedName $e
      */
@@ -113,24 +111,27 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                           ]);
     }
 
+    public function whenUserUpdatesEmail(UsersEmailHasChanged $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getId())
+                 ->update([
+                              'email' => $e->getEmail()->getEmail(),
+                          ]);
+    }
+
     /**
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
-<<<<<<< HEAD
             UserRegistered::class          => ['whenUserRegistered'],
             UserPasswordReset::class       => ['whenUserPasswordReset'],
             UserInvited::class             => ['whenUserInvited'],
             UserFinishedApplication::class => ['whenUserFinishedApplication'],
-=======
-            'whenUserRegistered'          => UserRegistered::class,
-            'whenUserPasswordReset'       => UserPasswordReset::class,
-            'whenUserInvited'             => UserInvited::class,
-            'whenUserFinishedApplication' => UserFinishedApplication::class,
-            'whenUserAmendsName'          => UserAmendedName::class,
->>>>>>> feature/user-settings
+            UserAmendedName::class         => ['whenUserAmendsName'],
+            UsersEmailHasChanged::class    => ['whenUserUpdatesEmail'],
         ];
     }
 }

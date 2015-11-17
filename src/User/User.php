@@ -2,6 +2,7 @@
 namespace FullRent\Core\User;
 
 use FullRent\Core\User\Events\UserAmendedName;
+use FullRent\Core\User\Events\UserChangedPassword;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
@@ -11,6 +12,7 @@ use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
 use FullRent\Core\User\Exceptions\InvalidInviteToken;
 use FullRent\Core\User\Exceptions\InvalidPasswordResetRequest;
+use FullRent\Core\User\Exceptions\PasswordIncorrect;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\InviteToken;
 use FullRent\Core\User\ValueObjects\Name;
@@ -19,6 +21,7 @@ use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
 use FullRent\Core\ValueObjects\Timezone;
+use Illuminate\Contracts\Hashing\Hasher;
 use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
@@ -43,6 +46,8 @@ final class User extends AggregateRoot
     /** @var Timezone */
     private $timezone;
 
+    /** @var Password */
+    private $password;
 
     /**
      * @param UserId $userId
@@ -144,6 +149,21 @@ final class User extends AggregateRoot
     }
 
     /**
+     * @param string $oldPassword
+     * @param Password $newPassword
+     * @param Hasher $hasher
+     * @throws PasswordIncorrect
+     */
+    public function changePassword($oldPassword, Password $newPassword, Hasher $hasher)
+    {
+        if(!$hasher->check($oldPassword,$this->password->getPassword()))
+        {
+           throw new PasswordIncorrect();
+        }
+
+        $this->apply(new UserChangedPassword($this->userId,$newPassword, DateTime::now()));
+    }
+    /**
      * @param UserRegistered $userRegistered
      */
     protected function applyUserRegistered(UserRegistered $userRegistered)
@@ -151,6 +171,7 @@ final class User extends AggregateRoot
         $this->userId = $userRegistered->getUserId();
         $this->email = $userRegistered->getEmail();
         $this->timezone = $userRegistered->getTimezone();
+        $this->password = $userRegistered->getPassword();
     }
 
     /**
