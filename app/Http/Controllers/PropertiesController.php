@@ -5,7 +5,9 @@ use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
 use FullRent\Core\CommandBus\CommandBus;
+use FullRent\Core\Images\Commands\StoreUploadedImage;
 use FullRent\Core\Property\Commands\AcceptApplications;
+use FullRent\Core\Property\Commands\AttachImage;
 use FullRent\Core\Property\Commands\CloseApplications;
 use FullRent\Core\Property\Commands\EmailApplication;
 use FullRent\Core\Property\Commands\ListNewProperty;
@@ -16,6 +18,7 @@ use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
 use FullRent\Core\Property\ValueObjects\CompanyId;
+use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\LandlordId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
@@ -142,5 +145,20 @@ final class PropertiesController extends Controller
     {
         return $this->jsonResponse->success(['property_history' => $this->propertiesReadRepository->getPropertyHistory(new PropertyId($propertyId))]);
 
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function attachImage(Request $request)
+    {
+        try {
+            $imageId = (string) ImageId::random();
+            $this->bus->execute(new StoreUploadedImage($imageId, $request->file('image')));
+            $this->bus->execute(new AttachImage($request->get('propertyId'), $imageId));
+            $this->jsonResponse->success();
+        } catch (\Exception $e) {
+            // I imagine there will be a variety of exceptions we can catch here
+        }
     }
 }
