@@ -7,6 +7,7 @@ use FullRent\Core\RentBook\Events\GoCardlessAcknowledgedRentBookBill;
 use FullRent\Core\RentBook\Events\RentBookBillCancelled;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
 use FullRent\Core\RentBook\Events\RentBookBillFailed;
+use FullRent\Core\RentBook\Events\RentBookBillPaid;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentDueSet;

@@ -2,6 +2,7 @@
 namespace FullRent\Core\RentBook\Events;
 
 use Broadway\Serializer\SerializableInterface;
+use FullRent\Core\RentBook\ValueObjects\RentBookId;
 use FullRent\Core\RentBook\ValueObjects\RentBookRentId;
 use FullRent\Core\ValueObjects\DateTime;
 
@@ -112,7 +113,7 @@ final class RentBookBillPaid implements SerializableInterface
             'bill_id'           => $this->billId,
             'rent_book_rent_id' => (string)$this->rentBookRentId,
             'paid_at'           => $this->paidAt->serialize(),
-            'received_at'       => $this->acknowledgedAt->serialize(),
+            'received_at'       => $this->receivedAt->serialize(),
         ];
     }
 
