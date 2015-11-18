@@ -3,8 +3,10 @@ namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Requests\UpdateUserBasicDetailsHTTPRequest;
 use FullRent\Core\Application\Http\Requests\UpdateUserEmailHttpRequest;
+use FullRent\Core\Application\Http\Requests\UpdateUserPasswordHttpRequest;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\User\Commands\AmendUsersName;
+use FullRent\Core\User\Commands\ChangeUserPassword;
 use FullRent\Core\User\Commands\ChangeUsersEmailAddress;
 use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Projections\UserReadRepository;
@@ -87,8 +89,16 @@ final class UserController extends Controller
     {
         $this->commandBus->execute(new AmendUsersName($userId, $request->legal_name, $request->known_as));
     }
+
     public function updateEmail($userId, UpdateUserEmailHttpRequest $request)
     {
-        $this->commandBus->execute(new ChangeUsersEmailAddress($userId,$request->email));
+        $this->commandBus->execute(new ChangeUsersEmailAddress($userId, $request->email));
+    }
+
+    public function updatePassword($userId, UpdateUserPasswordHttpRequest $request)
+    {
+        $this->commandBus->execute(new ChangeUserPassword($userId,
+                                                          $request->get('old_password'),
+                                                          $request->get('new_password')));
     }
 }
