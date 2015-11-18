@@ -1,5 +1,6 @@
 <?php namespace FullRent\Core\Images\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
 use FullRent\Core\Images\ValueObjects\ImageId;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -8,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @package FullRent\Core\Images\Commands
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class StoreUploadedImage
+final class StoreUploadedImage extends BaseCommand
 {
     /** @var ImageId */
     private $imageId;
@@ -22,6 +23,7 @@ final class StoreUploadedImage
      */
     public function __construct($imageId, UploadedFile $image)
     {
+        parent::__construct();
         $this->imageId = new ImageId($imageId);
         $this->image = $image;
     }
