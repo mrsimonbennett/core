@@ -1,6 +1,6 @@
 <?php namespace FullRent\Core\Images;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use SmoothPhp\EventSourcing\AggregateRoot;
 use FullRent\Core\Images\ValueObjects\ImageId;
 
 /**
@@ -8,7 +8,7 @@ use FullRent\Core\Images\ValueObjects\ImageId;
  * @package FullRent\Core\Images
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class Image extends EventSourcedAggregateRoot
+final class Image extends AggregateRoot
 {
     /** @var ImageId */
     private $imageId;
