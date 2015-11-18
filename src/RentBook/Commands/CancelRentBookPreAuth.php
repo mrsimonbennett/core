@@ -22,7 +22,7 @@ final class CancelRentBookPreAuth extends BaseCommand
     public function __construct($preAuthorizationId)
     {
         $this->preAuthorizationId = $preAuthorizationId;
-        parent::__construct();
+
     }
 
     /**

@@ -23,7 +23,7 @@ final class ChangeCompanyName extends BaseCommand
     {
         $this->companyId = $companyId;
         $this->companyName = $companyName;
-        parent::__construct();
+
 
     }
 

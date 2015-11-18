@@ -41,7 +41,7 @@ final class RegisterCompany extends BaseCommand
         $this->companyName = $companyName;
         $this->companyDomain = $companyDomain;
         $this->landlordId = LandlordId::random();
-        parent::__construct();
+
 
     }
 

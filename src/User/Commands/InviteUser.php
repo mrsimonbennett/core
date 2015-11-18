@@ -24,7 +24,7 @@ final class InviteUser extends BaseCommand
     {
         $this->userId = $userId;
         $this->email = $email;
-        parent::__construct();
+
     }
 
     /**

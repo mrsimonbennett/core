@@ -22,7 +22,7 @@ final class CloseApplications extends BaseCommand
     public function __construct(PropertyId $propertyId)
     {
         $this->propertyId = $propertyId;
-        parent::__construct();
+
     }
 
     /**

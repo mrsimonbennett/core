@@ -27,7 +27,7 @@ final class RegisterDirectDebitService extends BaseCommand
     {
         $this->companyId = $companyId;
         $this->directDebitAuthCode = $directDebitAuthCode;
-        parent::__construct();
+
 
     }
 

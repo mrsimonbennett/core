@@ -3,6 +3,7 @@ namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
 use FullRent\Core\User\Events\UserAmendedName;
+use FullRent\Core\User\Events\UserChangedPassword;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
@@ -20,6 +21,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  */
 final class UserMysqlSubscriber implements Projection, Subscriber
 {
+    /** @var int */
     protected $priority = 10;
 
     /**
@@ -111,6 +113,9 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                           ]);
     }
 
+    /**
+     * @param UsersEmailHasChanged $e
+     */
     public function whenUserUpdatesEmail(UsersEmailHasChanged $e)
     {
         $this->db->table('users')
@@ -118,6 +123,16 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                  ->update([
                               'email' => $e->getEmail()->getEmail(),
                           ]);
+    }
+
+    /**
+     * @param UserChangedPassword $e
+     */
+    public function whenUserChangesPassword(UserChangedPassword $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getUserId())
+                 ->update(['password' => $e->getNewPassword()]);
     }
 
     /**
@@ -132,6 +147,7 @@ final class UserMysqlSubscriber implements Projection, Subscriber
             UserFinishedApplication::class => ['whenUserFinishedApplication'],
             UserAmendedName::class         => ['whenUserAmendsName'],
             UsersEmailHasChanged::class    => ['whenUserUpdatesEmail'],
+            UserChangedPassword::class     => ['whenUserChangesPassword'],
         ];
     }
 }

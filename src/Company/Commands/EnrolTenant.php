@@ -27,7 +27,7 @@ final class EnrolTenant extends BaseCommand
     {
         $this->companyId = $companyId;
         $this->tenantId = $tenantId;
-        parent::__construct();
+
 
     }
 

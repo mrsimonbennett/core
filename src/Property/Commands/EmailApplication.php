@@ -28,7 +28,7 @@ final class EmailApplication extends BaseCommand
     {
         $this->propertyId = $propertyId;
         $this->applicantEmail = $applicantEmail;
-        parent::__construct();
+
     }
 
     /**

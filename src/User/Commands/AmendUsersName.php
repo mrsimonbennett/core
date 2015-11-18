@@ -30,7 +30,7 @@ final class AmendUsersName extends BaseCommand
         $this->userId = $userId;
         $this->legalName = $legalName;
         $this->knownAs = $knownAs;
-        parent::__construct();
+
     }
 
     /**

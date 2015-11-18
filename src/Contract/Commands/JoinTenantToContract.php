@@ -27,7 +27,7 @@ final class JoinTenantToContract extends BaseCommand
     {
         $this->contractId = $contractId;
         $this->tenantId = $tenantId;
-        parent::__construct();
+
     }
 
     /**

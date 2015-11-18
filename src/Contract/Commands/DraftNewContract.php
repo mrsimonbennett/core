@@ -65,7 +65,7 @@ final class DraftNewContract extends BaseCommand
         $this->rentPayable = $rentPayable;
         $this->fullrentRentCollection = $fullrentRentCollection;
         $this->landlordId = $landlordId;
-        parent::__construct();
+
     }
 
     /**

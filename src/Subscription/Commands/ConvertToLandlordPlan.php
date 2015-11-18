@@ -25,7 +25,7 @@ final class ConvertToLandlordPlan extends BaseCommand
     {
         $this->subscriptionId = $subscriptionId;
         $this->cardToken = $cardToken;
-        parent::__construct();
+
     }
 
     /**

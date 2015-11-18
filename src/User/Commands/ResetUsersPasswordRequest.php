@@ -19,7 +19,7 @@ final class ResetUsersPasswordRequest extends BaseCommand
     public function __construct($email)
     {
         $this->email = $email;
-        parent::__construct();
+
     }
 
     /**
