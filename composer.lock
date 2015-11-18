@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9e0cb3eb596a1d03be806829e3f74090",
-    "content-hash": "5302f95ef7f5c4ee226350b5171366ba",
+    "hash": "c7aa5fe56e0e6baddef6f64e3eaa1ae3",
+    "content-hash": "84966aa128141b3b8527f981f303d80f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -205,6 +205,58 @@
                 "preload"
             ],
             "time": "2015-06-28 21:39:13"
+        },
+        {
+            "name": "cloudinary/cloudinary_php",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudinary/cloudinary_php.git",
+                "reference": "b8dff83e64419630cab8b37e0a1bcd39da5dee08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/b8dff83e64419630cab8b37e0a1bcd39da5dee08",
+                "reference": "b8dff83e64419630cab8b37e0a1bcd39da5dee08",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ],
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cloudinary",
+                    "homepage": "https://github.com/cloudinary/cloudinary_php/graphs/contributors"
+                }
+            ],
+            "description": "Cloudinary PHP SDK",
+            "homepage": "https://github.com/cloudinary/cloudinary_php",
+            "keywords": [
+                "cdn",
+                "cloud",
+                "cloudinary",
+                "image management",
+                "sdk"
+            ],
+            "time": "2015-11-01 13:43:31"
         },
         {
             "name": "danielstjules/stringy",
@@ -1696,6 +1748,52 @@
             "time": "2015-07-23 19:00:41"
         },
         {
+            "name": "samcrosoft/cloudinary",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samcrosoft/Laravel5-Cloudinary.git",
+                "reference": "c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samcrosoft/Laravel5-Cloudinary/zipball/c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46",
+                "reference": "c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46",
+                "shasum": ""
+            },
+            "require": {
+                "cloudinary/cloudinary_php": "~1.0",
+                "illuminate/support": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Samcrosoft\\Cloudinary": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "samuel Olowofela",
+                    "email": "samuel_olowofela@yahoo.com"
+                }
+            ],
+            "description": "Laravel Based Cloudinary PHP SDK",
+            "homepage": "https://github.com/samcrooft/cloudinary",
+            "keywords": [
+                "cloud",
+                "cloudinary",
+                "image management",
+                "image manipulation",
+                "laravel"
+            ],
+            "time": "2015-02-13 00:14:19"
+        },
+        {
             "name": "smoothphp/cqrs-es-framework",
             "version": "v1.1.0",
             "source": {
@@ -1770,7 +1868,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/41f0b8e3574897b213b152a1e975af6e09d45c5c",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/b1bf710bb7500fae6b5fe26a48b7d39b66aa625c",
                 "reference": "41f0b8e3574897b213b152a1e975af6e09d45c5c",
                 "shasum": ""
             },

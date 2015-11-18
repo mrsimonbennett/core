@@ -157,6 +157,7 @@ return [
          */
         SmoothPhp\LaravelAdapter\ServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Samcrosoft\Cloudinary\Provider\CloudinaryServiceProvider::class,
 
         /**
          * src
