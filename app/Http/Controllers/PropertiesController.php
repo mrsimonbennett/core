@@ -153,8 +153,7 @@ final class PropertiesController extends Controller
     public function attachImage(Request $request)
     {
         try {
-            $imageId = uuid();
-            $this->bus->execute(new StoreUploadedImage($imageId, $request->file('image')));
+            $this->bus->execute(new StoreUploadedImage($imageId = uuid(), $request->file('image')));
             $this->bus->execute(new AttachImage($request->get('propertyId'), $imageId));
             $this->jsonResponse->success();
         } catch (\Exception $e) {
