@@ -8,22 +8,37 @@ namespace FullRent\Core\RentBook\Queries;
  */
 final class FindRentBookQueryById
 {
+    /** @var string */
     private $rentBookId;
 
+    /** @var bool */
+    private $details;
+
     /**
-     * @param $rentBookId
+     * @param string $rentBookId
+     * @param bool $details
      */
-    public function __construct($rentBookId)
+    public function __construct($rentBookId, $details = false)
     {
         $this->rentBookId = $rentBookId;
+        $this->details = $details;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRentBookId()
     {
         return $this->rentBookId;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isDetails()
+    {
+        return $this->details;
+    }
+
 
 }

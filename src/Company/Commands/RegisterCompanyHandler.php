@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Company\Commands;
 
-use FullRent\Core\CommandBus\CommandHandler;
 use FullRent\Core\Company\Company;
 use FullRent\Core\Company\CompanyRepository;
 use FullRent\Core\Company\Landlord;
@@ -11,7 +10,7 @@ use FullRent\Core\Company\Landlord;
  * @package FullRent\Core\Company\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterCompanyHandler implements CommandHandler
+final class RegisterCompanyHandler
 {
     /**
      * @var CompanyRepository

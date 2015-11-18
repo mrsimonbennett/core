@@ -1,12 +1,12 @@
 <?php
 namespace FullRent\Core\Deposit\Listeners;
 
-use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Contract\Events\LandlordSignedContract;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
 use FullRent\Core\Deposit\Commands\SetupDeposit;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class ContractListener
@@ -16,12 +16,13 @@ use FullRent\Core\QueryBus\QueryBus;
  * @package FullRent\Core\Deposit\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ContractListener extends EventListener
+final class ContractListener implements Subscriber
 {
     /**
      * @var CommandBus
      */
     private $commandBus;
+
     /**
      * @var QueryBus
      */
@@ -43,7 +44,6 @@ final class ContractListener extends EventListener
      * This handler only fires when a contract is signed, and not on event rebuild
      *
      * @param LandlordSignedContract $e
-
      */
     public function whenContractedCompleted(LandlordSignedContract $e)
     {
@@ -60,20 +60,13 @@ final class ContractListener extends EventListener
         }
 
     }
-
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
-        return [];
-    }
-
-    /**
-     * @return array
-     */
-    protected function registerOnce()
-    {
-        return ['whenContractedCompleted' => LandlordSignedContract::class];
+        return [
+            LandlordSignedContract::class => ['whenContractedCompleted'],
+        ];
     }
 }

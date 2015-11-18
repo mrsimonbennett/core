@@ -1,15 +1,18 @@
 <?php
 namespace FullRent\Core\User;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\User\Events\UserAmendedName;
+use FullRent\Core\User\Events\UserChangedPassword;
 use FullRent\Core\User\Events\UserFinishedApplication;
-use FullRent\Core\User\Events\UserHasChangedName;
+use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\User\Events\UsersEmailHasChanged;
+use FullRent\Core\User\Exceptions\InvalidInviteToken;
 use FullRent\Core\User\Exceptions\InvalidPasswordResetRequest;
+use FullRent\Core\User\Exceptions\PasswordIncorrect;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\InviteToken;
 use FullRent\Core\User\ValueObjects\Name;
@@ -17,13 +20,16 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use FullRent\Core\ValueObjects\Timezone;
+use Illuminate\Contracts\Hashing\Hasher;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class User
  * @package FullRent\Core\User
  * @author Simon Bennett <simon@bennett.im>
  */
-final class User extends EventSourcedAggregateRoot
+final class User extends AggregateRoot
 {
     /** @var UserId */
     private $userId;
@@ -37,18 +43,29 @@ final class User extends EventSourcedAggregateRoot
     /**  @var InviteToken */
     private $inviteToken;
 
+    /** @var Timezone */
+    private $timezone;
+
+    /** @var Password */
+    private $password;
 
     /**
      * @param UserId $userId
      * @param Name $name
      * @param Email $email
      * @param Password $password
+     * @param Timezone $timezone
      * @return User
      */
-    public static function registerUser(UserId $userId, Name $name, Email $email, Password $password)
-    {
+    public static function registerUser(
+        UserId $userId,
+        Name $name,
+        Email $email,
+        Password $password,
+        Timezone $timezone
+    ) {
         $user = new static();
-        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now()));
+        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now(), $timezone));
 
         return $user;
     }
@@ -75,15 +92,13 @@ final class User extends EventSourcedAggregateRoot
      */
     public function changeEmail(Email $email)
     {
-        $this->apply(new UsersEmailHasChanged($email));
+        $this->apply(new UsersEmailHasChanged($this->userId, $email, DateTime::now()));
     }
 
-    /**
-     * @param Name $name
-     */
-    public function changeName(Name $name)
+
+    public function changeTimezone(Timezone $timezone)
     {
-        $this->apply(new UserHasChangedName($name));
+        $this->apply(new UserHasChangedTimezone($timezone));
     }
 
     /**
@@ -128,6 +143,26 @@ final class User extends EventSourcedAggregateRoot
         throw new InvalidInviteToken;
     }
 
+    public function amendName(Name $name)
+    {
+        $this->apply(new UserAmendedName($this->userId, $name, DateTime::now()));
+    }
+
+    /**
+     * @param string $oldPassword
+     * @param Password $newPassword
+     * @param Hasher $hasher
+     * @throws PasswordIncorrect
+     */
+    public function changePassword($oldPassword, Password $newPassword, Hasher $hasher)
+    {
+        if(!$hasher->check($oldPassword,$this->password->getPassword()))
+        {
+           throw new PasswordIncorrect();
+        }
+
+        $this->apply(new UserChangedPassword($this->userId,$newPassword, DateTime::now()));
+    }
     /**
      * @param UserRegistered $userRegistered
      */
@@ -135,6 +170,8 @@ final class User extends EventSourcedAggregateRoot
     {
         $this->userId = $userRegistered->getUserId();
         $this->email = $userRegistered->getEmail();
+        $this->timezone = $userRegistered->getTimezone();
+        $this->password = $userRegistered->getPassword();
     }
 
     /**
@@ -153,6 +190,14 @@ final class User extends EventSourcedAggregateRoot
     protected function applyUsersEmailHasChanged(UsersEmailHasChanged $usersEmailHasChanged)
     {
         $this->email = $usersEmailHasChanged->getEmail();
+    }
+
+    /**
+     * @param UserHasChangedTimezone $userHasChangedTimezone
+     */
+    protected function applyUserHasChangedTimezone(UserHasChangedTimezone $userHasChangedTimezone)
+    {
+        $this->timezone = $userHasChangedTimezone->getTimezone();
     }
 
     /**

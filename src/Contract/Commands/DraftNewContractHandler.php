@@ -18,7 +18,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Contract\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DraftNewContractHandler implements CommandHandler
+final class DraftNewContractHandler
 {
     /** @var ContractRepository */
     private $contractRepository;

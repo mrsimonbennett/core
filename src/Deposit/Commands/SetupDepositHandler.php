@@ -15,7 +15,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Deposit\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SetupDepositHandler implements CommandHandler
+final class SetupDepositHandler
 {
     /**
      * @var DepositRepository

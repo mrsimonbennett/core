@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Property\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Property\Company;
 use FullRent\Core\Property\Landlord;
 use FullRent\Core\Property\ValueObjects\Address;
@@ -17,7 +17,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Property\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class NewPropertyListed implements SerializableInterface
+final class NewPropertyListed implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var PropertyId

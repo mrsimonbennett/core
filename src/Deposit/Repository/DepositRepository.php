@@ -1,9 +1,9 @@
 <?php
 namespace FullRent\Core\Deposit\Repository;
 
-use Broadway\Domain\AggregateRoot;
 use FullRent\Core\Deposit\Deposit;
 use FullRent\Core\Deposit\ValueObjects\DepositId;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Class DepositRepository

@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Deposit\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class PayDepositWithCard
  * @package FullRent\Core\Deposit\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PayDepositWithCard
+final class PayDepositWithCard extends BaseCommand
 {
     /**
      * @var string
@@ -43,6 +45,8 @@ final class PayDepositWithCard
         $this->cardNumber = $cardNumber;
         $this->cardExpiresDate = $cardExpiresDate;
         $this->cardCvs = $cardCvs;
+        parent::__construct();
+
     }
 
     /**

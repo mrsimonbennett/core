@@ -9,7 +9,7 @@ use FullRent\Core\Property\PropertyRepository;
  * @package FullRent\Core\Property\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CloseApplicationsHandler implements CommandHandler
+final class CloseApplicationsHandler
 {
     /**
      * @var PropertyRepository

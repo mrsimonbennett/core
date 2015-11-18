@@ -1,27 +1,28 @@
 <?php
 namespace FullRent\Core\RentBook\Listeners;
 
-use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Contract\Query\FindContractByIdQuery;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\RentBook\Commands\RentBookCreateBills;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Queries\FindRentBookQueryById;
 use FullRent\Core\Services\DirectDebit\GoCardLess\GoCardLessAccessTokens;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class RentBookAuthorizedListener
  * @package FullRent\Core\RentBook\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookAuthorizedListener extends EventListener
+final class RentBookAuthorizedListener implements Subscriber
 {
     /**
      * @var CommandBus
      */
     private $commandBus;
+
     /**
      * @var QueryBus
      */
@@ -59,18 +60,10 @@ final class RentBookAuthorizedListener extends EventListener
     /**
      * @return array
      */
-    protected function registerOnce()
+    public function getSubscribedEvents()
     {
         return [
-            'whenRentBookAuthorized' => RentBookDirectDebitPreAuthorized::class,
+            RentBookDirectDebitPreAuthorized::class => ['whenRentBookAuthorized'],
         ];
-    }
-
-    /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [];
     }
 }

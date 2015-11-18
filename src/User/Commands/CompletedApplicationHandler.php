@@ -15,7 +15,7 @@ use FullRent\Core\User\ValueObjects\UserId;
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompletedApplicationHandler implements CommandHandler
+final class CompletedApplicationHandler
 {
     /** @var UserRepository */
     private $userRepository;

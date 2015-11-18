@@ -5,13 +5,14 @@ use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\Company\ValueObjects\LandlordId;
+use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class RegisterCompany
  * @package FullRent\Core\Company\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterCompany
+final class RegisterCompany extends BaseCommand
 {
     /**
      * @var CompanyName
@@ -40,6 +41,8 @@ final class RegisterCompany
         $this->companyName = $companyName;
         $this->companyDomain = $companyDomain;
         $this->landlordId = LandlordId::random();
+        parent::__construct();
+
     }
 
     /**

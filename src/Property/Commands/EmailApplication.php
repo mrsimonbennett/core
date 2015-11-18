@@ -1,17 +1,20 @@
 <?php
 namespace FullRent\Core\Property\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class EmailApplication
  * @package FullRent\Core\Property\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class EmailApplication
+final class EmailApplication extends BaseCommand
 {
     /**
      * @var string
      */
     private $propertyId;
+
     /**
      * @var string
      */
@@ -25,6 +28,7 @@ final class EmailApplication
     {
         $this->propertyId = $propertyId;
         $this->applicantEmail = $applicantEmail;
+        parent::__construct();
     }
 
     /**

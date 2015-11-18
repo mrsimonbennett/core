@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password')->nullable();
             $table->boolean('has_address')->default(false);
             $table->boolean('completed')->default(false);
+			$table->string('timezone');
             $table->rememberToken();
 			$table->timestamps();
 		});

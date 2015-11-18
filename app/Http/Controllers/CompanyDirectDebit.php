@@ -2,7 +2,7 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\RegisterDirectDebitService;
 use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\QueryBus\QueryBus;

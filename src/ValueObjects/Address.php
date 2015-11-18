@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class Address
  * @package FullRent\Core\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-class Address implements SerializableInterface
+class Address implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var string

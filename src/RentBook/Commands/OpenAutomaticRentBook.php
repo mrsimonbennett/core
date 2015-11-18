@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\RentBook\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class OpenAutomaticRentBook
  * @package FullRent\Core\RentBook\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class OpenAutomaticRentBook
+final class OpenAutomaticRentBook extends BaseCommand
 {
     /**
      * @var string
@@ -43,6 +45,8 @@ final class OpenAutomaticRentBook
         $this->tenantId = $tenantId;
         $this->rentInPounds = $rentInPounds;
         $this->paymentDates = $paymentDates;
+        parent::__construct();
+
     }
 
     /**

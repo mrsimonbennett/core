@@ -2,20 +2,21 @@
 namespace FullRent\Core\Property\Read\Subscribers;
 
 use FullRent\Core\Contract\Events\ContractDrafted;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
 use FullRent\Core\ValueObjects\Identity\UuidIdentity;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class PropertyEventsSubscriber
  * @package FullRent\Core\Property\Read\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PropertyHistorySubscriber extends EventListener
+final class PropertyHistorySubscriber implements Subscriber, Projection
 {
     /**
      * @var Connection
@@ -86,13 +87,15 @@ final class PropertyHistorySubscriber extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenPropertyWasListed'                  => NewPropertyListed::class,
-            'whenPropertyAcceptingApplications'      => PropertyAcceptingApplications::class,
-            'whenPropertyCloseAcceptingApplications' => PropertyClosedAcceptingApplications::class,
-            'whenContractIsDrafted'                  => ContractDrafted::class,
+            NewPropertyListed::class                   => ['whenPropertyWasListed'],
+            PropertyAcceptingApplications::class       => ['whenPropertyAcceptingApplications'],
+            PropertyClosedAcceptingApplications::class => ['whenPropertyCloseAcceptingApplications'],
+            ContractDrafted::class                     => ['whenContractIsDrafted'],
         ];
     }
+
+
 }

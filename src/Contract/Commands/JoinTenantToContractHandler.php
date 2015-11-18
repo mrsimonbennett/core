@@ -11,7 +11,7 @@ use FullRent\Core\Contract\ValueObjects\TenantId;
  * @package FullRent\Core\Contract\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class JoinTenantToContractHandler implements CommandHandler
+final class JoinTenantToContractHandler
 {
     /**
      * @var ContractRepository

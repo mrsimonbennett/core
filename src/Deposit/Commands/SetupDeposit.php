@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Deposit\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class SetupDeposit
  * @package FullRent\Core\Deposit\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SetupDeposit
+final class SetupDeposit extends BaseCommand
 {
     /**
      * @var string
@@ -55,6 +57,8 @@ final class SetupDeposit
         $this->depositAmountPounds = $depositAmountPounds;
         $this->depositDue = $depositDue;
         $this->fullrentDepositCollection = $fullrentDepositCollection;
+        parent::__construct();
+
     }
 
     /**

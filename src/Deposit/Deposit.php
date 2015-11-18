@@ -1,7 +1,6 @@
 <?php
 namespace FullRent\Core\Deposit;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Deposit\Events\DepositManuallyPaid;
 use FullRent\Core\Deposit\Events\DepositPaid;
 use FullRent\Core\Deposit\Events\DepositSetUp;
@@ -15,6 +14,7 @@ use FullRent\Core\Deposit\ValueObjects\PaymentAmount;
 use FullRent\Core\Deposit\ValueObjects\TenantId;
 use FullRent\Core\Services\CardPayment\CardPaymentGateway;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Deposit
@@ -31,32 +31,38 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\Deposit
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Deposit extends EventSourcedAggregateRoot
+final class Deposit extends AggregateRoot
 {
     /**
      * @var DepositId
      */
     private $depositId;
+
     /**
      * @var ContractId
      */
     private $contractId;
+
     /**
      * @var TenantId
      */
     private $tenantId;
+
     /**
      * @var DepositAmount
      */
     private $depositAmount;
+
     /**
      * @var DateTime
      */
     private $depositDue;
+
     /**
      * @var bool
      */
     private $fullrentCollection;
+
     /**
      * @var bool
      */
@@ -119,7 +125,10 @@ final class Deposit extends EventSourcedAggregateRoot
 
         $paymentDetails = $cardPaymentGateway->charge($cardDetails, $this->depositAmount, "Payment of deposit");
 
-        $this->apply(new DepositPaid($this->depositId, new PaymentAmount($this->depositAmount->getAmount()), $paymentDetails, DateTime::now()));
+        $this->apply(new DepositPaid($this->depositId,
+                                     new PaymentAmount($this->depositAmount->getAmount()),
+                                     $paymentDetails,
+                                     DateTime::now()));
 
     }
 

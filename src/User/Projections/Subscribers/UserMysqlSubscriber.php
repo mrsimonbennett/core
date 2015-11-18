@@ -2,20 +2,23 @@
 namespace FullRent\Core\User\Projections\Subscribers;
 
 use Carbon\Carbon;
-use FullRent\Core\Infrastructure\Events\EventListener;
+use FullRent\Core\User\Events\UserAmendedName;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
+use FullRent\Core\User\Events\UsersEmailHasChanged;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class UserMysqlSubscriber
  * @package FullRent\Core\User\Projections\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserMysqlSubscriber extends EventListener
+final class UserMysqlSubscriber implements Projection, Subscriber
 {
     protected $priority = 10;
 
@@ -44,6 +47,7 @@ final class UserMysqlSubscriber extends EventListener
                                               'email'       => $userRegistered->getEmail(),
                                               'password'    => $userRegistered->getPassword(),
                                               'created_at'  => $userRegistered->getCreatedAt(),
+                                              'timezone'    => $userRegistered->getTimezone(),
                                               'has_address' => false,
                                               'completed'   => true,
                                               'updated_at'  => Carbon::now(),
@@ -95,15 +99,39 @@ final class UserMysqlSubscriber extends EventListener
     }
 
     /**
+     * @param UserAmendedName $e
+     */
+    public function whenUserAmendsName(UserAmendedName $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getUserId())
+                 ->update([
+                              'legal_name' => $e->getName()->getLegalName(),
+                              'known_as'   => $e->getName()->getKnowAs(),
+                          ]);
+    }
+
+    public function whenUserUpdatesEmail(UsersEmailHasChanged $e)
+    {
+        $this->db->table('users')
+                 ->where('id', $e->getId())
+                 ->update([
+                              'email' => $e->getEmail()->getEmail(),
+                          ]);
+    }
+
+    /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenUserRegistered'    => UserRegistered::class,
-            'whenUserPasswordReset' => UserPasswordReset::class,
-            'whenUserInvited'       => UserInvited::class,
-            'whenUserFinishedApplication' => UserFinishedApplication::class,
+            UserRegistered::class          => ['whenUserRegistered'],
+            UserPasswordReset::class       => ['whenUserPasswordReset'],
+            UserInvited::class             => ['whenUserInvited'],
+            UserFinishedApplication::class => ['whenUserFinishedApplication'],
+            UserAmendedName::class         => ['whenUserAmendsName'],
+            UsersEmailHasChanged::class    => ['whenUserUpdatesEmail'],
         ];
     }
 }

@@ -21,7 +21,7 @@ use FullRent\Core\Application\ValueObjects\DateOfBirth;
 use FullRent\Core\Application\ValueObjects\PhoneNumber;
 use FullRent\Core\Application\ValueObjects\PropertyId;
 use FullRent\Core\Application\ValueObjects\RentingInformation;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\User\Commands\RegisterUser;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;

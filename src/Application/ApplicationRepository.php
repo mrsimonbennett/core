@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application;
 
-use Broadway\Domain\AggregateRoot;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Interface ApplicationRepository

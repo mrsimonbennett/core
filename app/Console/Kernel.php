@@ -2,6 +2,7 @@
 
 use FullRent\Core\Application\Console\Commands\BuildApi;
 use FullRent\Core\Application\Console\Commands\BuildEventStore;
+use FullRent\Core\Application\Console\Commands\BuildFailedJobsTable;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +17,7 @@ class Kernel extends ConsoleKernel {
 		'FullRent\Core\Application\Console\Commands\ReplaceEvents',
         BuildApi::class,
         BuildEventStore::class,
+        BuildFailedJobsTable::class
 
 	];
 

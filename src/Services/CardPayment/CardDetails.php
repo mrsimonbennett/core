@@ -3,7 +3,7 @@ namespace FullRent\Core\Services\CardPayment;
 
 /**
  * Class CardDetails
- * @package FullRent\Core\Services\CardPayment
+ * @package FullRent\Core\Services\CardPaymentGateWay
  * @author Simon Bennett <simon@bennett.im>
  */
 class CardDetails

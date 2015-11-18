@@ -1,9 +1,9 @@
 <?php
 namespace FullRent\Core\RentBook\Repository;
 
-use Broadway\Domain\AggregateRoot;
 use FullRent\Core\RentBook\RentBook;
 use FullRent\Core\RentBook\ValueObjects\RentBookId;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Interface RentBookRepository

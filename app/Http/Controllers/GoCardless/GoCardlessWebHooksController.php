@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers\GoCardless;
 
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\RentBook\Commands\CancelRentBookBill;
 use FullRent\Core\RentBook\Commands\CancelRentBookPreAuth;
@@ -76,7 +76,7 @@ final class GoCardlessWebHooksController extends Controller
                                                                                $bill['paid_at']));
                                 break;
                             case 'withdrawn':
-                                $this->commandBus->execute(new WithdrawRentBookBill($bill['source_id'], $bill['id']));
+                                $this->commandBus->execute(new WithdrawRentBookBill( $bill['id'],$bill['source_id']));
                                 break;
                         }
                     }

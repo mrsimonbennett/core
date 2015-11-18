@@ -12,16 +12,21 @@ abstract class Specification extends \TestCase
      */
     public $subjectType;
 
+    /**
+     * @var
+     */
     public $subject;
 
     /**
      *
      */
     protected $caughtException;
+
     /**
      * @var array
      */
     protected $producedEvents = [];
+
     /**
      * Current state
      *
@@ -43,9 +48,20 @@ abstract class Specification extends \TestCase
 
     /**
      * @return mixed
-     * @internal param $repository
+     * @param $repository
      */
     abstract public function handler($repository);
+
+    /**
+     * @return string
+     */
+    abstract public function subject();
+
+    /**
+     * @return string
+     */
+    abstract public function repository();
+
 
     public function tearDown()
     {
@@ -56,21 +72,50 @@ abstract class Specification extends \TestCase
     {
         $this->id = uuid();
         try {
-            /** @var \Broadway\Domain\AggregateRootInterface $subject */
-            $subjectType = $this->subjectType;
 
             $events = $this->given();
 
+            $repo = $this->getMockBuilder($this->repository())->getMock();
+
+
+            $subject = $this->subject();
+            $this->subject = new $subject;
+
             if (count($events) > 0) {
-                $this->subject = new $subjectType;
-                $this->subject = $subjectType->initializeState($events);
+                $this->subject->initializeState(new \SmoothPhp\Domain\DomainEventStream(array_map(function ($event) {
+                    return new \SmoothPhp\Domain\DomainMessage(0,
+                                                               0,
+                                                               new \SmoothPhp\Domain\Metadata(),
+                                                               $event,
+                                                               \SmoothPhp\Domain\DateTime::now());
+                },
+                    $events)));
             }
 
-            $this->handler()->handle($this->when());
+            $repo->method('load')->willReturn($this->subject);
+            $repo->method('save')->will($this->returnCallback(function ($subject) {
+                $this->subject = $subject;
+            }));
 
-            $this->producedEvents = $this->subject->getUncommittedChanges();
-        } catch (Exception $e) {
+            $this->handler($repo)->handle($this->when());
+
+            $events = [];
+            foreach ($this->subject->getUncommittedEvents() as $event) {
+                $events[] = $event->getPayload();
+            }
+            $this->producedEvents = $events;
+
+
+        } catch (DomainException $e) {
             $this->caughtException = $e;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getEvents()
+    {
+        return $this->producedEvents;
     }
 }

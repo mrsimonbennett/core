@@ -4,7 +4,7 @@ namespace FullRent\Core\Application\Http\Controllers\Auth;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\ResetPasswordHttpRequest;
 use FullRent\Core\Application\Http\Requests\ResetPasswordWithNewHttpRequest;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\User\Commands\ResetUsersPassword;
 use FullRent\Core\User\Commands\ResetUsersPasswordRequest;
 use Illuminate\Routing\Controller;

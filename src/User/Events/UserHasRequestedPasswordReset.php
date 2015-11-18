@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\User\Events;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
@@ -12,7 +12,7 @@ use FullRent\Core\ValueObjects\DateTime;
  * @package FullRent\Core\User\Events
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserHasRequestedPasswordReset implements SerializableInterface
+final class UserHasRequestedPasswordReset implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /** @var UserId */
     private $userId;

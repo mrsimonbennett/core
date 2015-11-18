@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class InviteUser
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class InviteUser
+final class InviteUser extends BaseCommand
 {
     /** @var string */
     private $userId;
@@ -22,6 +24,7 @@ final class InviteUser
     {
         $this->userId = $userId;
         $this->email = $email;
+        parent::__construct();
     }
 
     /**

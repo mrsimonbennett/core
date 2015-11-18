@@ -10,7 +10,7 @@ use FullRent\Core\User\UserRepository;
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RegisterUserHandler implements CommandHandler
+final class RegisterUserHandler
 {
     /**
      * @var UserRepository
@@ -28,7 +28,7 @@ final class RegisterUserHandler implements CommandHandler
     public function handle(RegisterUser $registerUser)
     {
         $user = User::registerUser($registerUser->getUserId(), $registerUser->getName(), $registerUser->getEmail(),
-            $registerUser->getPassword());
+            $registerUser->getPassword(), $registerUser->getTimezone());
 
         $this->userRepository->save($user);
     }

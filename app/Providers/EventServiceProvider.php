@@ -8,6 +8,7 @@ use FullRent\Core\Property\Read\Subscribers\PropertyImagesSubscriber;
 use FullRent\Core\RentBook\Listeners\RentBookAuthorizedListener;
 use FullRent\Core\RentBook\Listeners\RentBookContractListener;
 use FullRent\Core\RentBook\Listeners\RentBookMysqlListener;
+use FullRent\Core\RentBook\Listeners\RentBookRentHistoryListener;
 use FullRent\Core\User\Listener\UserEmailListener;
 use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -40,48 +41,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        DepositMySqlListenerV2::class,
-        /**
-         * Rent Book
-         */
-        RentBookContractListener::class,
-        RentBookMysqlListener::class,
-        RentBookAuthorizedListener::class,
-
-        /**
-         * Company
-         */
-        MysqlCompanySubscriber::class,
-
-        /**
-         * User
-         */
-        UserMysqlSubscriber::class,
-        UserEmailListener::class,
-
-        /**
-         * Properties
-         */
-        MysqlPropertySubscriber::class,
-        PropertyHistorySubscriber::class,
-        PropertyImagesSubscriber::class,
-
-        /**
-         * Applications
-         */
-        ApplicationMysqlListener::class,
-        ApplicationEmails::class,
-        ContractApplicationListener::class,
-        ApplicationEventListener::class,
-        PropertyApplicationEmailListener::class,
-
-        /**
-         * Contracts
-         */
-        ContractMysqlListener::class,
-        ContractMailListener::class,
-
-
 
     ];
 

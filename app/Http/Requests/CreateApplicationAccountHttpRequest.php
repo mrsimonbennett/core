@@ -25,7 +25,7 @@ class CreateApplicationAccountHttpRequest extends Request {
 			'user_legal_name' => 'required',
 			'user_know_as' => 'required',
 			'user_password' => 'required|min:8',
-			'property_id' => 'required|uuid|exists:properties,id'
+			'property_id' => 'required|exists:properties,id'
 		];
 	}
 

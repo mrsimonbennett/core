@@ -1,23 +1,25 @@
 <?php
 namespace FullRent\Core\RentBook\Listeners;
 
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\RentBook\Events\GoCardlessAcknowledgedRentBookBill;
 use FullRent\Core\RentBook\Events\RentBookBillCancelled;
 use FullRent\Core\RentBook\Events\RentBookBillCreated;
 use FullRent\Core\RentBook\Events\RentBookBillFailed;
 use FullRent\Core\RentBook\Events\RentBookBillPaid;
+use FullRent\Core\RentBook\Events\RentBookBillWithdrawn;
 use FullRent\Core\RentBook\Events\RentBookDirectDebitPreAuthorized;
 use FullRent\Core\RentBook\Events\RentBookOpenedAutomatic;
 use FullRent\Core\RentBook\Events\RentDueSet;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class RentBookMysqlListener
  * @package FullRent\Core\RentBook\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class RentBookMysqlListener extends EventListener
+final class RentBookMysqlListener implements Projection, Subscriber
 {
     /**
      * @var MySqlClient
@@ -88,7 +90,7 @@ final class RentBookMysqlListener extends EventListener
                      ->table('rent_book_rent')
                      ->where('id', $e->getRentBookRentId())
                      ->update([
-                                  'status' => 'requesting',
+                                  'status' => 'scheduled',
                               ]);
     }
 
@@ -131,7 +133,7 @@ final class RentBookMysqlListener extends EventListener
                      ->table('rent_book_rent')
                      ->where('id', $e->getRentBookRentId())
                      ->update([
-                                  'status' => 'paid',
+                                  'status' => 'collected',
                               ]);
     }
 
@@ -148,18 +150,18 @@ final class RentBookMysqlListener extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenRentBookOpenedAutomatic'            => RentBookOpenedAutomatic::class,
-            'whenRentBookPaymentDueSet'              => RentDueSet::class,
-            'whenRentBookSetup'                      => RentBookDirectDebitPreAuthorized::class,
-            'whenRentBookBillCreated'                => RentBookBillCreated::class,
-            'whenGoCardlessAcknowledgedRentBookBill' => GoCardlessAcknowledgedRentBookBill::class,
-            'whenRentBookBillFailed'                 => RentBookBillFailed::class,
-            'whenRentBookBillCancelled'              => RentBookBillCancelled::class,
-            'whenRentBookBillPaid'                   => RentBookBillPaid::class,
-            'whenRentBookBillWithdrawn'              => RentBookBillWithdrawn::class
+            RentBookOpenedAutomatic::class            => ['whenRentBookOpenedAutomatic'],
+            RentDueSet::class                         => ['whenRentBookPaymentDueSet'],
+            RentBookDirectDebitPreAuthorized::class   => ['whenRentBookSetup'],
+            RentBookBillCreated::class                => ['whenRentBookBillCreated'],
+            GoCardlessAcknowledgedRentBookBill::class => ['whenGoCardlessAcknowledgedRentBookBill'],
+            RentBookBillFailed::class                 => ['whenRentBookBillFailed'],
+            RentBookBillCancelled::class              => ['whenRentBookBillCancelled'],
+            RentBookBillPaid::class                   => ['whenRentBookBillPaid'],
+            RentBookBillWithdrawn::class              => ['whenRentBookBillWithdrawn']
         ];
     }
 }

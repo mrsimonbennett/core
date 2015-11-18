@@ -3,15 +3,16 @@ namespace FullRent\Core\Deposit\Listeners;
 
 use FullRent\Core\Deposit\Events\DepositPaid;
 use FullRent\Core\Deposit\Events\DepositSetUp;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class DepositMySqlListenerV2
  * @package FullRent\Core\Deposit\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DepositMySqlListenerV2 extends EventListener
+final class DepositMySqlListenerV2 implements Subscriber, Projection
 {
     /**
      * @var MySqlClient
@@ -64,11 +65,11 @@ final class DepositMySqlListenerV2 extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenDepositSetUp' => DepositSetUp::class,
-            'whenDepositPaid'  => DepositPaid::class,
+            DepositSetUp::class => ['whenDepositSetUp'],
+            DepositPaid::class  => ['whenDepositPaid'],
         ];
     }
 }
