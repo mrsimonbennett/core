@@ -1,16 +1,16 @@
 <?php namespace FullRent\Core\Property\Events;
 
 use FullRent\Core\ValueObjects\DateTime;
-use Broadway\Serializer\SerializableInterface;
 use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class ImageAttachedToProperty
  * @package FullRent\Core\Property\Events
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class ImageAttachedToProperty implements SerializableInterface
+final class ImageAttachedToProperty implements Serializable
 {
     /** @var PropertyId */
     private $propertyId;
