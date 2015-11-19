@@ -70,7 +70,7 @@ final class MysqlPropertiesReadRepository implements PropertiesReadRepository
         return $this->db
                     ->table('property_images')
                     ->where('property_id', $propertyId)
-                    ->orderBy('date_attached')
+                    ->orderBy('attached_at')
                     ->get(['image_id', 'attached_at']);
     }
 }
