@@ -4,6 +4,8 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
+use FullRent\Core\Property\Queries\FindPropertyById;
+use FullRent\Core\QueryBus\QueryBus;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Images\Commands\StoreUploadedImage;
 use FullRent\Core\Property\Commands\AcceptApplications;
@@ -45,19 +47,27 @@ final class PropertiesController extends Controller
      * @var JsonResponse
      */
     private $jsonResponse;
+    /**
+     * @var QueryBus
+     */
+    private $queryBus;
 
     /**
      * @param CommandBus $bus
      * @param PropertiesReadRepository $propertiesReadRepository
+     * @param JsonResponse $jsonResponse
+     * @param QueryBus $queryBus
      */
     public function __construct(
         CommandBus $bus,
         PropertiesReadRepository $propertiesReadRepository,
-        JsonResponse $jsonResponse
+        JsonResponse $jsonResponse,
+        QueryBus $queryBus
     ) {
         $this->bus = $bus;
         $this->propertiesReadRepository = $propertiesReadRepository;
         $this->jsonResponse = $jsonResponse;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -101,8 +111,8 @@ final class PropertiesController extends Controller
      */
     public function show($id)
     {
-        $property = $this->propertiesReadRepository->getById($propertyId = new PropertyId($id));
-        $property->images = $this->propertiesReadRepository->getPropertyImages($propertyId);
+        $property = $this->queryBus->query(new FindPropertyById(new PropertyId($id)));
+
         return $this->jsonResponse->success(['property' => $property]);
     }
 
