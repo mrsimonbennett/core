@@ -101,11 +101,9 @@ final class PropertiesController extends Controller
      */
     public function show($id)
     {
-        return $this->jsonResponse->success([
-            'property' => $this->propertiesReadRepository->getById($propertyId = new PropertyId($id)),
-            'images'   => $this->propertiesReadRepository->getPropertyImages($propertyId),
-        ]);
-
+        $property = $this->propertiesReadRepository->getById($propertyId = new PropertyId($id));
+        $property->images = $this->propertiesReadRepository->getPropertyImages($propertyId);
+        return $this->jsonResponse->success(['property' => $property]);
     }
 
     /**
