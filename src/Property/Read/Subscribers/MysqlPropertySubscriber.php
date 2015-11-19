@@ -79,16 +79,6 @@ final class MysqlPropertySubscriber implements Projection, Subscriber
 
     }
 
-    public function whenImageAttachedToProperty(ImageAttachedToProperty $e)
-    {
-        $this->client->query()
-                     ->table('property_images')
-                     ->insert([
-                         'property_id' => $e->getPropertyId(),
-                         'image_id'    => $e->getImageId(),
-                     ]);
-    }
-
     /**
      * @return array
      */
@@ -98,7 +88,6 @@ final class MysqlPropertySubscriber implements Projection, Subscriber
             NewPropertyListed::class => ['whenPropertyWasListed'],
             PropertyAcceptingApplications::class => ['whenPropertyAcceptsApplications'],
             PropertyClosedAcceptingApplications::class => ['whenPropertyApplicationsClose'],
-            ImageAttachedToProperty::class => ['whenImageAttachedToProperty'],
         ];
     }
 }
