@@ -32,4 +32,10 @@ interface PropertiesReadRepository
      * @return stdClass
      */
     public function getPropertyHistory(PropertyId $propertyId);
+
+    /**
+     * @param PropertyId $propertyId
+     * @return stdClass
+     */
+    public function getPropertyImages(PropertyId $propertyId);
 }
