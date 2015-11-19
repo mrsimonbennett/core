@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Images;
 
 use Exception;
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use FullRent\Core\Images\ValueObjects\ImageId;
 use FullRent\Core\Images\Events\UploadedImageStored;
@@ -29,7 +30,7 @@ final class Image extends AggregateRoot
         $image->imageId = $imageId;
         try {
             $cloud->upload($uploadedImage->getPath(), (string) $imageId);
-            $image->apply(new UploadedImageStored($imageId));
+            $image->apply(new UploadedImageStored($imageId, new DateTime));
 
             return $image;
         } catch (Exception $e) {

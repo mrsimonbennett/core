@@ -1,7 +1,8 @@
 <?php namespace FullRent\Core\Images\Events;
 
-use FullRent\Core\Images\ValueObjects\ImageId;
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
+use FullRent\Core\Images\ValueObjects\ImageId;
 use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
@@ -14,12 +15,17 @@ final class UploadedImageStored implements Serializable, Event
     /** @var ImageId */
     private $imageId;
 
+    /** @var DateTime */
+    private $uploadedAt;
+
     /**
      * @param ImageId $imageId
+     * @param DateTime $uploadedAt
      */
-    public function __construct(ImageId $imageId)
+    public function __construct(ImageId $imageId, DateTime $uploadedAt)
     {
         $this->imageId = $imageId;
+        $this->uploadedAt = $uploadedAt;
     }
 
     /**
@@ -36,7 +42,10 @@ final class UploadedImageStored implements Serializable, Event
      */
     public static function deserialize(array $data)
     {
-        return new static(new ImageId($data['image_id']));
+        return new static(
+            new ImageId($data['image_id']),
+            DateTime::deserialize($data['uploaded_at'])
+        );
     }
 
     /**
@@ -44,6 +53,9 @@ final class UploadedImageStored implements Serializable, Event
      */
     public function serialize()
     {
-        return ['image_id' => (string) $this->imageId];
+        return [
+            'image_id' => (string) $this->imageId,
+            'uploaded_at' => $this->uploadedAt->serialize(),
+        ];
     }
 }
