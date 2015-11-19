@@ -33,6 +33,6 @@ class CreatePropertyImagesTable extends Migration
      */
     public function down()
     {
-        \Illuminate\Support\Facades\Schema::drop('property_iamges');
+        \Illuminate\Support\Facades\Schema::drop('property_images');
     }
 }
