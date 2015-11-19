@@ -67,6 +67,10 @@ final class MysqlPropertiesReadRepository implements PropertiesReadRepository
      */
     public function getPropertyImages(PropertyId $propertyId)
     {
-        return $this->db->table('property_images')->where('property_id', $propertyId)->orderBy('date_attached')->get();
+        return $this->db
+                    ->table('property_images')
+                    ->where('property_id', $propertyId)
+                    ->orderBy('date_attached')
+                    ->get(['image_id', 'attached_at']);
     }
 }
