@@ -4,6 +4,7 @@ namespace FullRent\Core\Property\Read\Subscribers;
 use Carbon\Carbon;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
@@ -78,6 +79,16 @@ final class MysqlPropertySubscriber implements Projection, Subscriber
 
     }
 
+    public function whenImageAttachedToProperty(ImageAttachedToProperty $e)
+    {
+        $this->client->query()
+                     ->table('property_images')
+                     ->insert([
+                         'property_id' => $e->getPropertyId(),
+                         'image_id'    => $e->getImageId(),
+                     ]);
+    }
+
     /**
      * @return array
      */
@@ -87,6 +98,7 @@ final class MysqlPropertySubscriber implements Projection, Subscriber
             NewPropertyListed::class => ['whenPropertyWasListed'],
             PropertyAcceptingApplications::class => ['whenPropertyAcceptsApplications'],
             PropertyClosedAcceptingApplications::class => ['whenPropertyApplicationsClose'],
+            ImageAttachedToProperty::class => ['whenImageAttachedToProperty'],
         ];
     }
 }
