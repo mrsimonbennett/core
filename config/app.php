@@ -171,10 +171,7 @@ return [
         CardPaymentGatewayProvider::class,
         DirectDebitServiceProvider::class,
         ApiAuthServiceProvider::class,
-        /**
-         * REnt Book
-         */
-        RentBookServiceProvider::class,
+      
 
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
 
