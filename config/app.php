@@ -164,14 +164,13 @@ return [
         'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
-        ApplicationLaravelServiceProvider::class,
         LaravelDepositServiceProvider::class,
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
         DirectDebitServiceProvider::class,
         ApiAuthServiceProvider::class,
-      
+
 
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
 
