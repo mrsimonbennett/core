@@ -164,7 +164,7 @@ return [
         'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
-        LaravelDepositServiceProvider::class,
+
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
