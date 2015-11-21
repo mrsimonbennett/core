@@ -62,37 +62,7 @@ $router->group([],
 
             }
         );
-        $router->post('contracts', 'ContractsController@store');
-        $router->get('contracts', 'ContractsController@indexAll');
-        $router->get('rentbooks/{rentBookId}', 'RentBookController@getRentBook');
-        $router->get('rentbooks/{rentBookId}/rent/{rentId}', 'RentBookRentController@getRent');
 
-        $router->group(['prefix' => 'contracts/{id}'],
-            function () use ($router) {
-                $router->get('', 'ContractsController@show');
-
-                /*  $router->post('dates', 'ContractsController@saveDates');
-                  $router->post('rent', 'ContractsController@saveRent');
-                  $router->post('documents', 'ContractsController@saveDocuments');
-                  $router->post('lock', 'ContractsController@lockContract');
-                  $router->post('landlord-sign', 'ContractsController@landlordSignContract');
-
-                  $router->post('tenant-upload-id', 'ContractsController@tenantUploadIdDocument');
-                  $router->post('tenant-upload-earnings', 'ContractsController@tenantUploadEarningsDocument');
-                  $router->post('tenant-sign-contract', 'ContractsController@tenantSignContract');
-
-                  $router->get('deposit-information', 'ContractsController@getDepositInformation');
-                  $router->get('deposit/{tenantId}', 'ContractsController@getDepositInformationForTenant');*/
-
-                $router->post('tenant-pay-deposit', 'ContractsController@tenantPayDeposit');
-                $router->get('tenant/direct-debit/authorization_url',
-                             'ContractsController@tenantAuthorizationUrl');
-                $router->post('tenant/direct-debit/access_token',
-                              'ContractsController@tenantDirectDebitAccessToken');
-
-
-            }
-        );
 
         $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsContracts');
 
