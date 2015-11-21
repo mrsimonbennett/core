@@ -1,7 +1,7 @@
 <?php namespace FullRent\Core\Images\Commands;
 
 use FullRent\Core\Images\Image;
-use FullRent\Core\Images\ImageRepository;
+use FullRent\Core\Images\Repository\ImageRepository;
 use Samcrosoft\Cloudinary\Wrapper\CloudinaryWrapper;
 
 /**

@@ -1,6 +1,8 @@
-<?php namespace FullRent\Core\Images;
+<?php namespace FullRent\Core\Images\Repository;
 
-use SmoothPhp\EventSourcing\AggregateRoot;
+use FullRent\Core\Images\Image;
+use FullRent\Core\Images\ValueObjects\ImageId;
+use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Interface ImageRepository
@@ -10,7 +12,7 @@ use SmoothPhp\EventSourcing\AggregateRoot;
 interface ImageRepository
 {
     /**
-     * @param $id
+     * @param ImageId $id
      * @return Image
      */
     public function load($id);

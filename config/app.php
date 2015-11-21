@@ -179,6 +179,7 @@ return [
         RentBookServiceProvider::class,
 
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
+        \FullRent\Core\Images\ImageServiceProvider::class,
 
 
     ],
