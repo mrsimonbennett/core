@@ -1,5 +1,6 @@
 <?php namespace FullRent\Core\Property\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
 use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 
@@ -8,7 +9,7 @@ use FullRent\Core\Property\ValueObjects\PropertyId;
  * @package FullRent\Core\Property\Commands
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class AttachImage
+final class AttachImage extends BaseCommand
 {
     /** @var PropertyId */
     private $propertyId;
@@ -22,6 +23,7 @@ final class AttachImage
      */
     public function __construct($propertyId, $imageId)
     {
+        parent::__construct();
         $this->propertyId = new PropertyId($propertyId);
         $this->imageId = new ImageId($imageId);
     }
