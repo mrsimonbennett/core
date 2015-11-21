@@ -3,6 +3,7 @@ namespace Tests\Domain\Tenancy\UseCase;
 
 use FullRent\Core\Tenancy\Commands\DraftTenancy;
 use FullRent\Core\Tenancy\Commands\DraftTenancyHandler;
+use FullRent\Core\Tenancy\Events\TenancyDrafted;
 use FullRent\Core\Tenancy\Repositories\TenancyRepository;
 use FullRent\Core\Tenancy\Tenancy;
 use FullRent\Core\ValueObjects\DateTime;
@@ -67,8 +68,9 @@ final class DraftTenancyTest extends \Specification
     /**
      *
      */
-    public function testCommandGenerated()
+    public function testCommandGeneratedEvent()
     {
         $this->assertCount(1, $this->getEvents());
+        $this->assertInstanceOf(TenancyDrafted::class, $this->getEvents()[0]);
     }
 }
