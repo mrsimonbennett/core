@@ -2,6 +2,7 @@
 namespace FullRent\Core\Tenancy;
 
 use FullRent\Core\Tenancy\Events\TenancyDrafted;
+use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\PropertyId;
 use FullRent\Core\Tenancy\ValueObjects\RentDetails;
 use FullRent\Core\Tenancy\ValueObjects\TenancyDuration;
@@ -24,6 +25,7 @@ final class Tenancy extends AggregateRoot
     /**
      * @param TenancyId $tenancyId
      * @param PropertyId $propertyId
+     * @param CompanyId $companyId
      * @param TenancyDuration $tenancyDuration
      * @param RentDetails $rentDetails
      * @return static
@@ -31,11 +33,12 @@ final class Tenancy extends AggregateRoot
     public static function draft(
         TenancyId $tenancyId,
         PropertyId $propertyId,
+        CompanyId $companyId,
         TenancyDuration $tenancyDuration,
         RentDetails $rentDetails
     ) {
         $tenancy = new static();
-        $tenancy->apply(new TenancyDrafted($tenancyId, $propertyId, $tenancyDuration, $rentDetails, new DateTime()));
+        $tenancy->apply(new TenancyDrafted($tenancyId, $propertyId, $companyId,$tenancyDuration, $rentDetails, new DateTime()));
 
         return $tenancy;
     }

@@ -30,7 +30,13 @@ final class DraftTenancyTest extends \Specification
      */
     public function when()
     {
-        return new DraftTenancy(uuid(),uuid(),DateTime::now()->format('d/m/y'), DateTime::now()->addYear()->format('d/m/y'),200,'1-month');
+        return new DraftTenancy(uuid(),
+                                uuid(),
+                                uuid(),
+                                DateTime::now()->format('d/m/y'),
+                                DateTime::now()->addYear()->format('d/m/y'),
+                                200,
+                                '1-month');
     }
 
     /**

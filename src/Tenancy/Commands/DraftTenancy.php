@@ -20,16 +20,19 @@ final class DraftTenancy
 
     private $rentFrequency;
 
+    private $companyId;
+
     /**
      * DraftTenancy constructor.
      * @param string $tenancyId
+     * @param $companyId
      * @param string $propertyId
      * @param string $start
      * @param string $end
      * @param string $rentAmount
      * @param string $rentFrequency
      */
-    public function __construct($tenancyId, $propertyId, $start, $end, $rentAmount, $rentFrequency)
+    public function __construct($tenancyId, $companyId, $propertyId, $start, $end, $rentAmount, $rentFrequency)
     {
         $this->tenancyId = $tenancyId;
         $this->propertyId = $propertyId;
@@ -37,6 +40,7 @@ final class DraftTenancy
         $this->end = $end;
         $this->rentAmount = $rentAmount;
         $this->rentFrequency = $rentFrequency;
+        $this->companyId = $companyId;
     }
 
     /**
@@ -53,6 +57,14 @@ final class DraftTenancy
     public function getPropertyId()
     {
         return $this->propertyId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyId()
+    {
+        return $this->companyId;
     }
 
     /**

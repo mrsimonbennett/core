@@ -3,6 +3,7 @@ namespace FullRent\Core\Tenancy\Commands;
 
 use FullRent\Core\Tenancy\Repositories\TenancyRepository;
 use FullRent\Core\Tenancy\Tenancy;
+use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\PropertyId;
 use FullRent\Core\Tenancy\ValueObjects\RentAmount;
 use FullRent\Core\Tenancy\ValueObjects\RentDetails;
@@ -38,6 +39,7 @@ final class DraftTenancyHandler
 
         $tenancy = Tenancy::draft(new TenancyId($command->getTenancyId()),
                                   new PropertyId($command->getPropertyId()),
+                                  new CompanyId($command->getCompanyId()),
                                   $tenancyDuration,
                                   new RentDetails(RentAmount::fromPounds($command->getRentAmount()),
                                                   new RentFrequency($command->getRentFrequency())));
