@@ -173,7 +173,7 @@ return [
 
 
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
-
+        \FullRent\Core\Tenancy\TenancyServiceProvider::class,
 
     ],
     /*

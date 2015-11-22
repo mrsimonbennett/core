@@ -34,8 +34,8 @@ final class DraftTenancyTest extends \Specification
         return new DraftTenancy(uuid(),
                                 uuid(),
                                 uuid(),
-                                DateTime::now()->format('d/m/y'),
-                                DateTime::now()->addYear()->format('d/m/y'),
+                                DateTime::now()->format('d/m/Y'),
+                                DateTime::now()->addYear()->format('d/m/Y'),
                                 200,
                                 '1-month');
     }

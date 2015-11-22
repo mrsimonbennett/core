@@ -131,7 +131,7 @@ final class TenancyDrafted implements Serializable, Event
     {
         return new static(new TenancyId($data['tenancy_id']),
                           new PropertyId($data['property_id']),
-                          new CompanyId($data['comapny_id']),
+                          new CompanyId($data['company_id']),
                           TenancyDuration::deserialize($data['duration']),
                           RentDetails::deserialize($data['rent_details']),
                           DateTime::deserialize($data['drafted_at']));

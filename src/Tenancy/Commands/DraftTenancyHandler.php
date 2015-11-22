@@ -33,8 +33,8 @@ final class DraftTenancyHandler
 
     public function handle(DraftTenancy $command)
     {
-        $tenancyDuration = new TenancyDuration(DateTime::createFromFormat('d/m/y', $command->getStart()),
-                                               DateTime::createFromFormat('d/m/y', $command->getEnd()));
+        $tenancyDuration = new TenancyDuration(DateTime::createFromFormat('d/m/Y', $command->getStart()),
+                                               DateTime::createFromFormat('d/m/Y', $command->getEnd()));
 
 
         $tenancy = Tenancy::draft(new TenancyId($command->getTenancyId()),

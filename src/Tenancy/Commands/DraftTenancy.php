@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Tenancy\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class DraftTenancy
  * @package FullRent\Core\Tenancy\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DraftTenancy
+final class DraftTenancy extends BaseCommand
 {
     private $tenancyId;
 
