@@ -29,12 +29,12 @@ final class Image extends AggregateRoot
         $image = new static;
         $image->imageId = $imageId;
         try {
-            $cloud->upload($uploadedImage->getPath(), (string) $imageId);
+            $cloud->upload($uploadedImage->getRealPath(), (string) $imageId);
             $image->apply(new UploadedImageStored($imageId, new DateTime));
 
             return $image;
         } catch (Exception $e) {
-            // oh dear
+            \Log::debug("Uploading Image {$image->imageId} failed:\n{$e->getMessage()}\n\n");
         }
     }
 
