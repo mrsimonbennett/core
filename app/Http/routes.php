@@ -55,6 +55,8 @@ $router->group([],
                 $router->get('', 'PropertiesController@index');
                 $router->get('{id}', 'PropertiesController@show');
 
+                $router->post('{id}/photos', 'PropertiesController@attachImage');
+
                 /**
                  * Contracts
                  */

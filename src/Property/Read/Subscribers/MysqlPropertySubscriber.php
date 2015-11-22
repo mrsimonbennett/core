@@ -4,6 +4,7 @@ namespace FullRent\Core\Property\Read\Subscribers;
 use Carbon\Carbon;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;

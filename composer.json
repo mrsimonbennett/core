@@ -17,8 +17,9 @@
     "barryvdh/laravel-cors": "0.7.x",
     "guzzlehttp/guzzle": "~5.0",
     "firebase/php-jwt": "dev-master",
-    "smoothphp/cqrs-es-framework-laravel": "~0.0",
-    "beberlei/assert": "^2.3@dev"
+    "smoothphp/cqrs-es-framework-laravel": "^1.0@dev",
+    "beberlei/assert": "^2.3@dev",
+    "samcrosoft/cloudinary": "~1.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
