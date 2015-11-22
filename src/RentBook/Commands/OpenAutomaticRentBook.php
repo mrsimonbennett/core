@@ -45,7 +45,7 @@ final class OpenAutomaticRentBook extends BaseCommand
         $this->tenantId = $tenantId;
         $this->rentInPounds = $rentInPounds;
         $this->paymentDates = $paymentDates;
-        parent::__construct();
+
 
     }
 

@@ -50,7 +50,7 @@ final class RegisterUser extends BaseCommand
         $this->email = $email;
         $this->password = $password;
         $this->timezone = $timezone;
-        parent::__construct();
+
     }
 
     /**

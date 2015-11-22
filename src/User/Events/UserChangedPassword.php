@@ -4,6 +4,7 @@ namespace FullRent\Core\User\Events;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\Contracts\EventSourcing\Event;
 use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
@@ -36,11 +37,39 @@ final class UserChangedPassword implements Event, Serializable
     }
 
     /**
+     * @return UserId
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @return Password
+     */
+    public function getNewPassword()
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getChangedAt()
+    {
+        return $this->changedAt;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
     {
-        throw new \Exception('Not implemented [serialize] method');
+        return [
+            'user_id'    => (string)$this->userId,
+            'password'   => $this->newPassword->serialize(),
+            'changed_at' => $this->changedAt->serialize()
+        ];
     }
 
     /**
@@ -49,6 +78,8 @@ final class UserChangedPassword implements Event, Serializable
      */
     public static function deserialize(array $data)
     {
-        throw new \Exception('Not implemented [deserialize] method');
+        return new static(new UserId($data['user_id']),
+                          Password::deserialize($data['password']),
+                          DateTime::deserialize($data['changed_at']));
     }
 }

@@ -21,7 +21,7 @@ final class LockContract extends BaseCommand
     public function __construct($contractId)
     {
         $this->contractId = $contractId;
-        parent::__construct();
+
 
     }
 

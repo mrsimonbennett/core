@@ -5,7 +5,6 @@
         "This file is @generated automatically"
     ],
     "hash": "c7aa5fe56e0e6baddef6f64e3eaa1ae3",
-    "content-hash": "84966aa128141b3b8527f981f303d80f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -416,16 +415,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.7",
+            "version": "1.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
+                "reference": "c9abab430c5a019724425b57093fc4c853cf716a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/c9abab430c5a019724425b57093fc4c853cf716a",
+                "reference": "c9abab430c5a019724425b57093fc4c853cf716a",
                 "shasum": ""
             },
             "require": {
@@ -470,7 +469,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-06-29 05:42:04"
+            "time": "2015-11-22 19:20:15"
         },
         {
             "name": "firebase/php-jwt",
@@ -1798,16 +1797,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "dc03066b07383470e4693c8e7693d98235c87138"
+                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/dc03066b07383470e4693c8e7693d98235c87138",
-                "reference": "dc03066b07383470e4693c8e7693d98235c87138",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/133bd74d3f91243a9086cd100b72a4766c862dc5",
+                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5",
                 "shasum": ""
             },
             "require": {
@@ -1859,20 +1858,20 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-10-19 11:38:22"
+            "time": "2015-11-22 16:20:12"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
-            "version": "v0.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework-Laravel.git",
-                "reference": "1a1db26bdb08eca3cb957b93094f1a749629a505"
+                "reference": "b10cbe835f1672a4fb953be9eec644bf4647c3c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/b1bf710bb7500fae6b5fe26a48b7d39b66aa625c",
-                "reference": "41f0b8e3574897b213b152a1e975af6e09d45c5c",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/b10cbe835f1672a4fb953be9eec644bf4647c3c0",
+                "reference": "b10cbe835f1672a4fb953be9eec644bf4647c3c0",
                 "shasum": ""
             },
             "require": {
@@ -1916,7 +1915,7 @@
                 "event sourcing",
                 "laravel"
             ],
-            "time": "2015-11-17 21:27:58"
+            "time": "2015-11-19 06:42:33"
         },
         {
             "name": "stripe/stripe-php",
@@ -5155,20 +5154,20 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "863ae85c6d3ef60ca49cb12bd051c4a0648c40c4"
+                "reference": "66834d3e3566bb5798db7294619388786ae99394"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/863ae85c6d3ef60ca49cb12bd051c4a0648c40c4",
-                "reference": "863ae85c6d3ef60ca49cb12bd051c4a0648c40c4",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/66834d3e3566bb5798db7294619388786ae99394",
+                "reference": "66834d3e3566bb5798db7294619388786ae99394",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^5.3 || ^7.0"
             },
             "bin": [
                 "bin/jsonlint"
@@ -5197,7 +5196,7 @@
                 "parser",
                 "validator"
             ],
-            "time": "2015-01-04 21:18:15"
+            "time": "2015-11-21 02:21:41"
         },
         {
             "name": "symfony/options-resolver",
@@ -5362,6 +5361,7 @@
         "stripe/stripe-php": 20,
         "gocardless/gocardless": 20,
         "firebase/php-jwt": 20,
+        "smoothphp/cqrs-es-framework-laravel": 20,
         "beberlei/assert": 20,
         "apigen/apigen": 20
     },

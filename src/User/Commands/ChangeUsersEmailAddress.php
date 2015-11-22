@@ -25,7 +25,7 @@ final class ChangeUsersEmailAddress extends BaseCommand
     {
         $this->userId = $userId;
         $this->email = $email;
-        parent::__construct();
+
     }
 
     /**

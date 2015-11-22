@@ -39,7 +39,7 @@ final class CompletedApplication extends BaseCommand
         $this->password = $password;
         $this->legalName = $legalName;
         $this->knownAs = $knownAs;
-        parent::__construct();
+
     }
 
     /**

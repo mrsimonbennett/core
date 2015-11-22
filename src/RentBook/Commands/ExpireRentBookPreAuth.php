@@ -19,7 +19,7 @@ final class ExpireRentBookPreAuth extends BaseCommand
     public function __construct($preAuthId)
     {
         $this->preAuthId = $preAuthId;
-        parent::__construct();
+
     }
 
     /**

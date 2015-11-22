@@ -156,13 +156,16 @@ final class User extends AggregateRoot
      */
     public function changePassword($oldPassword, Password $newPassword, Hasher $hasher)
     {
-        if(!$hasher->check($oldPassword,$this->password->getPassword()))
-        {
-           throw new PasswordIncorrect();
+        \Log::debug($oldPassword);
+        \Log::debug($this->password->getPassword());
+        if ($hasher->check($oldPassword, $this->password->getPassword())) {
+            $this->apply(new UserChangedPassword($this->userId, $newPassword, DateTime::now()));
+            return;
         }
 
-        $this->apply(new UserChangedPassword($this->userId,$newPassword, DateTime::now()));
+        throw new PasswordIncorrect();
     }
+
     /**
      * @param UserRegistered $userRegistered
      */
@@ -182,6 +185,17 @@ final class User extends AggregateRoot
         $this->userId = $e->getUserId();
         $this->email = $e->getEmail();
         $this->inviteToken = $e->getInviteToken();
+    }
+    protected function applyUserPasswordReset(UserPasswordReset $e)
+    {
+        $this->password = $e->getPassword();
+    }
+    /**
+     * @param UserChangedPassword $e
+     */
+    protected function applyUserChangedPassword(UserChangedPassword $e)
+    {
+        $this->password = $e->getNewPassword();
     }
 
     /**

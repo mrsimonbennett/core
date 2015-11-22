@@ -79,7 +79,7 @@ final class ListNewProperty extends BaseCommand
         $this->bathrooms = $bathrooms;
         $this->parking = $parking;
         $this->pets = $pets;
-        parent::__construct();
+
     }
 
     /**

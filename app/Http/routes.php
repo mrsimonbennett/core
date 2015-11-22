@@ -107,6 +107,7 @@ $router->group([],
         $router->post('users/{id}/remember-token', 'UserController@rememberMe');
         $router->put('users/{id}/basic', 'UserController@basicDetails');
         $router->put('users/{id}/email', 'UserController@updateEmail');
+        $router->put('users/{id}/password', 'UserController@updatePassword');
 
         /*
          * Auth

@@ -37,7 +37,7 @@ final class RentBookAuthorizeDirectDebit extends BaseCommand
         $this->resourceUri = $resourceUri;
         $this->signature = $signature;
         $this->accessTokens = $accessTokens;
-        parent::__construct();
+
     }
 
     /**

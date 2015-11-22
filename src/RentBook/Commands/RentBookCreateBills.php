@@ -25,7 +25,7 @@ final class RentBookCreateBills extends BaseCommand
     {
         $this->rentBookId = $rentBookId;
         $this->accessTokens = $accessTokens;
-        parent::__construct();
+
     }
 
     /**

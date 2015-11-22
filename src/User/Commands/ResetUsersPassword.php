@@ -26,7 +26,7 @@ final class ResetUsersPassword extends BaseCommand
         $this->email = $email;
         $this->newPassword = $newPassword;
         $this->token = $token;
-        parent::__construct();
+
     }
 
     /**

@@ -25,7 +25,7 @@ final class ChangeCompanyDomain extends BaseCommand
     {
         $this->companyId = $companyId;
         $this->companyDomain = $companyDomain;
-        parent::__construct();
+
     }
 
     /**

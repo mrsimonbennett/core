@@ -45,17 +45,6 @@ final class UserTest extends \TestCase
         $this->checkCorrectEvent($events, 1, UsersEmailHasChanged::class);
     }
 
-    /**
-     *
-     */
-    public function testChangingUsersName()
-    {
-        $user = $this->registerUser();
-        $user->changeName(new Name('test', 'test'));
-
-        $events = $this->events($user);
-        $this->checkCorrectEvent($events, 1, UserHasChangedName::class);
-    }
 
     /**
      * @return User

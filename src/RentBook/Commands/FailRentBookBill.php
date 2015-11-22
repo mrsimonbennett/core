@@ -23,7 +23,7 @@ final class FailRentBookBill extends BaseCommand
     {
         $this->preAuthId = $preAuthId;
         $this->billId = $billId;
-        parent::__construct();
+
     }
 
     /**

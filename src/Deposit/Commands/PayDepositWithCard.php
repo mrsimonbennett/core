@@ -45,7 +45,7 @@ final class PayDepositWithCard extends BaseCommand
         $this->cardNumber = $cardNumber;
         $this->cardExpiresDate = $cardExpiresDate;
         $this->cardCvs = $cardCvs;
-        parent::__construct();
+
 
     }
 

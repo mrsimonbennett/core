@@ -57,7 +57,7 @@ final class SetupDeposit extends BaseCommand
         $this->depositAmountPounds = $depositAmountPounds;
         $this->depositDue = $depositDue;
         $this->fullrentDepositCollection = $fullrentDepositCollection;
-        parent::__construct();
+
 
     }
 

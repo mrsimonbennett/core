@@ -23,7 +23,7 @@ final class WithdrawRentBookBill extends BaseCommand
     {
         $this->billId = $billId;
         $this->preAuthId = $preAuthId;
-        parent::__construct();
+
     }
 
     /**
