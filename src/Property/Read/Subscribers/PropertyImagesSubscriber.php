@@ -4,21 +4,23 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
+use SmoothPhp\Contracts\EventDispatcher\Projection;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class PropertyImagesSubscriber
  * @package FullRent\Core\Property\Read\Subscribers
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class PropertyImagesSubscriber extends EventListener
+final class PropertyImagesSubscriber implements Subscriber, Projection
 {
-    /** @var Connection */
+    /** @var DatabaseManager */
     protected $db;
 
     /**
-     * @param Connection $db
+     * @param DatabaseManager $db
      */
-    public function __construct(Connection $db)
+    public function __construct(DatabaseManager $db)
     {
         $this->db = $db;
     }
@@ -40,10 +42,10 @@ final class PropertyImagesSubscriber extends EventListener
     /**
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-            'whenImageAttachedToProperty' => ImageAttachedToProperty::class,
+            ImageAttachedToProperty::class => ['whenImageAttachedToProperty'],
         ];
     }
 }
