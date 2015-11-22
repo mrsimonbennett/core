@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
-use FullRent\Core\Infrastructure\Events\EventListener;
-use FullRent\Core\Property\Events\ImageAttachedToProperty;
+use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
 
 /**
  * Class PropertyImagesSubscriber
@@ -14,13 +14,13 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  */
 final class PropertyImagesSubscriber implements Subscriber, Projection
 {
-    /** @var DatabaseManager */
+    /** @var MySqlClient */
     protected $db;
 
     /**
-     * @param DatabaseManager $db
+     * @param MySqlClient $db
      */
-    public function __construct(DatabaseManager $db)
+    public function __construct(MySqlClient $db)
     {
         $this->db = $db;
     }
@@ -30,7 +30,7 @@ final class PropertyImagesSubscriber implements Subscriber, Projection
      */
     public function whenImageAttachedToProperty(ImageAttachedToProperty $e)
     {
-        $this->db
+        $this->db->query()
             ->table('property_images')
             ->insert([
                 'property_id' => $e->getPropertyId(),
