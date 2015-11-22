@@ -3,6 +3,7 @@
 use FullRent\Core\ValueObjects\DateTime;
 use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use SmoothPhp\Contracts\EventSourcing\Event;
 use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
@@ -10,7 +11,7 @@ use SmoothPhp\Contracts\Serialization\Serializable;
  * @package FullRent\Core\Property\Events
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class ImageAttachedToProperty implements Serializable
+final class ImageAttachedToProperty implements Serializable, Event
 {
     /** @var PropertyId */
     private $propertyId;
