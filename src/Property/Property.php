@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Property;
 
+use FullRent\Core\Property\Events\AmendedPropertyAddress;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
@@ -165,6 +166,14 @@ final class Property extends AggregateRoot
         }
 
         $this->apply(new ImageAttachedToProperty($this->id, $imageId, DateTime::now()));
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function amendAddress(Address $address)
+    {
+        $this->apply(new AmendedPropertyAddress($this->id, $address, new DateTime()));
     }
 
     /**

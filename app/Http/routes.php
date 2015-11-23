@@ -51,6 +51,7 @@ $router->group([],
                 $router->post('', 'PropertiesController@listNewProperty');
                 $router->get('', 'PropertiesController@index');
                 $router->get('{id}', 'PropertiesController@show');
+                $router->put('{id}', 'PropertiesController@update');
 
                 $router->post('{id}/photos', 'PropertiesController@attachImage');
 
