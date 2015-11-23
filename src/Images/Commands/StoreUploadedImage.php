@@ -23,7 +23,6 @@ final class StoreUploadedImage extends BaseCommand
      */
     public function __construct($imageId, UploadedFile $image)
     {
-        parent::__construct();
         $this->imageId = new ImageId($imageId);
         $this->image = $image;
     }

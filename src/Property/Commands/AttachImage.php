@@ -23,7 +23,6 @@ final class AttachImage extends BaseCommand
      */
     public function __construct($propertyId, $imageId)
     {
-        parent::__construct();
         $this->propertyId = new PropertyId($propertyId);
         $this->imageId = new ImageId($imageId);
     }
