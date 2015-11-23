@@ -10,18 +10,20 @@ use SmoothPhp\Contracts\Serialization\Serializable;
  */
 final class RentFrequency implements Serializable
 {
+    /** @var array */
     private $allowedValues = [
-        '2-week',
-        '4-week',
-        '1-month',
-        '2-month',
-        '3-month',
-        '4-month',
-        '6-month',
-        '1-year',
-        'irregular',
+        '2-week'    => 'Two Weekly',
+        '4-week'    => 'Four Weekly',
+        '1-month'   => 'Monthly',
+        '2-month'   => '2 Months',
+        '3-month'   => '3 Months',
+        '4-month'   => '4 Months',
+        '6-month'   => '6 Months',
+        '1-year'    => 'Annually',
+        'irregular' => 'Irregular Payments'
     ];
 
+    /** @var */
     private $rentFrequency;
 
     /**
@@ -30,7 +32,7 @@ final class RentFrequency implements Serializable
      */
     public function __construct($rentFrequency)
     {
-        if (!in_array($rentFrequency, $this->allowedValues)) {
+        if (!isset($this->allowedValues[$rentFrequency])) {
             throw new \InvalidArgumentException('Rent Frequency Not Valid');
         }
 
@@ -43,6 +45,14 @@ final class RentFrequency implements Serializable
     public function getRentFrequency()
     {
         return $this->rentFrequency;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRentFrequencyFormatted()
+    {
+        return $this->allowedValues[$this->rentFrequency];
     }
 
     /**
@@ -61,4 +71,6 @@ final class RentFrequency implements Serializable
     {
         return new static($data['rent_frequency']);
     }
+
+
 }

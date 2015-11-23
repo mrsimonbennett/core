@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTenanciesTable extends Migration
 {
@@ -21,7 +21,7 @@ class CreateTenanciesTable extends Migration
                 $table->timestamp('tenancy_end');
                 $table->string('tenancy_rent_amount');
                 $table->string('tenancy_rent_frequency');
-
+                $table->string('tenancy_rent_frequency_formatted');
                 $table->timestamp('drafted_at');
                 $table->string('status');
             });

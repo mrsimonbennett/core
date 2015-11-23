@@ -42,7 +42,9 @@ final class TenancyMysqlListener implements Subscriber, Projection
                                                                 ->getAmountInPounds(),
                                   'tenancy_rent_frequency' => $e->getRentDetails()->getRentFrequency()
                                                                 ->getRentFrequency(),
-                                  'status'                 => 'drafted',
+                                  'tenancy_rent_frequency_formatted' => $e->getRentDetails()->getRentFrequency()
+                                                                ->getRentFrequencyFormatted(),
+                                  'status'                 => 'draft',
                                   'drafted_at'             => $e->getDraftedAt()
                               ]);
     }

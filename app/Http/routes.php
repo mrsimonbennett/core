@@ -95,6 +95,7 @@ $router->group([],
         $router->group(['prefix' => 'tenancies'],
             function () use ($router) {
                 $router->post('draft', ['uses' => 'TenanciesController@draft']);
+                $router->get('{propertyId}/drafts', ['uses' => 'TenanciesController@getPropertiesDraftTenancies']);
 
 
             }
