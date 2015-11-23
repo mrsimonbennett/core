@@ -7,6 +7,7 @@ use FullRent\Core\Property\Read\MysqlPropertiesReadRepository;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\Property\Read\Subscribers\PropertyHistorySubscriber;
+use FullRent\Core\Property\Read\Subscribers\PropertyImagesSubscriber;
 use FullRent\Core\Property\SmoothPropertyRepository;
 use Illuminate\Support\ServiceProvider;
 use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
@@ -41,6 +42,7 @@ final class LaravelServiceProvider extends ServiceProvider
         $dispatcher->addSubscriber($this->app->make(MysqlPropertySubscriber::class));
         $dispatcher->addSubscriber($this->app->make(PropertyHistorySubscriber::class));
         $dispatcher->addSubscriber($this->app->make(PropertyApplicationEmailListener::class));
+        $dispatcher->addSubscriber($this->app->make(PropertyImagesSubscriber::class));
 
     }
 }

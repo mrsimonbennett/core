@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "52317d96b194942270e57a9b2a62fe88",
-    "content-hash": "2c01c5a39e2caf8171ff83c09c67a92d",
+    "hash": "c7aa5fe56e0e6baddef6f64e3eaa1ae3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -207,6 +206,58 @@
             "time": "2015-11-09 22:51:51"
         },
         {
+            "name": "cloudinary/cloudinary_php",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudinary/cloudinary_php.git",
+                "reference": "b8dff83e64419630cab8b37e0a1bcd39da5dee08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/b8dff83e64419630cab8b37e0a1bcd39da5dee08",
+                "reference": "b8dff83e64419630cab8b37e0a1bcd39da5dee08",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ],
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cloudinary",
+                    "homepage": "https://github.com/cloudinary/cloudinary_php/graphs/contributors"
+                }
+            ],
+            "description": "Cloudinary PHP SDK",
+            "homepage": "https://github.com/cloudinary/cloudinary_php",
+            "keywords": [
+                "cdn",
+                "cloud",
+                "cloudinary",
+                "image management",
+                "sdk"
+            ],
+            "time": "2015-11-01 13:43:31"
+        },
+        {
             "name": "danielstjules/stringy",
             "version": "1.10.0",
             "source": {
@@ -364,16 +415,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.7",
+            "version": "1.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
+                "reference": "c9abab430c5a019724425b57093fc4c853cf716a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/c9abab430c5a019724425b57093fc4c853cf716a",
+                "reference": "c9abab430c5a019724425b57093fc4c853cf716a",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +469,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-06-29 05:42:04"
+            "time": "2015-11-22 19:20:15"
         },
         {
             "name": "firebase/php-jwt",
@@ -1699,17 +1750,63 @@
             "time": "2015-07-23 19:00:41"
         },
         {
-            "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.1",
+            "name": "samcrosoft/cloudinary",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "89426fc5e07d181b45ebe29e450225d0b9f7ac90"
+                "url": "https://github.com/samcrosoft/Laravel5-Cloudinary.git",
+                "reference": "c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/89426fc5e07d181b45ebe29e450225d0b9f7ac90",
-                "reference": "89426fc5e07d181b45ebe29e450225d0b9f7ac90",
+                "url": "https://api.github.com/repos/samcrosoft/Laravel5-Cloudinary/zipball/c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46",
+                "reference": "c5b49c78d3b5b0a9e2e0aa66edcf831c0123bc46",
+                "shasum": ""
+            },
+            "require": {
+                "cloudinary/cloudinary_php": "~1.0",
+                "illuminate/support": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Samcrosoft\\Cloudinary": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "samuel Olowofela",
+                    "email": "samuel_olowofela@yahoo.com"
+                }
+            ],
+            "description": "Laravel Based Cloudinary PHP SDK",
+            "homepage": "https://github.com/samcrooft/cloudinary",
+            "keywords": [
+                "cloud",
+                "cloudinary",
+                "image management",
+                "image manipulation",
+                "laravel"
+            ],
+            "time": "2015-02-13 00:14:19"
+        },
+        {
+            "name": "smoothphp/cqrs-es-framework",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
+                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/133bd74d3f91243a9086cd100b72a4766c862dc5",
+                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5",
                 "shasum": ""
             },
             "require": {
@@ -1761,20 +1858,20 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-11-18 14:05:57"
+            "time": "2015-11-22 16:20:12"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
-            "version": "v0.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework-Laravel.git",
-                "reference": "b1bf710bb7500fae6b5fe26a48b7d39b66aa625c"
+                "reference": "b10cbe835f1672a4fb953be9eec644bf4647c3c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/b1bf710bb7500fae6b5fe26a48b7d39b66aa625c",
-                "reference": "b1bf710bb7500fae6b5fe26a48b7d39b66aa625c",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/b10cbe835f1672a4fb953be9eec644bf4647c3c0",
+                "reference": "b10cbe835f1672a4fb953be9eec644bf4647c3c0",
                 "shasum": ""
             },
             "require": {
@@ -1818,7 +1915,7 @@
                 "event sourcing",
                 "laravel"
             ],
-            "time": "2015-11-18 17:42:42"
+            "time": "2015-11-19 06:42:33"
         },
         {
             "name": "stripe/stripe-php",
@@ -5057,20 +5154,20 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "863ae85c6d3ef60ca49cb12bd051c4a0648c40c4"
+                "reference": "66834d3e3566bb5798db7294619388786ae99394"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/863ae85c6d3ef60ca49cb12bd051c4a0648c40c4",
-                "reference": "863ae85c6d3ef60ca49cb12bd051c4a0648c40c4",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/66834d3e3566bb5798db7294619388786ae99394",
+                "reference": "66834d3e3566bb5798db7294619388786ae99394",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^5.3 || ^7.0"
             },
             "bin": [
                 "bin/jsonlint"
@@ -5099,7 +5196,7 @@
                 "parser",
                 "validator"
             ],
-            "time": "2015-01-04 21:18:15"
+            "time": "2015-11-21 02:21:41"
         },
         {
             "name": "symfony/options-resolver",
@@ -5264,6 +5361,7 @@
         "stripe/stripe-php": 20,
         "gocardless/gocardless": 20,
         "firebase/php-jwt": 20,
+        "smoothphp/cqrs-es-framework-laravel": 20,
         "beberlei/assert": 20,
         "apigen/apigen": 20
     },

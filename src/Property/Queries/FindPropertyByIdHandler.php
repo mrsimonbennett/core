@@ -24,11 +24,18 @@ final class FindPropertyByIdHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindPropertyById $query
+     * @return \stdClass
+     * @throws PropertyNotFound
+     */
     public function handle(FindPropertyById $query)
     {
         if (is_null($property = $this->client->query()->table('properties')->where('id', $query->getPropertyId())->first())) {
             throw new PropertyNotFound;
         }
+
+        $property->images = $this->client->query()->table('property_images')->where('property_id', $property->id)->get();
 
         return $property;
     }

@@ -16,7 +16,7 @@ final class SmoothPropertyRepository extends EventSourcedRepository implements P
      */
     protected function getPrefix()
     {
-        return 'company-';
+        return 'property-';
     }
 
     protected function getAggregateType()

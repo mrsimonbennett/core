@@ -157,6 +157,7 @@ return [
          */
         SmoothPhp\LaravelAdapter\ServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Samcrosoft\Cloudinary\Provider\CloudinaryServiceProvider::class,
 
         /**
          * src
@@ -171,6 +172,8 @@ return [
         DirectDebitServiceProvider::class,
         ApiAuthServiceProvider::class,
 
+
+        \FullRent\Core\Images\ImageServiceProvider::class,
 
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
         \FullRent\Core\Tenancy\TenancyServiceProvider::class,
