@@ -3,6 +3,7 @@ namespace FullRent\Core\Property\Read\Subscribers;
 
 use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Property\Events\NewPropertyListed;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
 use FullRent\Core\ValueObjects\Identity\UuidIdentity;
@@ -85,6 +86,19 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param ImageAttachedToProperty $e
+     */
+    public function whenImageHasBeenAttached(ImageAttachedToProperty $e)
+    {
+        $this->db->table('property_history')->insert([
+            'id'             => uuid(),
+            'property_id'    => $e->getPropertyId(),
+            'event_name'     => 'Image Uploaded',
+            'event_happened' => $e->wasAttachedAt(),
+        ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
@@ -94,6 +108,7 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
             PropertyAcceptingApplications::class       => ['whenPropertyAcceptingApplications'],
             PropertyClosedAcceptingApplications::class => ['whenPropertyCloseAcceptingApplications'],
             ContractDrafted::class                     => ['whenContractIsDrafted'],
+            ImageAttachedToProperty::class             => ['whenImageHasBeenAttached'],
         ];
     }
 
