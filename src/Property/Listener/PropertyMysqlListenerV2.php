@@ -3,6 +3,7 @@ namespace FullRent\Core\Property\Listener;
 
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\Property\Events\AmendedPropertyAddress;
+use FullRent\Core\Property\Events\PropertyExtraInformationAmended;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
@@ -40,6 +41,22 @@ final class PropertyMysqlListenerV2 implements Projection, Subscriber
     }
 
     /**
+     * @param PropertyExtraInformationAmended $e
+     */
+    public function whenPropertyExtraInformationAmended(PropertyExtraInformationAmended $e)
+    {
+        $this->client->query()
+                     ->table('properties')
+                     ->where('id', $e->getId())
+                     ->update([
+                                  'bedrooms'  => $e->getBathrooms(),
+                                  'bathrooms' => $e->getBathrooms(),
+                                  'parking'   => $e->getParking(),
+                                  'pets'      => $e->getPets(),
+                              ]);
+    }
+
+    /**
      * ['eventName' => 'methodName']
      * ['eventName' => ['methodName', $priority]]
      * ['eventName' => [['methodName1', $priority], array['methodName2']]
@@ -47,6 +64,9 @@ final class PropertyMysqlListenerV2 implements Projection, Subscriber
      */
     public function getSubscribedEvents()
     {
-        return [AmendedPropertyAddress::class => 'whenPropertyAddressAmendedUpDateMysql'];
+        return [
+            AmendedPropertyAddress::class          => 'whenPropertyAddressAmendedUpDateMysql',
+            PropertyExtraInformationAmended::class => 'whenPropertyExtraInformationAmended',
+        ];
     }
 }
