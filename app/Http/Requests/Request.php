@@ -2,15 +2,27 @@
 
 
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Validator;
 
-abstract class Request extends FormRequest {
+abstract class Request extends FormRequest
+{
 
-  public function wantsJson()
-  {
-      return true;
-  }
+    public function wantsJson()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public abstract function rules();
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public abstract function authorize();
+
 }

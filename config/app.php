@@ -165,22 +165,18 @@ return [
         'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\Property\ServiceProviders\LaravelServiceProvider',
-        'FullRent\Core\Contract\ServiceProviders\LaravelServiceProvider',
-        ApplicationLaravelServiceProvider::class,
-        LaravelDepositServiceProvider::class,
+
         ExceptionsServiceProvider::class,
         LaravelQueryBusServiceProvider::class,
         CardPaymentGatewayProvider::class,
         DirectDebitServiceProvider::class,
         ApiAuthServiceProvider::class,
-        /**
-         * REnt Book
-         */
-        RentBookServiceProvider::class,
 
-        \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
+
         \FullRent\Core\Images\ImageServiceProvider::class,
 
+        \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
+        \FullRent\Core\Tenancy\TenancyServiceProvider::class,
 
     ],
     /*

@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c7aa5fe56e0e6baddef6f64e3eaa1ae3",
+    "hash": "7d4f4093c5303a157474c3c4f386279b",
+    "content-hash": "88119b987f2d96209f22a00bac6aa080",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1797,16 +1798,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5"
+                "reference": "886204b731495e5ebe53e7c3c3a277bb51b6b295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/133bd74d3f91243a9086cd100b72a4766c862dc5",
-                "reference": "133bd74d3f91243a9086cd100b72a4766c862dc5",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/886204b731495e5ebe53e7c3c3a277bb51b6b295",
+                "reference": "886204b731495e5ebe53e7c3c3a277bb51b6b295",
                 "shasum": ""
             },
             "require": {
@@ -1858,11 +1859,11 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-11-22 16:20:12"
+            "time": "2015-11-23 09:24:12"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
-            "version": "dev-master",
+            "version": "v0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework-Laravel.git",
@@ -5361,7 +5362,6 @@
         "stripe/stripe-php": 20,
         "gocardless/gocardless": 20,
         "firebase/php-jwt": 20,
-        "smoothphp/cqrs-es-framework-laravel": 20,
         "beberlei/assert": 20,
         "apigen/apigen": 20
     },

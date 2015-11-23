@@ -14,6 +14,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 /**
  * Class MysqlPropertySubscriber
  * @package FullRent\Core\Property\Read\Subscribers
+ * @deprecated use PropertyMysqlListenerV2
  * @author Simon Bennett <simon@bennett.im>
  */
 final class MysqlPropertySubscriber implements Projection, Subscriber
