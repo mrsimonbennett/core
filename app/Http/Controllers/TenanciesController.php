@@ -5,6 +5,7 @@ use FullRent\Core\Application\Http\Requests\Tenancies\DraftTenancyHttpRequest;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Commands\DraftTenancy;
 use FullRent\Core\Tenancy\Queries\FindPropertiesDraftTenancies;
+use FullRent\Core\Tenancy\Queries\FindTenancyById;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
@@ -58,5 +59,15 @@ final class TenanciesController extends Controller
             'tenancies' => $this->queryBus->query(new FindPropertiesDraftTenancies($propertyId))
         ];
     }
+
+    /**
+     * @param $tenancyId
+     * @return array
+     */
+    public function getTenancyById($tenancyId)
+    {
+        return ['tenancy' => $this->queryBus->query(new FindTenancyById($tenancyId))];
+    }
+
 
 }

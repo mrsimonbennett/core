@@ -100,6 +100,7 @@ $router->group([],
                 $router->post('draft', ['uses' => 'TenanciesController@draft']);
                 $router->get('{propertyId}/drafts', ['uses' => 'TenanciesController@getPropertiesDraftTenancies']);
 
+                $router->get('{tenancyId}',['uses' => 'TenanciesController@getTenancyById']);
 
             }
         );
