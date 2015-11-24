@@ -3,6 +3,7 @@ namespace FullRent\Core\Property;
 
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
+use FullRent\Core\Property\Events\ImageRemovedFromProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
@@ -168,6 +169,25 @@ final class Property extends AggregateRoot
     }
 
     /**
+     * @param ImageId $imageId
+     * @throws \Exception
+     */
+    public function removeImage(ImageId $imageId)
+    {
+        $filtered = array_filter($this->images, function (ImageId $existingImageId) use ($imageId) {
+            return $existingImageId->equal($imageId);
+        });
+
+        if (count($filtered) > 1) {
+            throw new \Exception('This image has been loaded more than once. Oopsie.');
+        } elseif (count($filtered) < 1) {
+            throw new \Exception('No image with this ID exists on property');
+        }
+
+        $this->apply(new ImageRemovedFromProperty($this->id, $imageId, DateTime::now()));
+    }
+
+    /**
      * @param NewPropertyListed $newPropertyListed
      */
     protected function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
@@ -199,6 +219,16 @@ final class Property extends AggregateRoot
     protected function applyImageAttachedToProperty(ImageAttachedToProperty $e)
     {
         $this->images[] = $e->getImageId();
+    }
+
+    /**
+     * @param ImageRemovedFromProperty $e
+     */
+    protected function applyImageRemovedFromProperty(ImageRemovedFromProperty $e)
+    {
+        $this->images = array_filter($this->images, function (ImageId $imageId) use ($e) {
+            return !$imageId->equal($e->getImageId());
+        });
     }
 
     /**

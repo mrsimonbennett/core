@@ -4,6 +4,7 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
+use FullRent\Core\Property\Commands\RemoveImageFromProperty;
 use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\QueryBus\QueryBus;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
@@ -171,6 +172,21 @@ final class PropertiesController extends Controller
             return $this->jsonResponse->success(['image_id' => $imageId]);
         } catch (\Exception $e) {
             // I imagine there will be a variety of exceptions we can catch here
+            return $this->jsonResponse->error(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param $propertyId
+     * @param $imageId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeImage($propertyId, $imageId)
+    {
+        try {
+            $this->bus->execute(new RemoveImageFromProperty($propertyId, $imageId));
+            return $this->jsonResponse->success();
+        } catch (\Exception $e) {
             return $this->jsonResponse->error(['error' => $e->getMessage()]);
         }
     }
