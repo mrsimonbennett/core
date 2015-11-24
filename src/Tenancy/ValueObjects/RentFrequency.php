@@ -56,6 +56,26 @@ final class RentFrequency implements Serializable
     }
 
     /**
+     *
+     */
+    public function convertToPeriod()
+    {
+        $period = [
+            '2-week'    => '14D',
+            '4-week'    => '28D',
+            '1-month'   => '1M',
+            '2-month'   => '2M',
+            '3-month'   => '3M',
+            '4-month'   => '4M',
+            '6-month'   => '6M',
+            '1-year'    => '1Y',
+            'irregular' => null,
+        ];
+
+        return $period[$this->rentFrequency];
+    }
+
+    /**
      * @return array
      */
     public function serialize()
