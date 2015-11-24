@@ -1,11 +1,12 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers;
+namespace FullRent\Core\Application\Http\Controllers\Tenancy;
 
 use FullRent\Core\Application\Http\Requests\Tenancies\DraftTenancyHttpRequest;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Commands\DraftTenancy;
 use FullRent\Core\Tenancy\Queries\FindPropertiesDraftTenancies;
 use FullRent\Core\Tenancy\Queries\FindTenancyById;
+use Illuminate\Routing\Controller;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**

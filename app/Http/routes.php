@@ -100,7 +100,10 @@ $router->group([],
                 $router->post('draft', ['uses' => 'TenanciesController@draft']);
                 $router->get('{propertyId}/drafts', ['uses' => 'TenanciesController@getPropertiesDraftTenancies']);
 
-                $router->get('{tenancyId}',['uses' => 'TenanciesController@getTenancyById']);
+                $router->get('{tenancyId}',['uses' => 'Tenancy\TenanciesController@getTenancyById']);
+                $router->post('{tenancyId}/rentbook',['uses' => 'Tenancy\TenanciesRentBookController@addPayment']);
+                $router->get('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@getRentPayment']);
+                $router->put('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@updateRentPayment']);
 
             }
         );

@@ -22,6 +22,10 @@ final class FindTenancyByIdHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindTenancyById $query
+     * @return mixed|static
+     */
     public function handle(FindTenancyById $query)
     {
         $tenancy = $this->client->query()
@@ -33,6 +37,11 @@ final class FindTenancyByIdHandler
                                           ->table('properties')
                                           ->where('id', $tenancy->property_id)
                                           ->first();
+
+        $tenancy->rent_book_payments = $this->client->query()
+                                                    ->table('tenancy_rent_book_payments')
+                                                    ->where('tenancy_id', $tenancy->id)
+                                                    ->get();
 
         return $tenancy;
     }
