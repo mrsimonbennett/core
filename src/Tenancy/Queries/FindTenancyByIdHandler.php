@@ -41,6 +41,7 @@ final class FindTenancyByIdHandler
         $tenancy->rent_book_payments = $this->client->query()
                                                     ->table('tenancy_rent_book_payments')
                                                     ->where('tenancy_id', $tenancy->id)
+                                                    ->where('deleted_at',null)
                                                     ->get();
 
         return $tenancy;

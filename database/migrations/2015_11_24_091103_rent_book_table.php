@@ -18,6 +18,7 @@ class RentBookTable extends Migration
                 $table->char('tenancy_id', 36);
                 $table->timestamp('payment_due');
                 $table->string('payment_amount');
+                $table->timestamp('deleted_at')->nullable();
             });
     }
 

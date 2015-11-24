@@ -104,6 +104,9 @@ $router->group([],
                 $router->post('{tenancyId}/rentbook',['uses' => 'Tenancy\TenanciesRentBookController@addPayment']);
                 $router->get('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@getRentPayment']);
                 $router->put('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@updateRentPayment']);
+                $router->delete('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@removeRentPayment']);
+
+
 
             }
         );

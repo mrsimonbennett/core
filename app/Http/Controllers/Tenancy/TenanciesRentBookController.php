@@ -3,6 +3,7 @@ namespace FullRent\Core\Application\Http\Controllers\Tenancy;
 
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Commands\AmendScheduledTenancyRentPayment;
+use FullRent\Core\Tenancy\Commands\RemoveScheduledRentPayment;
 use FullRent\Core\Tenancy\Commands\ScheduleTenancyRentPayment;
 use FullRent\Core\Tenancy\Queries\FindTenancyRentBookPayment;
 use Illuminate\Http\Request;
@@ -66,5 +67,14 @@ final class TenanciesRentBookController extends Controller
                                                                         $rentPaymentId,
                                                                         $request->get('rent_amount'),
                                                                         $request->get('rent_due')));
+    }
+
+    /**
+     * @param $tenancyId
+     * @param $rentPaymentId
+     */
+    public function removeRentPayment($tenancyId, $rentPaymentId)
+    {
+        $this->commandBus->execute(new RemoveScheduledRentPayment($tenancyId, $rentPaymentId));
     }
 }

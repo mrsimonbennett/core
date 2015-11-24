@@ -2,6 +2,7 @@
 namespace FullRent\Core\Tenancy\Listeners;
 
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
+use FullRent\Core\Tenancy\Events\RemovedScheduledRentPayment;
 use FullRent\Core\Tenancy\Events\TenancyRentPaymentScheduled;
 use FullRent\Core\Tenancy\Events\TenancyRentScheduledPaymentAmended;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
@@ -56,6 +57,17 @@ final class TenancyRentBookListener implements Projection, Subscriber
     }
 
     /**
+     * @param RemovedScheduledRentPayment $e
+     */
+    public function whenRemovedScheduledRentPayment(RemovedScheduledRentPayment $e)
+    {
+        $this->client->query()
+                     ->table('tenancy_rent_book_payments')
+                     ->where('id', $e->getRentPaymentId())
+                     ->update(['deleted_at' => $e->getRemovedAt()]);
+    }
+
+    /**
      * ['eventName' => 'methodName']
      * ['eventName' => ['methodName', $priority]]
      * ['eventName' => [['methodName1', $priority], array['methodName2']]
@@ -66,6 +78,7 @@ final class TenancyRentBookListener implements Projection, Subscriber
         return [
             TenancyRentPaymentScheduled::class        => 'whenTenancyRentPaymentScheduled',
             TenancyRentScheduledPaymentAmended::class => 'whenTenancyRentScheduledPaymentAmended',
+            RemovedScheduledRentPayment::class        => 'whenRemovedScheduledRentPayment',
         ];
     }
 }

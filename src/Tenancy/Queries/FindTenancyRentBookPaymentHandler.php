@@ -31,6 +31,7 @@ final class FindTenancyRentBookPaymentHandler
         return $this->client->query()
                             ->table('tenancy_rent_book_payments')
                             ->where('id', $query->getPaymentId())
+                            ->where('deleted_at', null)
                             ->first();
     }
 }

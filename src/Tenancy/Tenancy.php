@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Tenancy;
 
+use FullRent\Core\Tenancy\Events\RemovedScheduledRentPayment;
 use FullRent\Core\Tenancy\Events\TenancyDrafted;
 use FullRent\Core\Tenancy\Events\TenancyRentPaymentScheduled;
 use FullRent\Core\Tenancy\Events\TenancyRentScheduledPaymentAmended;
@@ -27,6 +28,7 @@ final class Tenancy extends AggregateRoot
      */
     private $tenancyId;
 
+    /** @var */
     private $scheduledPayments;
 
     /**
@@ -56,20 +58,6 @@ final class Tenancy extends AggregateRoot
     }
 
 
-    public function applyTenancyDrafted(TenancyDrafted $e)
-    {
-        $this->tenancyId = $e->getTenancyId();
-
-    }
-
-    /**
-     * @return string
-     */
-    public function getAggregateRootId()
-    {
-        return 'tenancy-' . $this->tenancyId;
-    }
-
     /**
      * @param RentPaymentId $rentPaymentId
      * @param RentAmount $rentAmount
@@ -84,6 +72,11 @@ final class Tenancy extends AggregateRoot
                                                      new DateTime()));
     }
 
+    /**
+     * @param RentPaymentId $rentPaymentId
+     * @param RentAmount $rentAmount
+     * @param DateTime $due
+     */
     public function amendScheduledPayment(RentPaymentId $rentPaymentId, RentAmount $rentAmount, DateTime $due)
     {
         if (!isset($this->scheduledPayments[(string)$rentPaymentId])) {
@@ -97,6 +90,30 @@ final class Tenancy extends AggregateRoot
                                                             new DateTime()));
     }
 
+    /**
+     * @param RentPaymentId $rentPaymentId
+     */
+    public function removeScheduledRent(RentPaymentId $rentPaymentId)
+    {
+        if (!isset($this->scheduledPayments[(string)$rentPaymentId])) {
+            throw new RentPaymentNotFound;
+        }
+
+        $this->apply(new RemovedScheduledRentPayment($this->tenancyId, $rentPaymentId, new DateTime()));
+    }
+
+    /**
+     * @param TenancyDrafted $e
+     */
+    public function applyTenancyDrafted(TenancyDrafted $e)
+    {
+        $this->tenancyId = $e->getTenancyId();
+
+    }
+
+    /**
+     * @param TenancyRentPaymentScheduled $e
+     */
     public function applyTenancyRentPaymentScheduled(TenancyRentPaymentScheduled $e)
     {
         $this->scheduledPayments[(string)$e->getRentPaymentId()] = [
@@ -104,4 +121,22 @@ final class Tenancy extends AggregateRoot
             'rent_due'    => $e->getDue()
         ];
     }
+
+    /**
+     * @param RemovedScheduledRentPayment $e
+     */
+    public function applyRemovedScheduledRentPayment(RemovedScheduledRentPayment $e)
+    {
+        unset($this->scheduledPayments[(string)$e->getRentPaymentId()]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getAggregateRootId()
+    {
+        return 'tenancy-' . $this->tenancyId;
+    }
+
+
 }
