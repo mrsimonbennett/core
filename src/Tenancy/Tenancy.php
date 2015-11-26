@@ -1,6 +1,8 @@
 <?php
 namespace FullRent\Core\Tenancy;
 
+use FullRent\Core\Tenancy\Events\InvitedExistingUserToTenancy;
+use FullRent\Core\Tenancy\Events\InvitedNewUserToTenancy;
 use FullRent\Core\Tenancy\Events\RemovedScheduledRentPayment;
 use FullRent\Core\Tenancy\Events\TenancyDrafted;
 use FullRent\Core\Tenancy\Events\TenancyRentPaymentScheduled;
@@ -13,6 +15,8 @@ use FullRent\Core\Tenancy\ValueObjects\RentDetails;
 use FullRent\Core\Tenancy\ValueObjects\RentPaymentId;
 use FullRent\Core\Tenancy\ValueObjects\TenancyDuration;
 use FullRent\Core\Tenancy\ValueObjects\TenancyId;
+use FullRent\Core\Tenancy\ValueObjects\TenantEmail;
+use FullRent\Core\Tenancy\ValueObjects\TenantId;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 
@@ -103,9 +107,25 @@ final class Tenancy extends AggregateRoot
     }
 
     /**
+     * @param TenantId $tenantId
+     * @param TenantEmail $tenantEmail
+     */
+    public function inviteNewUser(TenantId $tenantId, TenantEmail $tenantEmail)
+    {
+        $this->apply(new InvitedNewUserToTenancy($this->tenancyId, $tenantId, $tenantEmail, new DateTime()));
+    }
+
+    /**
+     * @param TenantId $tenantId
+     */
+    public function inviteExistingUser(TenantId $tenantId)
+    {
+        $this->apply(new InvitedExistingUserToTenancy($this->tenancyId,$tenantId,new DateTime()));
+    }
+    /**
      * @param TenancyDrafted $e
      */
-    public function applyTenancyDrafted(TenancyDrafted $e)
+    protected function applyTenancyDrafted(TenancyDrafted $e)
     {
         $this->tenancyId = $e->getTenancyId();
 
@@ -114,7 +134,7 @@ final class Tenancy extends AggregateRoot
     /**
      * @param TenancyRentPaymentScheduled $e
      */
-    public function applyTenancyRentPaymentScheduled(TenancyRentPaymentScheduled $e)
+    protected function applyTenancyRentPaymentScheduled(TenancyRentPaymentScheduled $e)
     {
         $this->scheduledPayments[(string)$e->getRentPaymentId()] = [
             'rent_amount' => $e->getRentAmount(),
@@ -125,7 +145,7 @@ final class Tenancy extends AggregateRoot
     /**
      * @param RemovedScheduledRentPayment $e
      */
-    public function applyRemovedScheduledRentPayment(RemovedScheduledRentPayment $e)
+    protected function applyRemovedScheduledRentPayment(RemovedScheduledRentPayment $e)
     {
         unset($this->scheduledPayments[(string)$e->getRentPaymentId()]);
     }

@@ -101,6 +101,10 @@ $router->group([],
                 $router->get('{propertyId}/drafts', ['uses' => 'Tenancy\TenanciesController@getPropertiesDraftTenancies']);
 
                 $router->get('{tenancyId}',['uses' => 'Tenancy\TenanciesController@getTenancyById']);
+                $router->post('{tenancyId}/invite-email',['uses' => 'Tenancy\TenanciesController@inviteByEmail']);
+
+
+
                 $router->post('{tenancyId}/rentbook',['uses' => 'Tenancy\TenanciesRentBookController@addPayment']);
                 $router->get('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@getRentPayment']);
                 $router->put('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@updateRentPayment']);

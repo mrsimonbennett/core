@@ -4,8 +4,12 @@ namespace FullRent\Core\Application\Http\Controllers\Tenancy;
 use FullRent\Core\Application\Http\Requests\Tenancies\DraftTenancyHttpRequest;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Commands\DraftTenancy;
+use FullRent\Core\Tenancy\Commands\InviteExistingUserToTenancy;
+use FullRent\Core\Tenancy\Commands\InviteNewUserToTenancy;
 use FullRent\Core\Tenancy\Queries\FindPropertiesDraftTenancies;
 use FullRent\Core\Tenancy\Queries\FindTenancyById;
+use FullRent\Core\User\Queries\FindUserByEmailQuery;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 
@@ -70,5 +74,20 @@ final class TenanciesController extends Controller
         return ['tenancy' => $this->queryBus->query(new FindTenancyById($tenancyId))];
     }
 
+    /**
+     * @param $tenancyId
+     * @param Request $request
+     */
+    public function inviteByEmail($tenancyId, Request $request)
+    {
+        //does fullrent know who this person is?
+        $user = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')));
+
+        if ($user === null) {
+            $this->commandBus->execute(new InviteNewUserToTenancy($tenancyId, uuid(), $request->get('email')));
+        } else {
+            $this->commandBus->execute(new InviteExistingUserToTenancy($tenancyId, $user->id));
+        }
+    }
 
 }
