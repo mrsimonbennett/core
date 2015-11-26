@@ -49,7 +49,7 @@ final class PropertyImagesSubscriber implements Subscriber, Projection
             ->table('property_images')
             ->where('property_id', '=', $e->getPropertyId())
             ->where('image_id', '=', $e->getImageId())
-            ->delete();
+            ->update('deleted_at', $e->getRemovedAt());
     }
 
     /**
