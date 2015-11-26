@@ -8,26 +8,30 @@ use FullRent\Core\Property\Commands\RemoveImageFromProperty;
 use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\QueryBus\QueryBus;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
+use FullRent\Core\Application\Http\Requests\Properties\UpdatePropertyHttpRequest;
 use FullRent\Core\Images\Commands\StoreUploadedImage;
 use FullRent\Core\Property\Commands\AcceptApplications;
 use FullRent\Core\Property\Commands\AttachImage;
 use FullRent\Core\Property\Commands\CloseApplications;
 use FullRent\Core\Property\Commands\EmailApplication;
 use FullRent\Core\Property\Commands\ListNewProperty;
+use FullRent\Core\Property\Commands\UpdatePropertiesBasicInformation;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
+use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
 use FullRent\Core\Property\ValueObjects\CompanyId;
-use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\LandlordId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class PropertiesController
@@ -40,14 +44,17 @@ final class PropertiesController extends Controller
      * @var CommandBus
      */
     private $bus;
+
     /**
      * @var PropertiesReadRepository
      */
     private $propertiesReadRepository;
+
     /**
      * @var JsonResponse
      */
     private $jsonResponse;
+
     /**
      * @var QueryBus
      */
@@ -118,6 +125,27 @@ final class PropertiesController extends Controller
     }
 
     /**
+     * @param $id
+     * @param UpdatePropertyHttpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($id, UpdatePropertyHttpRequest $request)
+    {
+        $this->bus->execute(new UpdatePropertiesBasicInformation($id,
+                                                                 $request->get('address'),
+                                                                 $request->get('city'),
+                                                                 $request->get('county'),
+                                                                 $request->get('country'),
+                                                                 $request->get('postcode'),
+                                                                 $request->get('bedrooms'),
+                                                                 $request->get('bathrooms'),
+                                                                 $request->get('parking'),''));
+
+        return $this->jsonResponse->success(['property_id' => $id]);
+
+    }
+
+    /**
      * @param AcceptPropertyApplicationsHttpRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -147,8 +175,9 @@ final class PropertiesController extends Controller
      */
     public function emailApplicant(Request $request)
     {
-        $this->bus->execute(new EmailApplication($request->get('property_id'),$request->get('email')));
+        $this->bus->execute(new EmailApplication($request->get('property_id'), $request->get('email')));
     }
+
     /**
      * @param $propertyId
      * @return \Illuminate\Http\JsonResponse
@@ -161,7 +190,7 @@ final class PropertiesController extends Controller
 
     /**
      * @param Request $request
-     * @param int     $propertyId
+     * @param int $propertyId
      * @return \Illuminate\Http\JsonResponse
      */
     public function attachImage(Request $request, $propertyId)
@@ -169,6 +198,7 @@ final class PropertiesController extends Controller
         try {
             $this->bus->execute(new StoreUploadedImage($imageId = uuid(), $request->file('image')));
             $this->bus->execute(new AttachImage($propertyId, $imageId));
+
             return $this->jsonResponse->success(['image_id' => $imageId]);
         } catch (\Exception $e) {
             // I imagine there will be a variety of exceptions we can catch here

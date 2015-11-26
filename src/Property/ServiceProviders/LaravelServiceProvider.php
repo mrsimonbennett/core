@@ -1,7 +1,9 @@
 <?php
 namespace FullRent\Core\Property\ServiceProviders;
 
+use FullRent\Core\Infrastructure\FullRentServiceProvider;
 use FullRent\Core\Property\Listener\PropertyApplicationEmailListener;
+use FullRent\Core\Property\Listener\PropertyMysqlListenerV2;
 use FullRent\Core\Property\PropertyRepository;
 use FullRent\Core\Property\Read\MysqlPropertiesReadRepository;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
@@ -9,15 +11,13 @@ use FullRent\Core\Property\Read\Subscribers\MysqlPropertySubscriber;
 use FullRent\Core\Property\Read\Subscribers\PropertyHistorySubscriber;
 use FullRent\Core\Property\Read\Subscribers\PropertyImagesSubscriber;
 use FullRent\Core\Property\SmoothPropertyRepository;
-use Illuminate\Support\ServiceProvider;
-use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
 
 /**
  * Class LaravelServiceProvider
  * @package FullRent\Core\Property\ServiceProviders
  * @author Simon Bennett <simon@bennett.im>
  */
-final class LaravelServiceProvider extends ServiceProvider
+final class LaravelServiceProvider extends FullRentServiceProvider
 {
 
     /**
@@ -32,17 +32,16 @@ final class LaravelServiceProvider extends ServiceProvider
     }
 
     /**
-     *
+     * @return array
      */
-    public function boot()
+    function getEventSubscribers()
     {
-        /** @var EventDispatcher $dispatcher */
-        $dispatcher = $this->app->make(EventDispatcher::class);
-
-        $dispatcher->addSubscriber($this->app->make(MysqlPropertySubscriber::class));
-        $dispatcher->addSubscriber($this->app->make(PropertyHistorySubscriber::class));
-        $dispatcher->addSubscriber($this->app->make(PropertyApplicationEmailListener::class));
-        $dispatcher->addSubscriber($this->app->make(PropertyImagesSubscriber::class));
-
+        return [
+            PropertyMysqlListenerV2::class,
+            MysqlPropertySubscriber::class,
+            PropertyHistorySubscriber::class,
+            PropertyApplicationEmailListener::class,
+            PropertyImagesSubscriber::class
+        ];
     }
 }
