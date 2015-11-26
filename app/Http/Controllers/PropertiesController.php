@@ -18,7 +18,6 @@ use FullRent\Core\Property\Commands\ListNewProperty;
 use FullRent\Core\Property\Commands\UpdatePropertiesBasicInformation;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
-use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
@@ -28,10 +27,8 @@ use FullRent\Core\Property\ValueObjects\LandlordId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
-use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class PropertiesController
