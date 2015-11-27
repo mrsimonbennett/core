@@ -24,9 +24,18 @@ class Handler extends ExceptionHandler {
 	 */
 	public function report(Exception $e)
 	{
-		if ($this->shouldntReport($e)) return;
+		if ($this->shouldntReport($e)) {
+			return;
+		}
 
-		$this->log->error((string)$e);	}
+		$this->log->error(sprintf(
+			"[Fatal] Uncaught Exception: [%s]\nMessage: %s\nFile: %s\nLine: %s",
+			get_class($e),
+			$e->getMessage(),
+			$e->getFile(),
+			$e->getLine()
+		));
+	}
 
 	/**
 	 * Render an exception into an HTTP response.
