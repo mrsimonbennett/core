@@ -1,14 +1,14 @@
 <?php namespace FullRent\Core\Application\Exceptions;
 
 use Log;
-use Exception;
+use DomainException as PhpDomainException;
 
 /**
  * Class DomainException
  *
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-abstract class DomainException extends Exception
+abstract class DomainException extends PhpDomainException
 {
     /**
      * DomainException constructor.
