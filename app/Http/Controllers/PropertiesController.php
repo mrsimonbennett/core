@@ -187,7 +187,7 @@ final class PropertiesController extends Controller
 
     /**
      * @param Request $request
-     * @param int $propertyId
+     * @param string $propertyId
      * @return \Illuminate\Http\JsonResponse
      */
     public function attachImage(Request $request, $propertyId)
