@@ -17,7 +17,7 @@ abstract class DomainException extends Exception
      * @param int       $code
      * @param Exception $previous
      */
-    public function __construct($message, $code, Exception $previous)
+    public function __construct($message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
         Log::debug(sprintf('[Debug] Exception thrown: [%s]', get_class($this)));
