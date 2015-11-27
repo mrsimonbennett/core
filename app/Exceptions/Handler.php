@@ -28,13 +28,7 @@ class Handler extends ExceptionHandler {
 			return;
 		}
 
-		$this->log->error(sprintf(
-			"[Fatal] Uncaught Exception: [%s]\nMessage: %s\nFile: %s\nLine: %s",
-			get_class($e),
-			$e->getMessage(),
-			$e->getFile(),
-			$e->getLine()
-		));
+		$this->log->error((string)$e);
 	}
 
 	/**
