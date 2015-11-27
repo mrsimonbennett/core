@@ -156,18 +156,18 @@ final class Property extends AggregateRoot
     }
 
     /**
-     * @param ImageId $imageId
+     * @param ImageId $newImageId
      * @throws ImageAlreadyAdded
      */
-    public function attachImage(ImageId $imageId)
+    public function attachImage(ImageId $newImageId)
     {
         foreach ($this->images as $imageId) {
-            if ($imageId->equal($imageId)) {
+            if ($imageId->equal($newImageId)) {
                 throw new ImageAlreadyAdded('This image has already been added to the property');
             }
         }
 
-        $this->apply(new ImageAttachedToProperty($this->id, $imageId, DateTime::now()));
+        $this->apply(new ImageAttachedToProperty($this->id, $newImageId, DateTime::now()));
     }
 
     /**
