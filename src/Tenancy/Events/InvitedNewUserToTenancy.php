@@ -1,6 +1,7 @@
 <?php
 namespace FullRent\Core\Tenancy\Events;
 
+use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\TenancyId;
 use FullRent\Core\Tenancy\ValueObjects\TenantEmail;
 use FullRent\Core\Tenancy\ValueObjects\TenantId;
@@ -27,19 +28,29 @@ final class InvitedNewUserToTenancy implements Event, Serializable
     /** @var DateTime */
     private $invitedAt;
 
+    /** @var CompanyId */
+    private $companyId;
+
     /**
      * InvitedNewUserToTenancy constructor.
      * @param TenancyId $id
      * @param TenantId $tenantId
      * @param TenantEmail $tenantEmail
+     * @param CompanyId $companyId
      * @param DateTime $invitedAt
      */
-    public function __construct(TenancyId $id, TenantId $tenantId, TenantEmail $tenantEmail, DateTime $invitedAt)
-    {
+    public function __construct(
+        TenancyId $id,
+        TenantId $tenantId,
+        TenantEmail $tenantEmail,
+        CompanyId $companyId,
+        DateTime $invitedAt
+    ) {
         $this->id = $id;
         $this->tenantId = $tenantId;
         $this->tenantEmail = $tenantEmail;
         $this->invitedAt = $invitedAt;
+        $this->companyId = $companyId;
     }
 
     /**
@@ -75,6 +86,14 @@ final class InvitedNewUserToTenancy implements Event, Serializable
     }
 
     /**
+     * @return CompanyId
+     */
+    public function getCompanyId()
+    {
+        return $this->companyId;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
@@ -83,6 +102,7 @@ final class InvitedNewUserToTenancy implements Event, Serializable
             'tenancy_id'   => (string)$this->id,
             'tenant_id'    => (string)$this->tenantId,
             'tenant_email' => $this->tenantEmail->serialize(),
+            'company_id'   => (string)$this->companyId,
             'invited_at'   => $this->invitedAt->serialize()
         ];
     }
@@ -96,6 +116,7 @@ final class InvitedNewUserToTenancy implements Event, Serializable
         return new static(new TenancyId($data['tenancy_id']),
                           new TenantId($data['tenant_id']),
                           TenantEmail::deserialize($data['tenant_email']),
+                          new CompanyId($data['company_id']),
                           DateTime::deserialize($data['invited_at']));
     }
 }

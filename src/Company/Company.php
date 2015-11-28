@@ -2,6 +2,7 @@
 namespace FullRent\Core\Company;
 
 use FullRent\Core\Company\Events\CompanyDomainChanged;
+use FullRent\Core\Company\Events\CompanyEnrolledNewTenant;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
@@ -10,6 +11,8 @@ use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\Company\ValueObjects\TenancyId;
+use FullRent\Core\Company\ValueObjects\TenantEmail;
 use FullRent\Core\Company\ValueObjects\TenantId;
 use FullRent\Core\Services\DirectDebit\DirectDebitAccountAuthorisation;
 use FullRent\Core\ValueObjects\DateTime;
@@ -98,7 +101,21 @@ final class Company extends AggregateRoot
      */
     public function changeDomain(CompanyDomain $companyDomain)
     {
-        $this->apply(new CompanyDomainChanged($this->companyId,$companyDomain,DateTime::now()));
+        $this->apply(new CompanyDomainChanged($this->companyId, $companyDomain, DateTime::now()));
+    }
+
+    /**
+     * @param TenantId $tenantId
+     * @param TenancyId $tenancyId
+     * @param TenantEmail $tenantEmail
+     */
+    public function enrolNewTenant(TenantId $tenantId, TenancyId $tenancyId, TenantEmail $tenantEmail)
+    {
+        $this->apply(new CompanyEnrolledNewTenant($this->companyId,
+                                                 $tenantId,
+                                                 $tenancyId,
+                                                 $tenantEmail,
+                                                 new DateTime()));
     }
 
 

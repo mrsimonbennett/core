@@ -36,6 +36,11 @@ final class Tenancy extends AggregateRoot
     private $scheduledPayments;
 
     /**
+     * @var CompanyId
+     */
+    private $companyId;
+
+    /**
      * @param TenancyId $tenancyId
      * @param PropertyId $propertyId
      * @param CompanyId $companyId
@@ -112,7 +117,7 @@ final class Tenancy extends AggregateRoot
      */
     public function inviteNewUser(TenantId $tenantId, TenantEmail $tenantEmail)
     {
-        $this->apply(new InvitedNewUserToTenancy($this->tenancyId, $tenantId, $tenantEmail, new DateTime()));
+        $this->apply(new InvitedNewUserToTenancy($this->tenancyId, $tenantId, $tenantEmail,$this->companyId, new DateTime()));
     }
 
     /**
@@ -120,14 +125,16 @@ final class Tenancy extends AggregateRoot
      */
     public function inviteExistingUser(TenantId $tenantId)
     {
-        $this->apply(new InvitedExistingUserToTenancy($this->tenancyId,$tenantId,new DateTime()));
+        $this->apply(new InvitedExistingUserToTenancy($this->tenancyId, $tenantId, $this->companyId, new DateTime()));
     }
+
     /**
      * @param TenancyDrafted $e
      */
     protected function applyTenancyDrafted(TenancyDrafted $e)
     {
         $this->tenancyId = $e->getTenancyId();
+        $this->companyId = $e->getCompanyId();
 
     }
 

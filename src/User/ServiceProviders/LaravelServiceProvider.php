@@ -1,20 +1,20 @@
 <?php
 namespace FullRent\Core\User\ServiceProviders;
 
+use FullRent\Core\Infrastructure\FullRentServiceProvider;
+use FullRent\Core\User\Listener\ContractTenantListener;
 use FullRent\Core\User\Projections\MysqlUserReadRepository;
 use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\SmoothUserRepository;
 use FullRent\Core\User\UserRepository;
-use Illuminate\Support\ServiceProvider;
-use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
 
 /**
  * Class LaravelServiceProvider
  * @package FullRent\Core\User\ServiceProviders
  * @author Simon Bennett <simon@bennett.im>
  */
-final class LaravelServiceProvider extends ServiceProvider
+final class LaravelServiceProvider extends FullRentServiceProvider
 {
 
     /**
@@ -29,11 +29,15 @@ final class LaravelServiceProvider extends ServiceProvider
 
 
     }
-    public function boot()
-    {
-        /** @var EventDispatcher $dispatcher */
-        $dispatcher = $this->app->make(EventDispatcher::class);
 
-        $dispatcher->addSubscriber($this->app->make(UserMysqlSubscriber::class));
+    /**
+     * @return array
+     */
+    function getEventSubscribers()
+    {
+        return [
+            ContractTenantListener::class,
+            UserMysqlSubscriber::class
+        ];
     }
 }
