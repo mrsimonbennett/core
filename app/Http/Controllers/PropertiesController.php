@@ -190,13 +190,16 @@ final class PropertiesController extends Controller
      * @param string $propertyId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function attachImage(Request $request, $propertyId)
+    public function attachPhotos(Request $request, $propertyId)
     {
         try {
-            $this->bus->execute(new StoreUploadedImage($imageId = uuid(), $request->file('image')));
-            $this->bus->execute(new AttachImage($propertyId, $imageId));
+            $photoIds = [];
+            foreach ($request->file('file') as $photo) {
+                $this->bus->execute(new StoreUploadedImage($photoIds[] = $imageId = uuid(), $photo));
+                $this->bus->execute(new AttachImage($propertyId, $imageId));
+            }
 
-            return $this->jsonResponse->success(['image_id' => $imageId]);
+            return $this->jsonResponse->success(['image_ids' => $photoIds]);
         } catch (\Exception $e) {
             // I imagine there will be a variety of exceptions we can catch here
             return $this->jsonResponse->error(['error' => $e->getMessage()]);
