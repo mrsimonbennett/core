@@ -4,6 +4,10 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
+use FullRent\Core\Property\Commands\RemoveImageFromProperty;
+use FullRent\Core\Property\Queries\FindPropertyById;
+use FullRent\Core\QueryBus\QueryBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Application\Http\Requests\Properties\UpdatePropertyHttpRequest;
 use FullRent\Core\Images\Commands\StoreUploadedImage;
 use FullRent\Core\Property\Commands\AcceptApplications;
@@ -14,7 +18,6 @@ use FullRent\Core\Property\Commands\ListNewProperty;
 use FullRent\Core\Property\Commands\UpdatePropertiesBasicInformation;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
-use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\Property\Read\PropertiesReadRepository;
 use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
@@ -24,10 +27,8 @@ use FullRent\Core\Property\ValueObjects\LandlordId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
-use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class PropertiesController
@@ -186,18 +187,36 @@ final class PropertiesController extends Controller
 
     /**
      * @param Request $request
-     * @param int $propertyId
+     * @param string $propertyId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function attachImage(Request $request, $propertyId)
+    public function attachPhotos(Request $request, $propertyId)
     {
         try {
-            $this->bus->execute(new StoreUploadedImage($imageId = uuid(), $request->file('image')));
-            $this->bus->execute(new AttachImage($propertyId, $imageId));
+            $photoIds = [];
+            foreach ($request->file('file') as $photo) {
+                $this->bus->execute(new StoreUploadedImage($photoIds[] = $imageId = uuid(), $photo));
+                $this->bus->execute(new AttachImage($propertyId, $imageId));
+            }
 
-            return $this->jsonResponse->success(['image_id' => $imageId]);
+            return $this->jsonResponse->success(['image_ids' => $photoIds]);
         } catch (\Exception $e) {
             // I imagine there will be a variety of exceptions we can catch here
+            return $this->jsonResponse->error(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param $propertyId
+     * @param $imageId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeImage($propertyId, $imageId)
+    {
+        try {
+            $this->bus->execute(new RemoveImageFromProperty($propertyId, $imageId));
+            return $this->jsonResponse->success();
+        } catch (\Exception $e) {
             return $this->jsonResponse->error(['error' => $e->getMessage()]);
         }
     }

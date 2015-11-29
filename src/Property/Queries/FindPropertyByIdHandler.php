@@ -35,7 +35,13 @@ final class FindPropertyByIdHandler
             throw new PropertyNotFound;
         }
 
-        $property->images = $this->client->query()->table('property_images')->where('property_id', $property->id)->get();
+        $property->images = $this
+            ->client
+            ->query()
+            ->table('property_images')
+            ->where('property_id', $property->id)
+            ->where('deleted_at', null)
+            ->get();
 
         return $property;
     }

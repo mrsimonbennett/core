@@ -6,6 +6,7 @@ use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
+use FullRent\Core\Property\Events\ImageRemovedFromProperty;
 
 /**
  * Class PropertyImagesSubscriber
@@ -40,12 +41,25 @@ final class PropertyImagesSubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param ImageRemovedFromProperty $e
+     */
+    public function whenImageRemovedFromProperty(ImageRemovedFromProperty $e)
+    {
+        $this->db->query()
+            ->table('property_images')
+            ->where('property_id', '=', $e->getPropertyId())
+            ->where('image_id', '=', $e->getImageId())
+            ->update(['deleted_at' => $e->getRemovedAt()]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
-            ImageAttachedToProperty::class => ['whenImageAttachedToProperty'],
+            ImageAttachedToProperty::class  => ['whenImageAttachedToProperty'],
+            ImageRemovedFromProperty::class => ['whenImageRemovedFromProperty'],
         ];
     }
 }

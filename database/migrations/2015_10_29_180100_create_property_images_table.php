@@ -22,6 +22,7 @@ class CreatePropertyImagesTable extends Migration
                 $table->index('image_id');
 
                 $table->timestamp('attached_at');
+                $table->softDeletes();
             });
 
     }
