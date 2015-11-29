@@ -53,7 +53,7 @@ $router->group([],
                 $router->get('{id}', 'PropertiesController@show');
                 $router->put('{id}', 'PropertiesController@update');
 
-                $router->post('{id}/photo', 'PropertiesController@attachImage');
+                $router->post('{id}/photos', 'PropertiesController@attachPhotos');
                 $router->delete('{id}/photo/{imageId}', 'PropertiesController@removeImage');
 
                 /**
