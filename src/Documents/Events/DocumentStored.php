@@ -1,10 +1,10 @@
 <?php namespace FullRent\Core\Documents\Events;
 
-use FullRent\Core\Images\ValueObjects\DocumentName;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
-use FullRent\Core\Documents\ValueObjects\DocumentId;
+use FullRent\Core\Images\ValueObjects\DocumentName;
 use SmoothPhp\Contracts\Serialization\Serializable;
+use FullRent\Core\Documents\ValueObjects\DocumentId;
 
 /**
  * Class UploadedImageStored
@@ -21,18 +21,23 @@ final class DocumentStored implements Serializable, Event
     private $documentName;
 
     /** @var DateTime */
+    private $expiresAt;
+
+    /** @var DateTime */
     private $uploadedAt;
 
     /**
      * @param DocumentId   $documentId
      * @param DocumentName $documentName
+     * @param DateTime     $expiresAt
      * @param DateTime     $uploadedAt
      */
-    public function __construct(DocumentId $documentId, DocumentName $documentName, DateTime $uploadedAt)
+    public function __construct(DocumentId $documentId, DocumentName $documentName, DateTime $expiresAt, DateTime $uploadedAt)
     {
         $this->documentId = $documentId;
         $this->uploadedAt = $uploadedAt;
         $this->documentName = $documentName;
+        $this->expiresAt = $expiresAt;
     }
 
     /**
@@ -52,6 +57,22 @@ final class DocumentStored implements Serializable, Event
     }
 
     /**
+     * @return DateTime
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getUploadedAt()
+    {
+        return $this->uploadedAt;
+    }
+
+    /**
      * @param array $data
      * @return mixed The object instance
      */
@@ -60,6 +81,7 @@ final class DocumentStored implements Serializable, Event
         return new static(
             new DocumentId($data['document_id']),
             new DocumentName($data['document_name']),
+            DateTime::deserialize($data['expires_at']),
             DateTime::deserialize($data['uploaded_at'])
         );
     }
@@ -72,6 +94,7 @@ final class DocumentStored implements Serializable, Event
         return [
             'document_id'    => (string) $this->documentId,
             'document_name'  => (string) $this->documentName,
+            'expires_at'     => $this->expiresAt->serialize(),
             'uploaded_at'    => $this->uploadedAt->serialize(),
         ];
     }

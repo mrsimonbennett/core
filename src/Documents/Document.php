@@ -21,19 +21,35 @@ final class Document extends AggregateRoot
     /** @var DocumentName */
     private $documentName;
 
+    /** @var DateTime */
+    private $uploadedAt;
+
+    /** @var DateTime */
+    private $expiresAt;
+
     /**
      * @param DocumentId        $documentId
      * @param UploadedFile      $file
+     * @param DateTime          $expiryDate
      * @param CloudinaryWrapper $cloud
      */
-    public static function upload(DocumentId $documentId, UploadedFile $file, CloudinaryWrapper $cloud)
-    {
+    public static function upload(
+        DocumentId $documentId,
+        UploadedFile $file,
+        DateTime $expiryDate,
+        CloudinaryWrapper $cloud
+    ) {
         $document = new static;
         $document->documentId = $documentId;
 
         try {
             $cloud->upload((string) $documentId, $file->getRealPath());
-            $document->apply(new DocumentStored($documentId, new DocumentName($file->getClientOriginalName()), DateTime::now()));
+            $document->apply(new DocumentStored(
+                $documentId,
+                new DocumentName($file->getClientOriginalName()),
+                $expiryDate,
+                DateTime::now()
+            ));
         } catch (\Exception $e) {
             \Log::error(sprintf("Document [%s] failed to upload: \n%s\n\n", $documentId, $e->getMessage()));
         }
@@ -45,6 +61,8 @@ final class Document extends AggregateRoot
     protected function applyDocumentStored(DocumentStored $e)
     {
         $this->documentName = $e->getDocumentName();
+        $this->uploadedAt   = $e->getUploadedAt();
+        $this->expiresAt    = $e->getExpiresAt();
     }
 
     /**
