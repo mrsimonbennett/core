@@ -4,9 +4,11 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
+use FullRent\Core\Documents\Commands\UploadDocument;
 use FullRent\Core\Property\Commands\RemoveImageFromProperty;
 use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Application\Http\Requests\Properties\UpdatePropertyHttpRequest;
 use FullRent\Core\Images\Commands\StoreUploadedImage;
@@ -218,6 +220,27 @@ final class PropertiesController extends Controller
             return $this->jsonResponse->success();
         } catch (\Exception $e) {
             return $this->jsonResponse->error(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * TODO: Proper expiry date
+     *
+     * @param Request $request
+     * @param string  $propertyId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function attachDocuments(Request $request, $propertyId) {
+        try {
+            $documentIds = [];
+            foreach ($request->file('file') as $file) {
+                $this->bus->execute(new UploadDocument($documentIds[] = $docId = uuid(), $file, new DateTime('now +1 year')));
+                // Attach doc to property
+            }
+
+            return $this->jsonResponse->success(['document_ids' => $documentIds]);
+        } catch (\Exception $e) {
+            return $this->jsonResponse->error($e->getMessage());
         }
     }
 }
