@@ -22,13 +22,13 @@ final class UploadDocument extends BaseCommand
     private $expiresAt;
 
     /**
-     * @param DocumentId   $documentId
+     * @param string       $documentId
      * @param UploadedFile $uploadedDocument
      * @param DateTime     $expiresAt
      */
-    public function __construct(DocumentId $documentId, UploadedFile $uploadedDocument, DateTime $expiresAt)
+    public function __construct($documentId, UploadedFile $uploadedDocument, DateTime $expiresAt)
     {
-        $this->documentId = $documentId;
+        $this->documentId = new DocumentId($documentId);
         $this->uploadedDocument = $uploadedDocument;
         $this->expiresAt = $expiresAt;
     }
