@@ -32,6 +32,7 @@ final class Document extends AggregateRoot
      * @param UploadedFile      $file
      * @param DateTime          $expiryDate
      * @param CloudinaryWrapper $cloud
+     * @return static
      */
     public static function upload(
         DocumentId $documentId,
@@ -50,6 +51,8 @@ final class Document extends AggregateRoot
                 $expiryDate,
                 DateTime::now()
             ));
+
+            return $document;
         } catch (\Exception $e) {
             \Log::error(sprintf("Document [%s] failed to upload: \n%s\n\n", $documentId, $e->getMessage()));
         }
