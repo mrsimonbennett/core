@@ -5,6 +5,7 @@ use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\AcceptPropertyApplicationsHttpRequest;
 use FullRent\Core\Application\Http\Requests\ListNewPropertyHttpRequest;
 use FullRent\Core\Documents\Commands\UploadDocument;
+use FullRent\Core\Property\Commands\AttachDocument;
 use FullRent\Core\Property\Commands\RemoveImageFromProperty;
 use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\QueryBus\QueryBus;
@@ -235,7 +236,7 @@ final class PropertiesController extends Controller
             $documentIds = [];
             foreach ($request->file('file') as $file) {
                 $this->bus->execute(new UploadDocument($documentIds[] = $docId = uuid(), $file, new DateTime('now +1 year')));
-                // Attach doc to property
+                $this->bus->execute(new AttachDocument($propertyId, $docId));
             }
 
             return $this->jsonResponse->success(['document_ids' => $documentIds]);
