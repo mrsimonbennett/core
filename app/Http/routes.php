@@ -56,6 +56,7 @@ $router->group([],
                 $router->post('{id}/photos', 'PropertiesController@attachPhotos');
                 $router->delete('{id}/photo/{imageId}', 'PropertiesController@removeImage');
 
+                $router->get('{propertyId}/documents', 'Properties\DocumentsController@documentsForProperty');
                 $router->post('{id}/documents', 'PropertiesController@attachDocuments');
 
                 /**
