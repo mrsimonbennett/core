@@ -17,6 +17,7 @@ use FullRent\Core\Tenancy\ValueObjects\TenancyDuration;
 use FullRent\Core\Tenancy\ValueObjects\TenancyId;
 use FullRent\Core\Tenancy\ValueObjects\TenantEmail;
 use FullRent\Core\Tenancy\ValueObjects\TenantId;
+use FullRent\Core\Tenancy\ValueObjects\TenantInviteCode;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 
@@ -117,7 +118,12 @@ final class Tenancy extends AggregateRoot
      */
     public function inviteNewUser(TenantId $tenantId, TenantEmail $tenantEmail)
     {
-        $this->apply(new InvitedNewUserToTenancy($this->tenancyId, $tenantId, $tenantEmail,$this->companyId, new DateTime()));
+        $this->apply(new InvitedNewUserToTenancy($this->tenancyId,
+                                                 $tenantId,
+                                                 $tenantEmail,
+                                                 $this->companyId,
+                                                 TenantInviteCode::random((string)$tenantEmail),
+                                                 new DateTime()));
     }
 
     /**

@@ -14,7 +14,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  * @package FullRent\Core\Subscription\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
-final class SubscriptionMailListener implements Subscriber, Projection
+final class SubscriptionMailListener implements Subscriber
 {
     /** @var EmailClient */
     private $client;

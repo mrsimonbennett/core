@@ -3,6 +3,7 @@ namespace FullRent\Core\User\ServiceProviders;
 
 use FullRent\Core\Infrastructure\FullRentServiceProvider;
 use FullRent\Core\User\Listener\ContractTenantListener;
+use FullRent\Core\User\Listener\UserEmailListener;
 use FullRent\Core\User\Projections\MysqlUserReadRepository;
 use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
 use FullRent\Core\User\Projections\UserReadRepository;
@@ -37,7 +38,8 @@ final class LaravelServiceProvider extends FullRentServiceProvider
     {
         return [
             ContractTenantListener::class,
-            UserMysqlSubscriber::class
+            UserMysqlSubscriber::class,
+            UserEmailListener::class,
         ];
     }
 }

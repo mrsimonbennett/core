@@ -1,7 +1,7 @@
 <?php
 namespace FullRent\Core\User\Listener;
 
-use FullRent\Core\Company\Events\CompanyEnrolledNewTenant;
+use FullRent\Core\Tenancy\Events\InvitedNewUserToTenancy;
 use FullRent\Core\User\Commands\InviteUser;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
@@ -26,11 +26,13 @@ final class ContractTenantListener implements Subscriber
     }
 
     /**
-     * @param CompanyEnrolledNewTenant $e
+     * @param InvitedNewUserToTenancy $e
      */
-    public function whenCompanyEnrolledNewTenant(CompanyEnrolledNewTenant $e)
+    public function whenInvitedNewUserToTenancy(InvitedNewUserToTenancy $e)
     {
-        $this->commandBus->execute(new InviteUser((string)$e->getTenantId(), (string)$e->getTenantEmail()));
+        $this->commandBus->execute(new InviteUser((string)$e->getTenantId(),
+                                                  (string)$e->getTenantEmail(),
+                                                  (string)$e->getInviteCode()->getCode()));
     }
 
     /**
@@ -41,6 +43,6 @@ final class ContractTenantListener implements Subscriber
      */
     public function getSubscribedEvents()
     {
-        return [CompanyEnrolledNewTenant::class => ['whenCompanyEnrolledNewTenant']];
+        return [InvitedNewUserToTenancy::class => ['whenInvitedNewUserToTenancy']];
     }
 }

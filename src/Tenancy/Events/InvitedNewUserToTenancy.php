@@ -5,6 +5,7 @@ use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\TenancyId;
 use FullRent\Core\Tenancy\ValueObjects\TenantEmail;
 use FullRent\Core\Tenancy\ValueObjects\TenantId;
+use FullRent\Core\Tenancy\ValueObjects\TenantInviteCode;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
 use SmoothPhp\Contracts\Serialization\Serializable;
@@ -31,12 +32,17 @@ final class InvitedNewUserToTenancy implements Event, Serializable
     /** @var CompanyId */
     private $companyId;
 
+    /** @var TenantInviteCode */
+    private $inviteCode;
+
+
     /**
      * InvitedNewUserToTenancy constructor.
      * @param TenancyId $id
      * @param TenantId $tenantId
      * @param TenantEmail $tenantEmail
      * @param CompanyId $companyId
+     * @param TenantInviteCode $inviteCode
      * @param DateTime $invitedAt
      */
     public function __construct(
@@ -44,6 +50,7 @@ final class InvitedNewUserToTenancy implements Event, Serializable
         TenantId $tenantId,
         TenantEmail $tenantEmail,
         CompanyId $companyId,
+        TenantInviteCode $inviteCode,
         DateTime $invitedAt
     ) {
         $this->id = $id;
@@ -51,6 +58,7 @@ final class InvitedNewUserToTenancy implements Event, Serializable
         $this->tenantEmail = $tenantEmail;
         $this->invitedAt = $invitedAt;
         $this->companyId = $companyId;
+        $this->inviteCode = $inviteCode;
     }
 
     /**
@@ -94,16 +102,25 @@ final class InvitedNewUserToTenancy implements Event, Serializable
     }
 
     /**
+     * @return TenantInviteCode
+     */
+    public function getInviteCode()
+    {
+        return $this->inviteCode;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
     {
         return [
-            'tenancy_id'   => (string)$this->id,
-            'tenant_id'    => (string)$this->tenantId,
-            'tenant_email' => $this->tenantEmail->serialize(),
-            'company_id'   => (string)$this->companyId,
-            'invited_at'   => $this->invitedAt->serialize()
+            'tenancy_id'         => (string)$this->id,
+            'tenant_id'          => (string)$this->tenantId,
+            'tenant_email'       => $this->tenantEmail->serialize(),
+            'company_id'         => (string)$this->companyId,
+            'tenant_invite_code' => $this->inviteCode->serialize(),
+            'invited_at'         => $this->invitedAt->serialize()
         ];
     }
 
@@ -117,6 +134,7 @@ final class InvitedNewUserToTenancy implements Event, Serializable
                           new TenantId($data['tenant_id']),
                           TenantEmail::deserialize($data['tenant_email']),
                           new CompanyId($data['company_id']),
+                          TenantInviteCode::deserialize($data['tenant_invite_code']),
                           DateTime::deserialize($data['invited_at']));
     }
 }
