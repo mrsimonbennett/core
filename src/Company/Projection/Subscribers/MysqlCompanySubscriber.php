@@ -2,6 +2,7 @@
 namespace FullRent\Core\Company\Projection\Subscribers;
 
 use FullRent\Core\Company\Events\CompanyDomainChanged;
+use FullRent\Core\Company\Events\CompanyEnrolledNewTenant;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
@@ -71,6 +72,17 @@ final class MysqlCompanySubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param CompanyEnrolledNewTenant $e
+     */
+    public function whenCompanyEnrolledNewTenant(CompanyEnrolledNewTenant $e)
+    {
+        $this->db->table('company_users')->insert([
+                                                      'user_id'    => $e->getTenantId(),
+                                                      'company_id' => $e->getCompanyId(),
+                                                      'role'       => 'tenant',
+                                                  ]);
+    }
+    /**
      * @param CompanySetUpDirectDebit $e
      */
     public function whenCompanySetUpDirectDebit(CompanySetUpDirectDebit $e)
@@ -128,6 +140,7 @@ final class MysqlCompanySubscriber implements Subscriber, Projection
             CompanySetUpDirectDebit::class  => ['whenCompanySetUpDirectDebit'],
             CompanyNameChanged::class       => ['whenCompanyNameChanged'],
             CompanyDomainChanged::class     => ['whenCompanyDomainChanged'],
+            CompanyEnrolledNewTenant::class => 'whenCompanyEnrolledNewTenant',
         ];
     }
 }

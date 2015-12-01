@@ -10,6 +10,7 @@ use stdClass;
  * Interface CompanyReadRepository
  * @package FullRent\Core\Company\Projection
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Use Query Bus
  */
 interface CompanyReadRepository
 {

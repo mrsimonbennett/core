@@ -2,7 +2,9 @@
 namespace FullRent\Core\Tenancy;
 
 use FullRent\Core\Infrastructure\FullRentServiceProvider;
+use FullRent\Core\Tenancy\Listeners\GuessRentPaymentDates;
 use FullRent\Core\Tenancy\Listeners\TenancyMysqlListener;
+use FullRent\Core\Tenancy\Listeners\TenancyRentBookListener;
 use FullRent\Core\Tenancy\Repositories\SmoothTenancyRepository;
 use FullRent\Core\Tenancy\Repositories\TenancyRepository;
 
@@ -21,6 +23,8 @@ final class TenancyServiceProvider extends FullRentServiceProvider
     {
         return [
             TenancyMysqlListener::class,
+            TenancyRentBookListener::class,
+            GuessRentPaymentDates::class,
         ];
     }
 

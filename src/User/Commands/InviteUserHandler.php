@@ -4,6 +4,7 @@ namespace FullRent\Core\User\Commands;
 use FullRent\Core\User\User;
 use FullRent\Core\User\UserRepository;
 use FullRent\Core\User\ValueObjects\Email;
+use FullRent\Core\User\ValueObjects\InviteToken;
 use FullRent\Core\User\ValueObjects\UserId;
 
 /**
@@ -24,9 +25,14 @@ final class InviteUserHandler
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param InviteUser $command
+     */
     public function handle(InviteUser $command)
     {
-        $user = User::inviteUser(new UserId($command->getUserId()), new Email($command->getEmail()));
+        $user = User::inviteUser(new UserId($command->getUserId()),
+                                 new Email($command->getEmail()),
+                                 new InviteToken($command->getCode()));
 
         $this->userRepository->save($user);
     }

@@ -2,19 +2,19 @@
 namespace FullRent\Core\User\Listener;
 
 use FullRent\Core\Infrastructure\Email\EmailClient;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Queries\FindUserById;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class EmailListener
  * @package FullRent\Core\User\Listener
  * @author Simon Bennett <simon@bennett.im>
  */
-final class UserEmailListener extends EventListener
+final class UserEmailListener implements Subscriber
 {
     protected $priority = 0;
 
@@ -71,6 +71,9 @@ final class UserEmailListener extends EventListener
                                  $user->email);
     }
 
+    /**
+     * @param UserInvited $e
+     */
     public function whenUserInvited(UserInvited $e)
     {
         $user = $this->queryBus->query(new FindUserById($e->getUserId()));
@@ -91,23 +94,16 @@ final class UserEmailListener extends EventListener
     }
 
     /**
+     * ['eventName' => 'methodName']
+     * ['eventName' => ['methodName', $priority]]
+     * ['eventName' => [['methodName1', $priority], array['methodName2']]
      * @return array
      */
-    protected function register()
+    public function getSubscribedEvents()
     {
         return [
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    protected function registerOnce()
-    {
-        return [
-            'whenPasswordResetRequested' => UserHasRequestedPasswordReset::class,
-            'whenUserPasswordReset'      => UserPasswordReset::class,
-            'whenUserInvited'            => UserInvited::class,
+            UserHasRequestedPasswordReset::class => ['whenPasswordResetRequested', 100],
+            UserPasswordReset::class             => ['whenUserPasswordReset', 100],
 
         ];
     }

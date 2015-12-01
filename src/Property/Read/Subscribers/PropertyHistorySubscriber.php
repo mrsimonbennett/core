@@ -7,6 +7,7 @@ use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use FullRent\Core\Tenancy\Events\TenancyDrafted;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
@@ -118,6 +119,20 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param TenancyDrafted $e
+     */
+    public function whenTenancyDrafted(TenancyDrafted $e)
+    {
+        $this->db->table('property_history')
+                 ->insert([
+                              'id'             => uuid(),
+                              'property_id'    => $e->getPropertyId(),
+                              'event_name'     => 'Tenancy Drafted',
+                              'event_happened' => $e->getDraftedAt(),
+                          ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
@@ -129,6 +144,7 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
             ContractDrafted::class                     => ['whenContractIsDrafted'],
             ImageAttachedToProperty::class             => ['whenImageHasBeenAttached'],
             AmendedPropertyAddress::class              => 'whenAmendedPropertyAddress',
+            TenancyDrafted::class                      => 'whenTenancyDrafted',
         ];
     }
 
