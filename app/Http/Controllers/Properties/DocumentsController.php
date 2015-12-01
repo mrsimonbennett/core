@@ -1,10 +1,11 @@
 <?php namespace FullRent\Core\Application\Http\Controllers\Properties;
 
-use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
-use FullRent\Core\QueryBus\QueryBus;
-use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use Illuminate\Routing\Controller;
+use FullRent\Core\QueryBus\QueryBus;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
+use FullRent\Core\Documents\Exception\DocumentsNotFound;
+use FullRent\Core\Application\Http\Helpers\JsonResponse;
+use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
 
 /**
  * Class DocumentsController
@@ -38,6 +39,10 @@ final class DocumentsController extends Controller
      */
     public function documentsForProperty($propertyId)
     {
-        return $this->json->success($this->query->query(new FindDocumentsByPropertyId($propertyId)));
+        try {
+            return $this->json->success($this->query->query(new FindDocumentsByPropertyId($propertyId)));
+        } catch (DocumentsNotFound $e) {
+            return $this->json->error([$e->getMessage()]);
+        }
     }
 }
