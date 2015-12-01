@@ -39,10 +39,6 @@ final class DocumentsController extends Controller
      */
     public function documentsForProperty($propertyId)
     {
-        try {
-            return $this->json->success($this->query->query(new FindDocumentsByPropertyId($propertyId)));
-        } catch (DocumentsNotFound $e) {
-            return $this->json->error([$e->getMessage()]);
-        }
+        return $this->json->success(['documents' => $this->query->query(new FindDocumentsByPropertyId($propertyId))]);
     }
 }

@@ -33,10 +33,6 @@ final class FindDocumentsByPropertyIdHandler
             ->where('property_id', $query->getPropertyId())
             ->get();
 
-        if (empty($documents)) {
-            throw new DocumentsNotFound("No documents found for property [{$query->getPropertyId()}]");
-        }
-
         return $documents;
     }
 }
