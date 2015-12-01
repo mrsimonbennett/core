@@ -44,6 +44,13 @@ final class FindTenancyByIdHandler
                                                     ->where('deleted_at', null)
                                                     ->orderBy('payment_due', 'asc')
                                                     ->get();
+        foreach ($this->client->query()
+                              ->table('tenancy_tenants')
+                              ->where('tenancy_id', $tenancy->id)
+                              ->orderBy('invited_at', 'asc')
+                              ->get() as $tenant) {
+            $tenancy->tenants[] = $this->client->query()->table('users')->where('id', $tenant->tenant_id)->first();
+        };
 
         return $tenancy;
     }
