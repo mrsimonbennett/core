@@ -27,9 +27,6 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bind(Filesystem::class, function () {
-			return $this->app->make(Factory::class)->disk('s3');
-		});
 	}
 
 }
