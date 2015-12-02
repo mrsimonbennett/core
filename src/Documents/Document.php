@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Documents;
 
 use FullRent\Core\ValueObjects\DateTime;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use FullRent\Core\Documents\Events\DocumentStored;
 use FullRent\Core\Images\ValueObjects\DocumentName;
@@ -28,23 +29,23 @@ final class Document extends AggregateRoot
     private $expiresAt;
 
     /**
-     * @param DocumentId        $documentId
-     * @param UploadedFile      $file
-     * @param DateTime          $expiryDate
-     * @param CloudinaryWrapper $cloud
+     * @param DocumentId   $documentId
+     * @param UploadedFile $file
+     * @param DateTime     $expiryDate
+     * @param Filesystem   $storage
      * @return static
      */
     public static function upload(
         DocumentId $documentId,
         UploadedFile $file,
         DateTime $expiryDate,
-        CloudinaryWrapper $cloud
+        Filesystem $storage
     ) {
         $document = new static;
         $document->documentId = $documentId;
 
         try {
-            $cloud->upload((string) $documentId, $file->getRealPath());
+            $storage->put((string) $documentId, file_get_contents($file));
             $document->apply(new DocumentStored(
                 $documentId,
                 new DocumentName($file->getClientOriginalName()),

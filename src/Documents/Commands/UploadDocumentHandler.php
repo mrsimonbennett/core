@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Documents\Commands;
 
 use FullRent\Core\Documents\Document;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Samcrosoft\Cloudinary\Wrapper\CloudinaryWrapper;
 use FullRent\Core\Documents\Repository\DocumentRepository;
 
@@ -14,17 +15,17 @@ final class UploadDocumentHandler
     /** @var DocumentRepository */
     private $repository;
 
-    /** @var CloudinaryWrapper */
-    private $cloud;
+    /** @var Filesystem */
+    private $filesystem;
 
     /**
      * @param DocumentRepository $repository
-     * @param CloudinaryWrapper  $cloud
+     * @param Filesystem         $filesystem
      */
-    public function __construct(DocumentRepository $repository, CloudinaryWrapper $cloud)
+    public function __construct(DocumentRepository $repository, Filesystem $filesystem)
     {
         $this->repository = $repository;
-        $this->cloud = $cloud;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -36,7 +37,7 @@ final class UploadDocumentHandler
             $command->getDocumentId(),
             $command->getUploadedDocument(),
             $command->getExpiresAt(),
-            $this->cloud
+            $this->filesystem
         );
 
         $this->repository->save($document);
