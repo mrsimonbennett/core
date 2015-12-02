@@ -21,6 +21,14 @@ final class DocumentName implements Serializable
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
