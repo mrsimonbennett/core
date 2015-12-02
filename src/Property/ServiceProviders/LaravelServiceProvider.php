@@ -4,7 +4,7 @@ namespace FullRent\Core\Property\ServiceProviders;
 use FullRent\Core\Infrastructure\FullRentServiceProvider;
 use FullRent\Core\Property\Listener\PropertyApplicationEmailListener;
 use FullRent\Core\Property\Listener\PropertyMysqlListenerV2;
-use FullRent\Core\Property\Listeners\PropertyDocumentsMySqlListener;
+use FullRent\Core\Property\Listener\PropertyDocumentsMySqlListener;
 use FullRent\Core\Property\PropertyRepository;
 use FullRent\Core\Property\Read\MysqlPropertiesReadRepository;
 use FullRent\Core\Property\Read\PropertiesReadRepository;

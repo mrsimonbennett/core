@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Property\Listeners;
+namespace FullRent\Core\Property\Listener;
 
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use FullRent\Core\Property\Events\DocumentAttachedToProperty;
