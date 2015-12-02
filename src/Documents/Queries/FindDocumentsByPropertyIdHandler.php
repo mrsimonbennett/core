@@ -29,8 +29,10 @@ final class FindDocumentsByPropertyIdHandler
     {
         $documents = $this->client
             ->query()
-            ->table('property_documents')
-            ->where('property_id', $query->getPropertyId())
+            ->table('documents')
+            ->select('documents.*')
+            ->join('property_documents', 'property_documents.document_id', '=', 'documents.document_id')
+            ->where('property_documents.property_id', $query->getPropertyId())
             ->get();
 
         return $documents;
