@@ -32,7 +32,7 @@ final class AttachDocumentHandler
     {
         $property = $this->propertyRepository->load($command->getPropertyId());
 
-
+        $property->attachDocument($command->getDocumentId());
 
         $this->propertyRepository->save($property);
     }
