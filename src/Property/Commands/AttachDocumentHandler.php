@@ -1,9 +1,6 @@
 <?php namespace FullRent\Core\Property\Commands;
 
 use FullRent\Core\Property\PropertyRepository;
-use FullRent\Core\Property\ValueObjects\DocumentId;
-use FullRent\Core\Property\ValueObjects\PropertyId;
-use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class AttachDocumentHandler
