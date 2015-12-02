@@ -14,11 +14,11 @@ final class DocumentsServiceProvider extends FullRentServiceProvider
      */
     public function getEventSubscribers()
     {
-        // TODO: Implement getEventSubscribers() method.
+        return [];
     }
 
     public function register()
     {
-        // TODO: Implement register() method.
+        $this->app->bind(Repository\DocumentRepository::class, Repository\SmoothDocumentRepository::class);
     }
 }
