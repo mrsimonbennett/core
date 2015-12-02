@@ -14,7 +14,9 @@ final class DocumentsServiceProvider extends FullRentServiceProvider
      */
     public function getEventSubscribers()
     {
-        return [];
+        return [
+            Listeners\DocumentsMysqlListener::class,
+        ];
     }
 
     public function register()
