@@ -22,7 +22,7 @@ class CreateCompanyTable extends Migration
                 $table->string('gocardless_token')->nullalbe();
                 $table->timestamp('gocardless_setup_at')->nullalbe();
                 $table->boolean('direct_debit_setup')->default(false);
-                $table->timestamp('trail_expires')->default(\Carbon\Carbon::now())->nullable();
+                $table->timestamp('trial_expires')->default(\Carbon\Carbon::now())->nullable();
                 $table->char('subscription_id', 36)->nullable();
                 $table->string('subscription_plan')->default('trail');
                 $table->string('subscription_plan_name')->default('Trail Plan');

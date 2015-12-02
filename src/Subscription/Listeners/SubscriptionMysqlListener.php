@@ -37,7 +37,7 @@ final class SubscriptionMysqlListener implements Subscriber, Projection
             ->table('companies')
             ->where('id', $e->getCompanyId())
             ->update([
-                         'trail_expires'   => $e->getExpiresAt(),
+                         'trial_expires'   => $e->getExpiresAt(),
                          'subscription_id' => $e->getId(),
                      ]);
     }
@@ -49,7 +49,7 @@ final class SubscriptionMysqlListener implements Subscriber, Projection
             ->table('companies')
             ->where('subscription_id', $e->getId())
             ->update([
-                         'trail_expires'           => null,
+                         'trial_expires'           => null,
                          'subscription_id'         => $e->getId(),
                          'subscription_plan'       => 'landlord',
                          'subscription_plan_name'  => 'Landlord Plan',
