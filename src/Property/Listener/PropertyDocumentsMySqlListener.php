@@ -19,8 +19,6 @@ final class PropertyDocumentsMySqlListener implements Subscriber, Projection
     private $client;
 
     /**
-     * TenancyMysqlListener constructor.
-     *
      * @param MySqlClient $client
      */
     public function __construct(MySqlClient $client)
@@ -35,7 +33,7 @@ final class PropertyDocumentsMySqlListener implements Subscriber, Projection
     {
         $this->client
             ->query()
-            ->table('property_images')
+            ->table('property_documents')
             ->insert([
                  'property_id' => $e->getPropertyId(),
                  'document_id' => $e->getDocumentId(),
