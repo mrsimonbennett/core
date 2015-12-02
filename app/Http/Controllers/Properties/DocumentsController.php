@@ -1,9 +1,13 @@
 <?php namespace FullRent\Core\Application\Http\Controllers\Properties;
 
+use Log;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
-use FullRent\Core\Documents\Exception\DocumentsNotFound;
+use FullRent\Core\Property\Commands\AttachDocument;
+use FullRent\Core\Documents\Commands\UploadDocument;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
 
@@ -40,5 +44,29 @@ final class DocumentsController extends Controller
     public function documentsForProperty($propertyId)
     {
         return $this->json->success(['documents' => $this->query->query(new FindDocumentsByPropertyId($propertyId))]);
+    }
+
+    /**
+     * TODO: Proper expiry date
+     *
+     * @param Request $request
+     * @param string  $propertyId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function attachDocuments(Request $request, $propertyId)
+    {
+        Log::info("Attaching documents to property [$propertyId]");
+        try {
+            $documentIds = [];
+            foreach ($request->file('file') as $file) {
+                $this->bus->execute(new UploadDocument($documentIds[] = $docId = uuid(), $file, new DateTime('now +1 year'))                );
+                $this->bus->execute(new AttachDocument($propertyId, $docId));
+            }
+
+            return $this->json->success(['document_ids' => $documentIds]);
+        } catch (\Exception $e) {
+            Log::info("Exception: [{$e->getMessage()}]");
+            return $this->json->error(['message' => $e->getMessage()]);
+        }
     }
 }

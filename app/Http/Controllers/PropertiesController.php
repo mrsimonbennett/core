@@ -223,25 +223,4 @@ final class PropertiesController extends Controller
             return $this->jsonResponse->error(['error' => $e->getMessage()]);
         }
     }
-
-    /**
-     * TODO: Proper expiry date
-     *
-     * @param Request $request
-     * @param string  $propertyId
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function attachDocuments(Request $request, $propertyId) {
-        try {
-            $documentIds = [];
-            foreach ($request->file('file') as $file) {
-                $this->bus->execute(new UploadDocument($documentIds[] = $docId = uuid(), $file, new DateTime('now +1 year')));
-                $this->bus->execute(new AttachDocument($propertyId, $docId));
-            }
-
-            return $this->jsonResponse->success(['document_ids' => $documentIds]);
-        } catch (\Exception $e) {
-            return $this->jsonResponse->error($e->getMessage());
-        }
-    }
 }
