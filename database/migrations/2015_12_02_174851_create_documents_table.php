@@ -36,6 +36,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        \Illuminate\Support\Facades\Schema::drop('property_documents');
+        \Illuminate\Support\Facades\Schema::drop('documents');
     }
 }
