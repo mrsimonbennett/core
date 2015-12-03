@@ -58,6 +58,7 @@ $router->group([],
 
                 $router->get('{propertyId}/documents', 'Properties\DocumentsController@documentsForProperty');
                 $router->post('{propertyId}/documents', 'Properties\DocumentsController@attachDocuments');
+                $router->put('{propertyId}/documents/{documentId}', 'Properties\DocumentsController@updateDocument');
 
                 /**
                  * Contracts

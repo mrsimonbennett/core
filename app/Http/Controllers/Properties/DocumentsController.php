@@ -8,6 +8,7 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Property\Commands\AttachDocument;
 use FullRent\Core\Documents\Commands\UploadDocument;
+use FullRent\Core\Documents\Commands\UpdateDocument;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
 
@@ -66,6 +67,28 @@ final class DocumentsController extends Controller
             return $this->json->success(['document_ids' => $documentIds]);
         } catch (\Exception $e) {
             Log::info("Exception: [{$e->getMessage()}]");
+            return $this->json->error(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $propertyId
+     * @param string  $documentId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDocument(Request $request, $propertyId, $documentId)
+    {
+        try {
+            $this->bus->execute(new UpdateDocument(
+                $documentId,
+                $request->request->get('name'),
+                $request->request->get('expiry-date')
+            ));
+
+            return $this->json->success(['property_id' => $propertyId, 'document_id' => $documentId]);
+        } catch (\Exception $e) {
+            Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
             return $this->json->error(['message' => $e->getMessage()]);
         }
     }
