@@ -51,7 +51,7 @@ final class DocumentsMysqlListener implements Subscriber, Projection
              ->table('documents')
              ->where('document_id', $e->documentId())
              ->update([
-                 'document_name' => $e->newName(),
+                 'name' => $e->newName(),
              ]);
     }
 

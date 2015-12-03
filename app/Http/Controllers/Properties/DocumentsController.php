@@ -83,7 +83,7 @@ final class DocumentsController extends Controller
         try {
             $this->bus->execute(new UpdateDocument(
                 $documentId,
-                $request->request->get('name'),
+                $request->request->get('filename'),
                 $request->request->get('expiry-date')
             ));
 
