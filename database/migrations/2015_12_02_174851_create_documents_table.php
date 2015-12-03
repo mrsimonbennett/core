@@ -18,6 +18,7 @@ class CreateDocumentsTable extends Migration
             function (Blueprint $table) {
                 $table->char('document_id', 36);
                 $table->string('name');
+                $table->date('expires_at');
 
                 $table->index('document_id');
 
