@@ -16,8 +16,9 @@ final class UpdatePropertyDocumentHttpRequest extends \FullRent\Core\Application
     public function rules()
     {
         return [
-            'name'        => 'required',
-            'expiry-date' => 'required|date',
+            'filename'        => 'required',
+            'expiry-date'     => 'required',
+            'document-type'   => 'required',
         ];
     }
 
