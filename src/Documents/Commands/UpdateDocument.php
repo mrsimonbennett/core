@@ -1,7 +1,7 @@
 <?php namespace FullRent\Core\Documents\Commands;
 
 use FullRent\Core\Documents\ValueObjects\DocumentId;
-use FullRent\Core\Images\ValueObjects\DocumentName;
+use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\CommandBus\BaseCommand;
 
@@ -24,9 +24,9 @@ final class UpdateDocument extends BaseCommand
     /**
      * TODO: Need a nicer way of figuring out the date format
      *
-     * @param $documentId
-     * @param $name
-     * @param $expiryDate
+     * @param string $documentId
+     * @param string $name
+     * @param string $expiryDate
      */
     public function __construct($documentId, $name, $expiryDate)
     {

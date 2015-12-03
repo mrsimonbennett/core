@@ -2,7 +2,7 @@
 
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
-use FullRent\Core\Images\ValueObjects\DocumentName;
+use FullRent\Core\Documents\ValueObjects\DocumentName;
 use SmoothPhp\Contracts\Serialization\Serializable;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 

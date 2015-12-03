@@ -4,7 +4,7 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
-use FullRent\Core\Images\ValueObjects\DocumentName;
+use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 use FullRent\Core\Documents\Events\DocumentNameChanged;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

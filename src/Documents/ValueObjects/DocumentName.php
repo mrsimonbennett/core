@@ -1,4 +1,4 @@
-<?php namespace FullRent\Core\Images\ValueObjects;
+<?php namespace FullRent\Core\Documents\ValueObjects;
 
 use SmoothPhp\Contracts\Serialization\Serializable;
 
