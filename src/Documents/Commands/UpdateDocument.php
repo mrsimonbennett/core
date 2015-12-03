@@ -46,7 +46,7 @@ final class UpdateDocument extends BaseCommand
     /**
      * @return DocumentName
      */
-    public function name()
+    public function newDocumentName()
     {
         return $this->name;
     }

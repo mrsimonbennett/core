@@ -27,11 +27,14 @@ final class UpdateDocumentHandler
     }
 
     /**
-     * @param UploadDocument $command
+     * @param UpdateDocument $command
      */
-    public function handle(UploadDocument $command)
+    public function handle(UpdateDocument $command)
     {
-        $document = $this->repository->load($command->getDocumentId());
+        $document = $this->repository->load($command->documentId());
+
+        $document->changeName($command->newDocumentName());
+        $document->changeExpiryDate($command->expiryDate());
 
         $this->repository->save($document);
     }

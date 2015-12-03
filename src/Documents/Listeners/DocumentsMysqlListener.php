@@ -4,6 +4,8 @@ use FullRent\Core\Documents\Events\DocumentStored;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
+use FullRent\Core\Documents\Events\DocumentNameChanged;
+use FullRent\Core\Documents\Events\DocumentExpiryDateChanged;
 
 /**
  * Class DocumentsMysqlListener
@@ -40,12 +42,39 @@ final class DocumentsMysqlListener implements Subscriber, Projection
     }
 
     /**
+     * @param DocumentNameChanged $e
+     */
+    public function whenDocumentNameChanged(DocumentNameChanged $e)
+    {
+        $this->client
+             ->query()
+             ->table('documents')
+             ->where('document_id', $e->documentId())
+             ->update([
+                 'document_name' => $e->newName(),
+             ]);
+    }
+
+    public function whenDocumentExpiryDateChanged(DocumentExpiryDateChanged $e)
+    {
+        $this->client
+             ->query()
+             ->table('documents')
+             ->where('document_id', $e->documentId())
+             ->update([
+                 'expires_at' => $e->newExpiryDate(),
+             ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
-            DocumentStored::class => ['whenDocumentStored'],
+            DocumentStored::class            => ['whenDocumentStored'],
+            DocumentNameChanged::class       => ['whenDocumentNameChanged'],
+            DocumentExpiryDateChanged::class => ['whenDocumentExpiryDateChanged'],
         ];
     }
 }
