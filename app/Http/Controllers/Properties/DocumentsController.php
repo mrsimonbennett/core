@@ -11,7 +11,7 @@ use FullRent\Core\Documents\Commands\UploadDocument;
 use FullRent\Core\Documents\Commands\UpdateDocument;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
-use FullRent\Core\Application\Http\Requests\Properties\UpdatePropertyHttpRequest;
+use FullRent\Core\Application\Http\Requests\Properties\Documents\UpdatePropertyDocumentHttpRequest;
 
 /**
  * Class DocumentsController
@@ -73,12 +73,12 @@ final class DocumentsController extends Controller
     }
 
     /**
-     * @param UpdatePropertyHttpRequest $request
-     * @param string                    $propertyId
-     * @param string                    $documentId
+     * @param UpdatePropertyDocumentHttpRequest $request
+     * @param string                            $propertyId
+     * @param string                            $documentId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateDocument(UpdatePropertyHttpRequest $request, $propertyId, $documentId)
+    public function updateDocument(UpdatePropertyDocumentHttpRequest $request, $propertyId, $documentId)
     {
         try {
             $this->bus->execute(new UpdateDocument(
