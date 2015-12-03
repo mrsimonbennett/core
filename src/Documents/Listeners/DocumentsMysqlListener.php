@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Documents\Listeners;
 
 use FullRent\Core\Documents\Events\DocumentStored;
+use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
@@ -55,6 +56,9 @@ final class DocumentsMysqlListener implements Subscriber, Projection
              ]);
     }
 
+    /**
+     * @param DocumentExpiryDateChanged $e
+     */
     public function whenDocumentExpiryDateChanged(DocumentExpiryDateChanged $e)
     {
         $this->client
@@ -67,6 +71,20 @@ final class DocumentsMysqlListener implements Subscriber, Projection
     }
 
     /**
+     * @param DocumentTypeAttached $e
+     */
+    public function whenDocumentTypeAttached(DocumentTypeAttached $e)
+    {
+        $this->client
+            ->query()
+            ->table('documents')
+            ->where('document_id', $e->documentId())
+            ->update([
+                    'type' => $e->documentType(),
+            ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
@@ -75,6 +93,7 @@ final class DocumentsMysqlListener implements Subscriber, Projection
             DocumentStored::class            => ['whenDocumentStored'],
             DocumentNameChanged::class       => ['whenDocumentNameChanged'],
             DocumentExpiryDateChanged::class => ['whenDocumentExpiryDateChanged'],
+            DocumentTypeAttached::class      => ['whenDocumentTypeAttached'],
         ];
     }
 }

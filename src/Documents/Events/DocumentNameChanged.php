@@ -1,9 +1,10 @@
 <?php namespace FullRent\Core\Documents\Events;
 
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
 use SmoothPhp\Contracts\Serialization\Serializable;
-use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
+use FullRent\Core\Documents\ValueObjects\DocumentName;
 
 /**
  * Class DocumentNameChanged
@@ -18,16 +19,21 @@ final class DocumentNameChanged implements Serializable, Event
     /** @var DocumentName */
     private $newName;
 
+    /** @var DateTime */
+    private $changedAt;
+
     /**
      * DocumentNameChanged constructor.
      *
-     * @param DocumentId $documentId
+     * @param DocumentId   $documentId
      * @param DocumentName $newName
+     * @param DateTime     $changedAt
      */
-    public function __construct(DocumentId $documentId, DocumentName $newName)
+    public function __construct(DocumentId $documentId, DocumentName $newName, DateTime $changedAt)
     {
         $this->documentId = $documentId;
         $this->newName = $newName;
+        $this->changedAt = $changedAt;
     }
 
     /**
@@ -47,6 +53,14 @@ final class DocumentNameChanged implements Serializable, Event
     }
 
     /**
+     * @return DateTime
+     */
+    public function changedAt()
+    {
+        return $this->changedAt;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
@@ -54,6 +68,7 @@ final class DocumentNameChanged implements Serializable, Event
         return [
             'document_id' => (string) $this->documentId,
             'new_name'    => (string) $this->newName,
+            'changed_at'  => $this->changedAt->serialize(),
         ];
     }
 
@@ -63,6 +78,10 @@ final class DocumentNameChanged implements Serializable, Event
      */
     public static function deserialize(array $data)
     {
-        return new self(new DocumentId($data['document_id']), new DocumentName($data['new_name']));
+        return new self(
+            new DocumentId($data['document_id']),
+            new DocumentName($data['new_name']),
+            DateTime::deserialize($data['changed_at'])
+        );
     }
 }

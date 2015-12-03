@@ -18,16 +18,21 @@ class DocumentExpiryDateChanged implements Serializable, Event
     /** @var DateTime */
     private $newExpiryDate;
 
+    /** @var DateTime */
+    private $changedAt;
+
     /**
      * DocumentNameChanged constructor.
      *
      * @param DocumentId $documentId
      * @param DateTime   $newExpiryDate
+     * @param DateTime   $changedAt
      */
-    public function __construct(DocumentId $documentId, DateTime $newExpiryDate)
+    public function __construct(DocumentId $documentId, DateTime $newExpiryDate, DateTime $changedAt)
     {
         $this->documentId    = $documentId;
         $this->newExpiryDate = $newExpiryDate;
+        $this->changedAt = $changedAt;
     }
 
     /**
@@ -47,6 +52,14 @@ class DocumentExpiryDateChanged implements Serializable, Event
     }
 
     /**
+     * @return DateTime
+     */
+    public function changedAt()
+    {
+        return $this->changedAt;
+    }
+
+    /**
      * @return array
      */
     public function serialize()
@@ -54,6 +67,7 @@ class DocumentExpiryDateChanged implements Serializable, Event
         return [
             'document_id' => (string) $this->documentId,
             'expiry_date' => $this->newExpiryDate->serialize(),
+            'changed_at'  => $this->changedAt->serialize(),
         ];
     }
 
@@ -63,6 +77,10 @@ class DocumentExpiryDateChanged implements Serializable, Event
      */
     public static function deserialize(array $data)
     {
-        return new self(new DocumentId($data['document_id']), DateTime::deserialize($data['expiry_date']));
+        return new self(
+            new DocumentId($data['document_id']),
+            DateTime::deserialize($data['expiry_date']),
+            DateTime::deserialize($data['changed_at'])
+        );
     }
 }

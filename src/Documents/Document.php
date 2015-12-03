@@ -4,10 +4,12 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
-use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
+use FullRent\Core\Documents\ValueObjects\DocumentName;
+use FullRent\Core\Documents\ValueObjects\DocumentType;
 use FullRent\Core\Documents\Events\DocumentNameChanged;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Documents\Events\DocumentExpiryDateChanged;
 
 /**
@@ -28,6 +30,9 @@ final class Document extends AggregateRoot
 
     /** @var DateTime */
     private $expiresAt;
+
+    /** @var DocumentType|null */
+    private $documentType;
 
     /**
      * @param DocumentId   $documentId
@@ -66,7 +71,7 @@ final class Document extends AggregateRoot
     public function changeName(DocumentName $newName)
     {
         if ((string) $newName != (string) $this->documentName) {
-            $this->apply(new DocumentNameChanged($this->documentId, $newName));
+            $this->apply(new DocumentNameChanged($this->documentId, $newName, DateTime::now()));
         }
     }
 
@@ -76,7 +81,17 @@ final class Document extends AggregateRoot
     public function changeExpiryDate(DateTime $newExpiryDate)
     {
         if ($newExpiryDate->format('d/m/Y H:i') !== $this->expiresAt->format('d/m/Y H:i')) {
-            $this->apply(new DocumentExpiryDateChanged($this->documentId, $newExpiryDate));
+            $this->apply(new DocumentExpiryDateChanged($this->documentId, $newExpiryDate, DateTime::now()));
+        }
+    }
+
+    /**
+     * @param DocumentType $type
+     */
+    public function addType(DocumentType $type)
+    {
+        if (!$this->documentType) {
+            $this->apply(new DocumentTypeAttached($this->documentId, $type, DateTime::now()));
         }
     }
 
@@ -108,6 +123,15 @@ final class Document extends AggregateRoot
     {
         $this->documentId = $e->documentId();
         $this->expiresAt  = $e->newExpiryDate();
+    }
+
+    /**
+     * @param DocumentTypeAttached $e
+     */
+    protected function applyDocumentTypeAttached(DocumentTypeAttached $e)
+    {
+        $this->documentId   = $e->documentId();
+        $this->documentType = $e->documentType();
     }
 
     /**

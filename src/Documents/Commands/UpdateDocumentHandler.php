@@ -35,6 +35,7 @@ final class UpdateDocumentHandler
 
         $document->changeName($command->newDocumentName());
         $document->changeExpiryDate($command->expiryDate());
+        $document->addType($command->documentType());
 
         $this->repository->save($document);
     }

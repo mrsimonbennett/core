@@ -84,7 +84,8 @@ final class DocumentsController extends Controller
             $this->bus->execute(new UpdateDocument(
                 $documentId,
                 $request->request->get('filename'),
-                $request->request->get('expiry-date')
+                $request->request->get('expiry-date'),
+                $request->request->get('document-type')
             ));
 
             return $this->json->success(['property_id' => $propertyId, 'document_id' => $documentId]);
