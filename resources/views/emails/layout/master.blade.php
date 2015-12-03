@@ -199,9 +199,6 @@
                     <tr>
                         <td>
                             @yield('content')
-
-                            <p><a href="https://twitter.com/fullrentltd">Follow @fullrenltd on Twitter</a></p>
-
                         </td>
                     </tr>
                 </table>
