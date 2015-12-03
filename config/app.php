@@ -178,6 +178,7 @@ return [
         \FullRent\Core\Subscription\SubscriptionServiceProvider::class,
         \FullRent\Core\Tenancy\TenancyServiceProvider::class,
         \FullRent\Core\Documents\DocumentsServiceProvider::class,
+        \FullRent\Core\Listeners\Email\EmailListenersServiceProvider::class,
 
     ],
     /*

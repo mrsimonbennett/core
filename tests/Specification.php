@@ -42,7 +42,7 @@ abstract class Specification extends \TestCase
     abstract public function given();
 
     /**
-     * @return Command
+     * @return \SmoothPhp\CommandBus\BaseCommand
      */
     abstract public function when();
 

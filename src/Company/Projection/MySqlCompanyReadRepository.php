@@ -12,6 +12,7 @@ use stdClass;
  * Class MySqlCompanyReadRepository
  * @package FullRent\Core\Company\Projection
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Use Query Bus
  */
 final class MySqlCompanyReadRepository implements CompanyReadRepository
 {

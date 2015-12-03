@@ -77,12 +77,13 @@ final class User extends AggregateRoot
      *
      * @param UserId $userId
      * @param Email $email
+     * @param InviteToken $inviteToken
      * @return User
      */
-    public static function inviteUser(UserId $userId, Email $email)
+    public static function inviteUser(UserId $userId, Email $email, InviteToken $inviteToken)
     {
         $user = new static();
-        $user->apply(new UserInvited($userId, $email, InviteToken::random((string)$email), DateTime::now()));
+        $user->apply(new UserInvited($userId, $email, $inviteToken, DateTime::now()));
 
         return $user;
     }

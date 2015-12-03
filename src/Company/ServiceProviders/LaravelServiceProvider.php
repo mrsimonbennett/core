@@ -2,12 +2,13 @@
 namespace FullRent\Core\Company\ServiceProviders;
 
 use FullRent\Core\Company\CompanyRepository;
+use FullRent\Core\Company\Listeners\TenancyListener;
 use FullRent\Core\Company\Projection\CompanyReadRepository;
 use FullRent\Core\Company\Projection\MySqlCompanyReadRepository;
 use FullRent\Core\Company\Projection\Subscribers\ApplicationEventListener;
 use FullRent\Core\Company\Projection\Subscribers\MysqlCompanySubscriber;
 use FullRent\Core\Company\SmoothCompanyRepository;
-use Illuminate\Support\ServiceProvider;
+use FullRent\Core\Infrastructure\FullRentServiceProvider;
 use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
 
 /**
@@ -15,7 +16,8 @@ use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
  * @package FullRent\Core\Company\ServiceProviders
  * @author Simon Bennett <simon@bennett.im>
  */
-final class LaravelServiceProvider extends ServiceProvider
+final class LaravelServiceProvider extends FullRentServiceProvider
+
 {
     /**
      * Register the service provider.
@@ -28,14 +30,17 @@ final class LaravelServiceProvider extends ServiceProvider
         $this->app->bind(CompanyReadRepository::class, MysqlCompanyReadRepository::class);
 
 
-
     }
-    public function boot()
-    {
-        /** @var EventDispatcher $dispatcher */
-        $dispatcher = $this->app->make(EventDispatcher::class);
 
-        $dispatcher->addSubscriber($this->app->make(MysqlCompanySubscriber::class));
-        $dispatcher->addSubscriber($this->app->make(ApplicationEventListener::class));
+    /**
+     * @return array
+     */
+    function getEventSubscribers()
+    {
+        return [
+            TenancyListener::class,
+            MysqlCompanySubscriber::class,
+            ApplicationEventListener::class,
+        ];
     }
 }
