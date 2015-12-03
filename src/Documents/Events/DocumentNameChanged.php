@@ -63,6 +63,6 @@ final class DocumentNameChanged implements Serializable, Event
      */
     public static function deserialize(array $data)
     {
-        return new self(new DocumentId($data['document_id'], new DocumentName($data['new_name'])));
+        return new self(new DocumentId($data['document_id']), new DocumentName($data['new_name']));
     }
 }

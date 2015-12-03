@@ -63,6 +63,6 @@ class DocumentExpiryDateChanged implements Serializable, Event
      */
     public static function deserialize(array $data)
     {
-        return new self(new DocumentId($data['document_id'], DateTime::deserialize($data['expiry_date'])));
+        return new self(new DocumentId($data['document_id']), DateTime::deserialize($data['expiry_date']));
     }
 }
