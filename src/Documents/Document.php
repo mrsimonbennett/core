@@ -85,6 +85,8 @@ final class Document extends AggregateRoot
      */
     protected function applyDocumentStored(DocumentStored $e)
     {
+
+        $this->documentId   = $e->getDocumentId();
         $this->documentName = $e->getDocumentName();
         $this->uploadedAt   = $e->getUploadedAt();
         $this->expiresAt    = $e->getExpiresAt();
@@ -95,6 +97,7 @@ final class Document extends AggregateRoot
      */
     protected function applyDocumentNameChanged(DocumentNameChanged $e)
     {
+        $this->documentId   = $e->documentId();
         $this->documentName = $e->newName();
     }
 
@@ -103,7 +106,8 @@ final class Document extends AggregateRoot
      */
     protected function applyDocumentExpiryDateChanged(DocumentExpiryDateChanged $e)
     {
-        $this->expiresAt = $e->newExpiryDate();
+        $this->documentId = $e->documentId();
+        $this->expiresAt  = $e->newExpiryDate();
     }
 
     /**
