@@ -10,6 +10,7 @@ use FullRent\Core\Documents\ValueObjects\DocumentType;
 use FullRent\Core\Documents\Events\DocumentNameChanged;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use FullRent\Core\Documents\Events\DocumentTypeAttached;
+use FullRent\Core\Documents\Exception\DocumentTypeImmutable;
 use FullRent\Core\Documents\Events\DocumentExpiryDateChanged;
 
 /**
@@ -80,18 +81,23 @@ final class Document extends AggregateRoot
      */
     public function changeExpiryDate(DateTime $newExpiryDate)
     {
-        if ($newExpiryDate->format('d/m/Y H:i') !== $this->expiresAt->format('d/m/Y H:i')) {
+        if ($newExpiryDate->format('d/m/Y') != $this->expiresAt->format('d/m/Y')) {
             $this->apply(new DocumentExpiryDateChanged($this->documentId, $newExpiryDate, DateTime::now()));
         }
     }
 
     /**
      * @param DocumentType $type
+     * @throws DocumentTypeImmutable
      */
     public function addType(DocumentType $type)
     {
         if (!$this->documentType) {
             $this->apply(new DocumentTypeAttached($this->documentId, $type, DateTime::now()));
+        }
+
+        if (!(string) $this->documentType == (string) $type) {
+            throw new DocumentTypeImmutable('Document type cannot be changed once set');
         }
     }
 
