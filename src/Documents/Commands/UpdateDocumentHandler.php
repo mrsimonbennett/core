@@ -1,7 +1,9 @@
 <?php namespace FullRent\Core\Documents\Commands;
 
+use Log;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Repository\DocumentRepository;
+use FullRent\Core\Documents\Exception\DocumentTypeImmutable;
 
 /**
  * Class UpdateDocumentHandler
@@ -35,7 +37,12 @@ final class UpdateDocumentHandler
 
         $document->changeName($command->newDocumentName());
         $document->changeExpiryDate($command->expiryDate());
-        $document->addType($command->documentType());
+
+        try {
+            $document->addType($command->documentType());
+        } catch (DocumentTypeImmutable $e) {
+            Log::debug("Attempt to change document type [{$command->documentId()}]");
+        }
 
         $this->repository->save($document);
     }
