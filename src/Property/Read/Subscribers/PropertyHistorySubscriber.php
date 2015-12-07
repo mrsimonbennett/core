@@ -3,6 +3,7 @@ namespace FullRent\Core\Property\Read\Subscribers;
 
 use FullRent\Core\Contract\Events\ContractDrafted;
 use FullRent\Core\Property\Events\AmendedPropertyAddress;
+use FullRent\Core\Property\Events\DocumentAttachedToProperty;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
@@ -133,6 +134,20 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param DocumentAttachedToProperty $e
+     */
+    public function whenDocumentAttachedToProperty(DocumentAttachedToProperty $e)
+    {
+        $this->db->table('property_history')
+             ->insert([
+                 'id'             => uuid(),
+                 'property_id'    => $e->getPropertyId(),
+                 'event_name'     => 'Document Attached',
+                 'event_happened' => $e->wasAttachedAt()
+             ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
@@ -143,8 +158,9 @@ final class PropertyHistorySubscriber implements Subscriber, Projection
             PropertyClosedAcceptingApplications::class => ['whenPropertyCloseAcceptingApplications'],
             ContractDrafted::class                     => ['whenContractIsDrafted'],
             ImageAttachedToProperty::class             => ['whenImageHasBeenAttached'],
-            AmendedPropertyAddress::class              => 'whenAmendedPropertyAddress',
-            TenancyDrafted::class                      => 'whenTenancyDrafted',
+            AmendedPropertyAddress::class              => ['whenAmendedPropertyAddress'],
+            TenancyDrafted::class                      => ['whenTenancyDrafted'],
+            DocumentAttachedToProperty::class          => ['whenDocumentAttachedToProperty'],
         ];
     }
 
