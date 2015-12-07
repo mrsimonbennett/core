@@ -78,6 +78,8 @@ $router->group([],
         $router->put('users/{id}/email', 'UserController@updateEmail');
         $router->put('users/{id}/password', 'UserController@updatePassword');
 
+        $router->get('users/settings/{userId}', 'User\SettingsController@viewSettings');
+
         /*
          * Auth
          */

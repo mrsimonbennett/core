@@ -9,5 +9,12 @@ use Illuminate\Routing\Controller;
  */
 final class SettingsController extends Controller
 {
-
+    /**
+     * @param string $userId
+     * @return array
+     */
+    public function viewSettings($userId)
+    {
+        return config('user.settings');
+    }
 }
