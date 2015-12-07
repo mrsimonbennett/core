@@ -35,9 +35,7 @@ final class FindDeletedDocumentsByPropertyIdHandler
             ->where('property_documents.property_id', $query->propertyId())
             ->whereNotNull('documents.deleted_at')
             ->get();
-
-        \Log::debug('Deleted docs: ' . count($documents));
-
+        
         return $documents;
     }
 }
