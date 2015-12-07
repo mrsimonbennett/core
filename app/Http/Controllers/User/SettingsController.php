@@ -15,6 +15,12 @@ final class SettingsController extends Controller
      */
     public function viewSettings($userId)
     {
-        return config('user.settings');
+        $config = config('user.settings');
+
+        foreach ($config as $setting => $value) {
+            $config[$setting] = ['human_name' => trans('user-settings.' . $setting), 'value' => $value];
+        }
+
+        return $config;
     }
 }
