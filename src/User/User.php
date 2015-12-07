@@ -49,6 +49,14 @@ final class User extends AggregateRoot
     /** @var Password */
     private $password;
 
+    /** @var array */
+    private $settings;
+
+    private function __construct()
+    {
+        $this->settings = config('user.settings');
+    }
+
     /**
      * @param UserId $userId
      * @param Name $name
