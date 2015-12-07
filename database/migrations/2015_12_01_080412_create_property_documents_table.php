@@ -23,7 +23,6 @@ class CreatePropertyDocumentsTable extends Migration
                 $table->index('document_id');
 
                 $table->timestamp('attached_at');
-                $table->softDeletes();
             }
         );
 
