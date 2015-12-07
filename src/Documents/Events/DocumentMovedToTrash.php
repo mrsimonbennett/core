@@ -10,7 +10,7 @@ use FullRent\Core\Documents\ValueObjects\DocumentId;
  *
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class DocumentTrashed implements Serializable, Event
+final class DocumentMovedToTrash implements Serializable, Event
 {
     /** @var DocumentId */
     private $documentId;

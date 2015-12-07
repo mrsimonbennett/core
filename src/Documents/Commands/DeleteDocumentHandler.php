@@ -25,7 +25,7 @@ final class DeleteDocumentHandler
     public function handle(DeleteDocument $command)
     {
         $document = $this->repository->load($command->documentId());
-        $document->trash();
+        $document->moveToTrash();
 
         $this->repository->save($document);
     }

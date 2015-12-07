@@ -4,12 +4,12 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
-use FullRent\Core\Documents\Events\DocumentTrashed;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentType;
 use FullRent\Core\Documents\Events\DocumentNameChanged;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use FullRent\Core\Documents\Events\DocumentMovedToTrash;
 use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Documents\Exception\DocumentTypeImmutable;
 use FullRent\Core\Documents\Events\DocumentExpiryDateChanged;
@@ -105,9 +105,9 @@ final class Document extends AggregateRoot
     /**
      * Trashes a document
      */
-    public function trash()
+    public function moveToTrash()
     {
-        $this->apply(new DocumentTrashed($this->documentId, DateTime::now()));
+        $this->apply(new DocumentMovedToTrash($this->documentId, DateTime::now()));
     }
 
     /**
