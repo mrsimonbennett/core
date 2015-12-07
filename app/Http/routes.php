@@ -58,6 +58,7 @@ $router->group([],
 
                 $router->get('{propertyId}/documents', 'Properties\DocumentsController@documentsForProperty');
                 $router->post('{propertyId}/documents', 'Properties\DocumentsController@attachDocuments');
+                $router->delete('{propertyId}/documents/{documentId}', 'Properties\DocumentsController@deleteDocument');
                 $router->put('{propertyId}/documents/{documentId}', 'Properties\DocumentsController@updateDocument');
 
                 /**

@@ -4,6 +4,7 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
+use FullRent\Core\Documents\Events\DocumentTrashed;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentType;
@@ -99,6 +100,14 @@ final class Document extends AggregateRoot
         if (!(string) $this->documentType == (string) $type) {
             throw new DocumentTypeImmutable('Document type cannot be changed once set');
         }
+    }
+
+    /**
+     * Trashes a document
+     */
+    public function trash()
+    {
+        $this->apply(new DocumentTrashed($this->documentId, DateTime::now()));
     }
 
     /**

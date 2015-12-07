@@ -7,6 +7,7 @@ use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\Property\Commands\AttachDocument;
+use FullRent\Core\Documents\Commands\DeleteDocument;
 use FullRent\Core\Documents\Commands\UploadDocument;
 use FullRent\Core\Documents\Commands\UpdateDocument;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
@@ -89,6 +90,25 @@ final class DocumentsController extends Controller
             ));
 
             return $this->json->success(['property_id' => $propertyId, 'document_id' => $documentId]);
+        } catch (\Exception $e) {
+            Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
+            return $this->json->error(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param string $propertyId
+     * @param string $documentId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteDocument($propertyId, $documentId)
+    {
+        Log::info('Delete document request received');
+
+        try {
+            $this->bus->execute(new DeleteDocument($documentId));
+
+            return $this->json->success(['property_id' => $propertyId]);
         } catch (\Exception $e) {
             Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
             return $this->json->error(['message' => $e->getMessage()]);

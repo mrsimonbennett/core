@@ -210,6 +210,23 @@ final class Property extends AggregateRoot
     }
 
     /**
+     * @param DocumentId $documentId
+     * @throws \Exception
+     */
+    public function removeDocument(DocumentId $documentId)
+    {
+        $filtered = array_filter($this->documents, function (DocumentId $existingDocumentId) use ($documentId) {
+            return $existingDocumentId->equal($documentId);
+        });
+
+        if (count($filtered) > 1) {
+            throw new \Exception('This document has been loaded more than once. Oopsie.');
+        } elseif (count($filtered) < 1) {
+            throw new \Exception('No document with this ID exists on property');
+        }
+    }
+
+    /**
      * @param Address $address
      */
     public function amendAddress(Address $address)

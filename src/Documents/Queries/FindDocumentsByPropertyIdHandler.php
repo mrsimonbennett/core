@@ -33,6 +33,7 @@ final class FindDocumentsByPropertyIdHandler
             ->select('documents.*')
             ->join('property_documents', 'property_documents.document_id', '=', 'documents.document_id')
             ->where('property_documents.property_id', $query->getPropertyId())
+            ->where('documents.deleted_at', NULL)
             ->get();
 
         return $documents;

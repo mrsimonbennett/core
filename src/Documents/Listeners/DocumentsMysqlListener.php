@@ -1,6 +1,7 @@
 <?php namespace FullRent\Core\Documents\Listeners;
 
 use FullRent\Core\Documents\Events\DocumentStored;
+use FullRent\Core\Documents\Events\DocumentTrashed;
 use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
@@ -85,6 +86,20 @@ final class DocumentsMysqlListener implements Subscriber, Projection
     }
 
     /**
+     * @param DocumentTrashed $e
+     */
+    public function whenDocumentTrashed(DocumentTrashed $e)
+    {
+        $this->client
+            ->query()
+            ->table('documents')
+            ->where('document_id', $e->documentId())
+            ->update([
+                'deleted_at' => $e->trashedAt()
+            ]);
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
@@ -94,6 +109,7 @@ final class DocumentsMysqlListener implements Subscriber, Projection
             DocumentNameChanged::class       => ['whenDocumentNameChanged'],
             DocumentExpiryDateChanged::class => ['whenDocumentExpiryDateChanged'],
             DocumentTypeAttached::class      => ['whenDocumentTypeAttached'],
+            DocumentTrashed::class           => ['whenDocumentTrashed'],
         ];
     }
 }
