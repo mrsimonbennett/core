@@ -12,7 +12,7 @@ use Stripe\Stripe;
 
 /**
  * Class StripeCardPayment
- * @package FullRent\Core\Services\CardPayment\Stripe
+ * @package FullRent\Core\Services\CardPaymentGateWay\Stripe
  * @author Simon Bennett <simon@bennett.im>
  */
 final class StripeCardPayment implements CardPaymentGateway

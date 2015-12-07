@@ -4,19 +4,19 @@ namespace FullRent\Core\Application\Http\Controllers;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\ChangeCompanyDomainHttpRequest;
 use FullRent\Core\Application\Http\Requests\CreateCompanyHttpRequest;
-use FullRent\Core\CommandBus\CommandBus;
 use FullRent\Core\Company\Commands\ChangeCompanyDomain;
 use FullRent\Core\Company\Commands\ChangeCompanyName;
 use FullRent\Core\Company\Commands\EnrolTenant;
 use FullRent\Core\Company\Commands\RegisterCompany;
 use FullRent\Core\Company\Exceptions\CompanyNotFoundException;
 use FullRent\Core\Company\Projection\CompanyReadRepository;
+use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyName;
 use FullRent\Core\QueryBus\QueryBus;
+use FullRent\Core\Subscription\Commands\ConvertToLandlordPlan;
 use FullRent\Core\User\Commands\InviteUser;
 use FullRent\Core\User\Commands\RegisterUser;
-use FullRent\Core\User\Exceptions\UserNotFound;
 use FullRent\Core\User\Queries\FindUserByEmailQuery;
 use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
@@ -24,7 +24,7 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\Timezone;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class CompanyController
@@ -73,6 +73,7 @@ final class CompanyController extends Controller
      * @param CreateCompanyHttpRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function createCompany(CreateCompanyHttpRequest $request)
     {
         $registerCompanyCommand = new RegisterCompany(
@@ -127,15 +128,15 @@ final class CompanyController extends Controller
      */
     public function invite(Request $request)
     {
-        try {
-            $userId = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')))->id;
-            $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
-
-        } catch (UserNotFound $ex) {
+        $user = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')));
+        if ($user == null) {
             $userId = uuid();
             $this->bus->execute(new EnrolTenant($request->get('company_id'), $userId));
             $this->bus->execute(new InviteUser($userId, $request->get('email')));
+        } else {
+            $userId = $user->id;
         }
+
 
         return $this->jsonResponse->success(['user_id' => (string)$userId]);
     }
@@ -152,6 +153,17 @@ final class CompanyController extends Controller
 
     public function putDomain(ChangeCompanyDomainHttpRequest $request, $id)
     {
-        $this->bus->execute(new ChangeCompanyDomain($id,$request->get('company_domain')));
+        $this->bus->execute(new ChangeCompanyDomain($id, $request->get('company_domain')));
+    }
+
+    /**
+     * @param $companyId
+     * @param Request $request
+     */
+    public function subscription($companyId, Request $request)
+    {
+        $company = $this->queryBus->query(new FindCompanyByIdQuery($companyId));
+
+        $this->bus->execute(new ConvertToLandlordPlan($company->subscription_id, $request->get('card_token')));
     }
 }

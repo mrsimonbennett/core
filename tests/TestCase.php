@@ -2,7 +2,7 @@
 
 use App\Exceptions\Handler;
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
-use FullRent\Core\CommandBus\CommandBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * @property CommandBus bus
@@ -36,10 +36,10 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * @param EventSourcedAggregateRoot $eventSourcedAggregateRoot
+     * @param \SmoothPhp\Contracts\EventSourcing\AggregateRoot $eventSourcedAggregateRoot
      * @return ArrayIterator
      */
-    protected function events(EventSourcedAggregateRoot $eventSourcedAggregateRoot)
+    protected function events(\SmoothPhp\Contracts\EventSourcing\AggregateRoot $eventSourcedAggregateRoot)
     {
         return $eventSourcedAggregateRoot->getUncommittedEvents()->getIterator();
     }

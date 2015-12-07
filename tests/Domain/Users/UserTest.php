@@ -9,6 +9,7 @@ use FullRent\Core\User\ValueObjects\Email;
 use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
+use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class UserTest
@@ -44,17 +45,6 @@ final class UserTest extends \TestCase
         $this->checkCorrectEvent($events, 1, UsersEmailHasChanged::class);
     }
 
-    /**
-     *
-     */
-    public function testChangingUsersName()
-    {
-        $user = $this->registerUser();
-        $user->changeName(new Name('test', 'test'));
-
-        $events = $this->events($user);
-        $this->checkCorrectEvent($events, 1, UserHasChangedName::class);
-    }
 
     /**
      * @return User
@@ -62,7 +52,7 @@ final class UserTest extends \TestCase
     protected function registerUser()
     {
         $user = User::registerUser(UserId::random(), new Name("Mr Simon Bennett", 'Simon'),
-            new Email('simon@bennett.im'), new Password('test'));
+            new Email('simon@bennett.im'), new Password('test'), new Timezone('User'));
 
         return $user;
     }

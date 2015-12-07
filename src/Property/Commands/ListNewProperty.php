@@ -11,13 +11,14 @@ use FullRent\Core\Property\ValueObjects\LandlordId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
+use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class ListNewProperty
  * @package FullRent\Core\Property\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ListNewProperty
+final class ListNewProperty extends BaseCommand
 {
     /**
      * @var PropertyId
@@ -78,6 +79,7 @@ final class ListNewProperty
         $this->bathrooms = $bathrooms;
         $this->parking = $parking;
         $this->pets = $pets;
+
     }
 
     /**

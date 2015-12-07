@@ -1,11 +1,15 @@
 <?php
 namespace FullRent\Core\Property;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use FullRent\Core\Property\Events\AmendedPropertyAddress;
+use FullRent\Core\Property\Events\PropertyExtraInformationAmended;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
+use FullRent\Core\Property\Events\ImageAttachedToProperty;
+use FullRent\Core\Property\Events\ImageRemovedFromProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use FullRent\Core\Property\Exceptions\ImageAlreadyAdded;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyClosedToApplications;
@@ -13,58 +17,72 @@ use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
+use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Property
  * @package FullRent\Core\Property
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Property extends EventSourcedAggregateRoot
+final class Property extends AggregateRoot
 {
     /**
      * @var PropertyId
      */
     private $id;
+
     /**
      * @var Address
      */
     private $address;
+
     /**
      * @var Company
      */
     private $company;
+
     /**
      * @var Landlord
      */
     private $landlord;
+
     /**
      * @var BedRooms
      */
     private $bedRooms;
+
     /**
      * @var Bathrooms
      */
     private $bathrooms;
+
     /**
      * @var Parking
      */
     private $parking;
+
     /**
      * @var Pets
      */
     private $pets;
+
     /**
      * @var DateTime
      */
     private $listedAt;
+
     /**
      * @var DateTime
      */
     private $acceptingApplicationsFrom = false;
+
+    /** @var ImageId[] */
+    private $images = [];
 
 
     /**
@@ -138,6 +156,59 @@ final class Property extends EventSourcedAggregateRoot
     }
 
     /**
+     * @param ImageId $newImageId
+     * @throws ImageAlreadyAdded
+     */
+    public function attachImage(ImageId $newImageId)
+    {
+        foreach ($this->images as $imageId) {
+            if ($imageId->equal($newImageId)) {
+                throw new ImageAlreadyAdded('This image has already been added to the property');
+            }
+        }
+
+        $this->apply(new ImageAttachedToProperty($this->id, $newImageId, DateTime::now()));
+    }
+
+    /**
+     * @param ImageId $imageId
+     * @throws \Exception
+     */
+    public function removeImage(ImageId $imageId)
+    {
+        $filtered = array_filter($this->images, function (ImageId $existingImageId) use ($imageId) {
+            return $existingImageId->equal($imageId);
+        });
+
+        if (count($filtered) > 1) {
+            throw new \Exception('This image has been loaded more than once. Oopsie.');
+        } elseif (count($filtered) < 1) {
+            throw new \Exception('No image with this ID exists on property');
+        }
+
+        $this->apply(new ImageRemovedFromProperty($this->id, $imageId, DateTime::now()));
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function amendAddress(Address $address)
+    {
+        $this->apply(new AmendedPropertyAddress($this->id, $address, new DateTime()));
+    }
+
+    /**
+     * @param BedRooms $bedRooms
+     * @param Bathrooms $bathrooms
+     * @param Parking $parking
+     * @param Pets $pets
+     */
+    public function amendExtraInformation(BedRooms $bedRooms, Bathrooms $bathrooms, Parking $parking, Pets $pets)
+    {
+        $this->apply(new PropertyExtraInformationAmended($this->id, $bedRooms, $bathrooms, $parking, $pets, new DateTime()));
+    }
+
+    /**
      * @param NewPropertyListed $newPropertyListed
      */
     protected function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
@@ -161,6 +232,24 @@ final class Property extends EventSourcedAggregateRoot
     protected function applyPropertyClosedAcceptingApplications(PropertyClosedAcceptingApplications $e)
     {
         $this->acceptingApplicationsFrom = false;
+    }
+
+    /**
+     * @param ImageAttachedToProperty $e
+     */
+    protected function applyImageAttachedToProperty(ImageAttachedToProperty $e)
+    {
+        $this->images[] = $e->getImageId();
+    }
+
+    /**
+     * @param ImageRemovedFromProperty $e
+     */
+    protected function applyImageRemovedFromProperty(ImageRemovedFromProperty $e)
+    {
+        $this->images = array_filter($this->images, function (ImageId $imageId) use ($e) {
+            return !$imageId->equal($e->getImageId());
+        });
     }
 
     /**

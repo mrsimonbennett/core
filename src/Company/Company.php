@@ -1,8 +1,8 @@
 <?php
 namespace FullRent\Core\Company;
 
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use FullRent\Core\Company\Events\CompanyDomainChanged;
+use FullRent\Core\Company\Events\CompanyEnrolledNewTenant;
 use FullRent\Core\Company\Events\CompanyHasBeenRegistered;
 use FullRent\Core\Company\Events\CompanyNameChanged;
 use FullRent\Core\Company\Events\CompanySetUpDirectDebit;
@@ -11,16 +11,19 @@ use FullRent\Core\Company\Events\TenantEnrolled;
 use FullRent\Core\Company\ValueObjects\CompanyDomain;
 use FullRent\Core\Company\ValueObjects\CompanyId;
 use FullRent\Core\Company\ValueObjects\CompanyName;
+use FullRent\Core\Company\ValueObjects\TenancyId;
+use FullRent\Core\Company\ValueObjects\TenantEmail;
 use FullRent\Core\Company\ValueObjects\TenantId;
 use FullRent\Core\Services\DirectDebit\DirectDebitAccountAuthorisation;
 use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
  * Class Company
  * @package FullRent\Core\Company
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Company extends EventSourcedAggregateRoot
+final class Company extends AggregateRoot
 {
     /**
      * @var Landlord[]
@@ -98,7 +101,21 @@ final class Company extends EventSourcedAggregateRoot
      */
     public function changeDomain(CompanyDomain $companyDomain)
     {
-        $this->apply(new CompanyDomainChanged($this->companyId,$companyDomain,DateTime::now()));
+        $this->apply(new CompanyDomainChanged($this->companyId, $companyDomain, DateTime::now()));
+    }
+
+    /**
+     * @param TenantId $tenantId
+     * @param TenancyId $tenancyId
+     * @param TenantEmail $tenantEmail
+     */
+    public function enrolNewTenant(TenantId $tenantId, TenancyId $tenancyId, TenantEmail $tenantEmail)
+    {
+        $this->apply(new CompanyEnrolledNewTenant($this->companyId,
+                                                 $tenantId,
+                                                 $tenancyId,
+                                                 $tenantEmail,
+                                                 new DateTime()));
     }
 
 

@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Company\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ChangeCompanyName
  * @package FullRent\Core\Company\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ChangeCompanyName
+final class ChangeCompanyName extends BaseCommand
 {
     private $companyId;
 
@@ -21,6 +23,8 @@ final class ChangeCompanyName
     {
         $this->companyId = $companyId;
         $this->companyName = $companyName;
+
+
     }
 
     /**

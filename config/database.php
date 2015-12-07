@@ -65,7 +65,7 @@ return [
 		],
         'eventstore' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST_EVENTSTORE', 'localhost'),
+            'host'      => env('DB_HOST_EVENTSTORE', '127.0.0.1'),
             'database'  => env('DB_DATABASE_EVENTSTORE', 'eventstore'),
             'username'  => env('DB_USERNAME_EVENTSTORE', 'dbuser'),
             'password'  => env('DB_PASSWORD_EVENTSTORE', '123'),

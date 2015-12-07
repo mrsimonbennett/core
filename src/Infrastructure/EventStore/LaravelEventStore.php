@@ -93,10 +93,8 @@ final class LaravelEventStore implements EventStoreInterface
         } catch (QueryException $ex) {
             $this->db->rollBack();
 
-            throw  DBALEventStoreException::create($ex);
-
+            throw $ex;
         }
-
     }
 
     /**

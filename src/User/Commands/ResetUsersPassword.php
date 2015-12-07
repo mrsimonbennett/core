@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\User\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class ResetUsersPassword
  * @package FullRent\Core\User\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class ResetUsersPassword
+final class ResetUsersPassword extends BaseCommand
 {
     private $email;
 
@@ -24,6 +26,7 @@ final class ResetUsersPassword
         $this->email = $email;
         $this->newPassword = $newPassword;
         $this->token = $token;
+
     }
 
     /**

@@ -1,12 +1,14 @@
 <?php
 namespace FullRent\Core\Company\Commands;
 
+use SmoothPhp\CommandBus\BaseCommand;
+
 /**
  * Class EnrolTenant
  * @package FullRent\Core\Company\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
-final class EnrolTenant
+final class EnrolTenant extends BaseCommand
 {
     /**
      * @var string
@@ -25,6 +27,8 @@ final class EnrolTenant
     {
         $this->companyId = $companyId;
         $this->tenantId = $tenantId;
+
+
     }
 
     /**

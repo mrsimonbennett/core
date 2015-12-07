@@ -12,6 +12,7 @@ use stdClass;
  * Class MysqlPropertiesReadRepository
  * @package FullRent\Core\Property\Read
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Convert to Query Bus Please
  */
 final class MysqlPropertiesReadRepository implements PropertiesReadRepository
 {
@@ -58,5 +59,18 @@ final class MysqlPropertiesReadRepository implements PropertiesReadRepository
     public function getPropertyHistory(PropertyId $propertyId)
     {
         return $this->db->table('property_history')->where('property_id', $propertyId)->orderBy('event_happened','desc')->get();
+    }
+
+    /**
+     * @param PropertyId $propertyId
+     * @return stdClass
+     */
+    public function getPropertyImages(PropertyId $propertyId)
+    {
+        return $this->db
+                    ->table('property_images')
+                    ->where('property_id', $propertyId)
+                    ->orderBy('attached_at')
+                    ->get(['image_id', 'attached_at']);
     }
 }

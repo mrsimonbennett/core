@@ -102,6 +102,14 @@ return [
 	|
 	*/
 
-	'attributes' => [],
+	'attributes' => [
+        'company_name' => 'Company Name',
+        'company_domain' => 'Account Address',
+        'user_email' => 'Email',
+        'user_legal_name' => 'Full Name',
+        'user_password' => 'Password',
+
+
+    ],
 
 ];

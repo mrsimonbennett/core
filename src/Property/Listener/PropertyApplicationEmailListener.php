@@ -3,18 +3,18 @@ namespace FullRent\Core\Property\Listener;
 
 use FullRent\Core\Company\Queries\FindCompanyByIdQuery;
 use FullRent\Core\Infrastructure\Email\EmailClient;
-use FullRent\Core\Infrastructure\Events\EventListener;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Queries\FindPropertyById;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\User\Queries\FindUserById;
+use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class PropertyApplicationEmailListener
  * @package FullRent\Core\Property\Listener
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PropertyApplicationEmailListener extends EventListener
+final class PropertyApplicationEmailListener implements Subscriber
 {
     /**
      * @var QueryBus
@@ -58,16 +58,10 @@ final class PropertyApplicationEmailListener extends EventListener
     /**
      * @return array
      */
-    protected function registerOnce()
+    public function getSubscribedEvents()
     {
-        return ['whenApplicantInvitedToApplyByEmail' => ApplicantInvitedToApplyByEmail::class];
-    }
-
-    /**
-     * @return array
-     */
-    protected function register()
-    {
-        return [];
+        return [
+            ApplicantInvitedToApplyByEmail::class => ['whenApplicantInvitedToApplyByEmail'],
+        ];
     }
 }

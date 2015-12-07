@@ -10,6 +10,7 @@ use stdClass;
  * interface PropertiesReadRepository
  * @package FullRent\Core\Property\Read
  * @author Simon Bennett <simon@bennett.im>
+ * @deprecated Convert to Query Bus Please
  */
 interface PropertiesReadRepository
 {
@@ -31,4 +32,10 @@ interface PropertiesReadRepository
      * @return stdClass
      */
     public function getPropertyHistory(PropertyId $propertyId);
+
+    /**
+     * @param PropertyId $propertyId
+     * @return stdClass
+     */
+    public function getPropertyImages(PropertyId $propertyId);
 }

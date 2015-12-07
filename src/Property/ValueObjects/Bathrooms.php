@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\Property\ValueObjects;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class Bathrooms
  * @package FullRent\Core\Property\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Bathrooms implements SerializableInterface
+final class Bathrooms implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     /**
      * @var int

@@ -1,14 +1,14 @@
 <?php
 namespace FullRent\Core\Services\DirectDebit\GoCardLess;
 
-use Broadway\Serializer\SerializableInterface;
+use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class PreAuthorization
  * @package FullRent\Core\Services\DirectDebit\GoCardLess
  * @author Simon Bennett <simon@bennett.im>
  */
-final class PreAuthorization implements SerializableInterface
+final class PreAuthorization implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event
 {
     private $id;
 

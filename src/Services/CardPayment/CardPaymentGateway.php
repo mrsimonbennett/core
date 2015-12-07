@@ -5,7 +5,7 @@ use FullRent\Core\ValueObjects\Money\Money;
 
 /**
  * Interface CardPaymentGateway
- * @package FullRent\Core\Services\CardPayment
+ * @package FullRent\Core\Services\CardPaymentGateWay
  * @author Simon Bennett <simon@bennett.im>
  */
 interface CardPaymentGateway

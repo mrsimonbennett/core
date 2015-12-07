@@ -2,7 +2,7 @@
 /** @var Router $router */
 use Illuminate\Routing\Router;
 
-$router->group(['middleware' => 'auth.api'],
+$router->group([],
     function ($router) {
 
         /**
@@ -37,6 +37,9 @@ $router->group(['middleware' => 'auth.api'],
                 $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
                 $router->post('invite', 'CompanyController@invite');
 
+                $router->post('{id}/subscription', 'CompanyController@subscription');
+
+
             }
         );
         /*
@@ -44,14 +47,14 @@ $router->group(['middleware' => 'auth.api'],
          */
         $router->group(['prefix' => 'properties'],
             function () use ($router) {
-                $router->post('accept-applications', 'PropertiesController@acceptApplication');
-                $router->post('close-applications', 'PropertiesController@closeApplication');
-                $router->post('email-applications', 'PropertiesController@emailApplicant');
-
                 $router->get('{id}/history', 'PropertiesController@getHistory');
                 $router->post('', 'PropertiesController@listNewProperty');
                 $router->get('', 'PropertiesController@index');
                 $router->get('{id}', 'PropertiesController@show');
+                $router->put('{id}', 'PropertiesController@update');
+
+                $router->post('{id}/photos', 'PropertiesController@attachPhotos');
+                $router->delete('{id}/photo/{imageId}', 'PropertiesController@removeImage');
 
                 /**
                  * Contracts
@@ -60,37 +63,7 @@ $router->group(['middleware' => 'auth.api'],
 
             }
         );
-        $router->post('contracts', 'ContractsController@store');
-        $router->get('contracts', 'ContractsController@indexAll');
-        $router->get('rentbooks/{rentBookId}', 'RentBookController@getRentBook');
-        $router->get('rentbooks/{rentBookId}/rent/{rentId}', 'RentBookRentController@getRent');
 
-        $router->group(['prefix' => 'contracts/{id}'],
-            function () use ($router) {
-                $router->get('', 'ContractsController@show');
-
-                /*  $router->post('dates', 'ContractsController@saveDates');
-                  $router->post('rent', 'ContractsController@saveRent');
-                  $router->post('documents', 'ContractsController@saveDocuments');
-                  $router->post('lock', 'ContractsController@lockContract');
-                  $router->post('landlord-sign', 'ContractsController@landlordSignContract');
-
-                  $router->post('tenant-upload-id', 'ContractsController@tenantUploadIdDocument');
-                  $router->post('tenant-upload-earnings', 'ContractsController@tenantUploadEarningsDocument');
-                  $router->post('tenant-sign-contract', 'ContractsController@tenantSignContract');
-
-                  $router->get('deposit-information', 'ContractsController@getDepositInformation');
-                  $router->get('deposit/{tenantId}', 'ContractsController@getDepositInformationForTenant');*/
-
-                $router->post('tenant-pay-deposit', 'ContractsController@tenantPayDeposit');
-                $router->get('tenant/direct-debit/authorization_url',
-                             'ContractsController@tenantAuthorizationUrl');
-                $router->post('tenant/direct-debit/access_token',
-                              'ContractsController@tenantDirectDebitAccessToken');
-
-
-            }
-        );
 
         $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsContracts');
 
@@ -101,6 +74,9 @@ $router->group(['middleware' => 'auth.api'],
 
         $router->resource('users', 'UserController');
         $router->post('users/{id}/remember-token', 'UserController@rememberMe');
+        $router->put('users/{id}/basic', 'UserController@basicDetails');
+        $router->put('users/{id}/email', 'UserController@updateEmail');
+        $router->put('users/{id}/password', 'UserController@updatePassword');
 
         /*
          * Auth
@@ -114,26 +90,31 @@ $router->group(['middleware' => 'auth.api'],
 
                 $router->post('invited/{token}', ['uses' => 'Auth\AuthController@invited']);
 
-            });
-
-
-        $router->group(['prefix' => 'applications'],
-            function () use ($router) {
-                $router->get('for-property/{propertyId}', 'ApplicationController@forProperty');
-
-                $router->post('{propertyId}/create-account', 'ApplicationController@createAccount');
-                $router->post('{propertyId}/{applicationId}/personal', 'ApplicationController@personal');
-                $router->post('{propertyId}/{applicationId}/residential', 'ApplicationController@residential');
-                $router->post('{propertyId}/{applicationId}/finish', 'ApplicationController@finish');
-
-                $router->post('{propertyId}/{applicationId}/reject', 'ApplicationController@reject');
-                $router->post('{propertyId}/{applicationId}/approve', 'ApplicationController@approve');
-
-                $router->post('{propertyId}/for-user', 'ApplicationController@forUser');
-                $router->get('{propertyId}/{applicationId}', 'ApplicationController@showApplication');
             }
         );
 
+        /*
+        * Auth
+        */
+        $router->group(['prefix' => 'tenancies'],
+            function () use ($router) {
+                $router->post('draft', ['uses' => 'Tenancy\TenanciesController@draft']);
+                $router->get('{propertyId}/drafts', ['uses' => 'Tenancy\TenanciesController@getPropertiesDraftTenancies']);
+
+                $router->get('{tenancyId}',['uses' => 'Tenancy\TenanciesController@getTenancyById']);
+                $router->post('{tenancyId}/invite-email',['uses' => 'Tenancy\TenanciesController@inviteByEmail']);
+
+
+
+                $router->post('{tenancyId}/rentbook',['uses' => 'Tenancy\TenanciesRentBookController@addPayment']);
+                $router->get('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@getRentPayment']);
+                $router->put('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@updateRentPayment']);
+                $router->delete('{tenancyId}/rentbook/{paymentId}',['uses' => 'Tenancy\TenanciesRentBookController@removeRentPayment']);
+
+
+
+            }
+        );
 
     });
 
