@@ -4,10 +4,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateTenancyTenantsTable
+ * Class CreateUserSettingsTable
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
-final class CreateTenancyTenantsTable extends Migration
+final class CreateUserSettingsTable extends Migration
 {
     /**
      * Run the migrations.
