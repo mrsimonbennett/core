@@ -1797,16 +1797,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "f178a6c90f62c91fdc09b2428fc4288515dffb6a"
+                "reference": "0ac2d913249dc392ad4edc74038164410c715dff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/f178a6c90f62c91fdc09b2428fc4288515dffb6a",
-                "reference": "f178a6c90f62c91fdc09b2428fc4288515dffb6a",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/0ac2d913249dc392ad4edc74038164410c715dff",
+                "reference": "0ac2d913249dc392ad4edc74038164410c715dff",
                 "shasum": ""
             },
             "require": {
@@ -1858,7 +1858,7 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-12-05 07:53:26"
+            "time": "2015-12-08 13:08:27"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
