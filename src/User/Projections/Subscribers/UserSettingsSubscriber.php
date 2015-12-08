@@ -39,7 +39,7 @@ final class UserSettingsSubscriber implements Subscriber, Projection
         ];
 
         foreach (config('user.settings') as $setting => $default) {
-            $insert[$setting] = $default;
+            $insert[$setting] = $default['default'];
         }
 
         $table->insert($insert);
