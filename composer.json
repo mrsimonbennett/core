@@ -19,7 +19,8 @@
     "firebase/php-jwt": "dev-master",
     "smoothphp/cqrs-es-framework-laravel": "~0.0",
     "beberlei/assert": "^2.3@dev",
-    "samcrosoft/cloudinary": "~1.1.0"
+    "samcrosoft/cloudinary": "~1.1.0",
+    "symfony/options-resolver": "~2.6"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
