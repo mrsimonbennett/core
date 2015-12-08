@@ -12,6 +12,9 @@ final class FindUserSettingsHandler
     /** @var MySqlClient */
     private $client;
 
+    /** @var string[] */
+    private $hidden = ['user_id'];
+
     /**
      * FindUserSettingsHandler constructor.
      *
@@ -28,10 +31,20 @@ final class FindUserSettingsHandler
      */
     public function handle(FindUserSettings $query)
     {
-        return $this->client
+        $settings = $this->client
             ->query()
             ->table('user_settings')
             ->where('user_id', $query->userId())
             ->first();
+
+
+
+        foreach (array_keys((array) $settings) as $setting) {
+            if (in_array($setting, $this->hidden)) {
+                unset($settings->$setting);
+            }
+        }
+
+        return $settings;
     }
 }
