@@ -1863,16 +1863,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
-            "version": "v0.0.5",
+            "version": "v0.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework-Laravel.git",
-                "reference": "619fa22bf914b6f15d2a391ff9d7584487cc4d2e"
+                "reference": "269ecd2b4724f16d533566b74fd5cc28542eedfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/619fa22bf914b6f15d2a391ff9d7584487cc4d2e",
-                "reference": "619fa22bf914b6f15d2a391ff9d7584487cc4d2e",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/269ecd2b4724f16d533566b74fd5cc28542eedfc",
+                "reference": "269ecd2b4724f16d533566b74fd5cc28542eedfc",
                 "shasum": ""
             },
             "require": {
@@ -1916,7 +1916,7 @@
                 "event sourcing",
                 "laravel"
             ],
-            "time": "2015-12-08 13:12:46"
+            "time": "2015-12-08 15:27:56"
         },
         {
             "name": "stripe/stripe-php",
