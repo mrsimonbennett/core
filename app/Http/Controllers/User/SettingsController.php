@@ -7,6 +7,7 @@ use FullRent\Core\User\Queries\FindUserSettings;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use FullRent\Core\Application\Http\Requests\User\UpdateUserSettingsHttpRequest;
 
 /**
  * Class SettingsController
@@ -58,5 +59,14 @@ final class SettingsController extends Controller
         }
 
         return $settings;
+    }
+
+    /**
+     * @param UpdateUserSettingsHttpRequest $request
+     * @param string                        $userId
+     */
+    public function updateSettings(UpdateUserSettingsHttpRequest $request, $userId)
+    {
+        $settings = array_intersect_key($request->request->all(), config('user.settings'));
     }
 }
