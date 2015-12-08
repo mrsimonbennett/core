@@ -3,7 +3,9 @@
 use Log;
 use Illuminate\Routing\Controller;
 use FullRent\Core\QueryBus\QueryBus;
+use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\User\Queries\FindUserSettings;
+use FullRent\Core\User\Commands\UpdateUserSettings;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
@@ -20,17 +22,21 @@ final class SettingsController extends Controller
     private $query;
     /** @var JsonResponse */
     private $json;
+    /** @var CommandBus */
+    private $bus;
 
     /**
      * SettingsController constructor.
      *
      * @param QueryBus     $query
      * @param JsonResponse $json
+     * @param CommandBus   $bus
      */
-    public function __construct(QueryBus $query, JsonResponse $json)
+    public function __construct(QueryBus $query, JsonResponse $json, CommandBus $bus)
     {
         $this->query = $query;
         $this->json  = $json;
+        $this->bus = $bus;
     }
 
     /**
@@ -64,9 +70,12 @@ final class SettingsController extends Controller
     /**
      * @param UpdateUserSettingsHttpRequest $request
      * @param string                        $userId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateSettings(UpdateUserSettingsHttpRequest $request, $userId)
     {
-        $settings = array_intersect_key($request->request->all(), config('user.settings'));
+        $this->bus->execute(new UpdateUserSettings($userId, $settings));
+
+        return $this->json->success(['user_id' => $userId, 'settings' => $settings]);
     }
 }
