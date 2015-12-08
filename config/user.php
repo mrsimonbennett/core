@@ -18,9 +18,21 @@ return [
         |--------------------------------------------------------------------------
         */
 
-        'datetime_format' => 'd/m/Y H:i',
-        'date_format'     => 'd/m/Y',
-        'time_format'     => 'H:i',
-        'timezone'        => 'Europe/London',
+        'datetime_format' => [
+            'default' => 'd/m/Y H:i',
+            'rules'   => 'required|string',
+        ],
+        'date_format'     => [
+            'default' => 'd/m/Y',
+            'rules'   => 'required|string',
+        ],
+        'time_format'     => [
+            'default' => 'H:i',
+            'rules'   => 'required|string',
+        ],
+        'timezone'        => [
+            'default' => 'Europe/London',
+            'rules'   => 'required|timezone',
+        ],
     ]
 ];

@@ -39,10 +39,14 @@ final class SettingsController extends Controller
     public function viewSettings($userId)
     {
         $defaults = config('user.settings');
+
+        foreach ($defaults as $key => $options) {
+            $defaults[$key] = $options['default'];
+        }
+
         $resolver = (new OptionsResolver)
             ->setDefaults($defaults)
-            ->setRequired(array_merge(array_keys($defaults), ['user_id']))
-            ->setAllowedValues('user_id', $userId);
+            ->setRequired(array_keys($defaults));
 
         $settings = $resolver->resolve((array) $this->query->query(new FindUserSettings($userId)));
 
