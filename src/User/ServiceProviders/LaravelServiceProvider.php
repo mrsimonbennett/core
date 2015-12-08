@@ -6,6 +6,7 @@ use FullRent\Core\User\Listener\ContractTenantListener;
 use FullRent\Core\User\Listener\UserEmailListener;
 use FullRent\Core\User\Projections\MysqlUserReadRepository;
 use FullRent\Core\User\Projections\Subscribers\UserMysqlSubscriber;
+use FullRent\Core\User\Projections\Subscribers\UserSettingsSubscriber;
 use FullRent\Core\User\Projections\UserReadRepository;
 use FullRent\Core\User\SmoothUserRepository;
 use FullRent\Core\User\UserRepository;
@@ -40,6 +41,7 @@ final class LaravelServiceProvider extends FullRentServiceProvider
             ContractTenantListener::class,
             UserMysqlSubscriber::class,
             UserEmailListener::class,
+            UserSettingsSubscriber::class,
         ];
     }
 }

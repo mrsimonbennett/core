@@ -49,7 +49,6 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                                               'email'       => $userRegistered->getEmail(),
                                               'password'    => $userRegistered->getPassword(),
                                               'created_at'  => $userRegistered->getCreatedAt(),
-                                              'timezone'    => $userRegistered->getTimezone(),
                                               'has_address' => false,
                                               'completed'   => true,
                                               'updated_at'  => Carbon::now(),
