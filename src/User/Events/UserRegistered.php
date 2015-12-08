@@ -7,7 +7,6 @@ use FullRent\Core\User\ValueObjects\Name;
 use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
-use FullRent\Core\ValueObjects\Timezone;
 
 /**
  * Class UserRegistered
@@ -36,8 +35,6 @@ final class UserRegistered implements Serializable, \SmoothPhp\Contracts\EventSo
      * @var DateTime
      */
     private $createdAt;
-    /** @var Timezone */
-    private $timezone;
 
     /**
      * @param UserId   $userId
@@ -45,16 +42,14 @@ final class UserRegistered implements Serializable, \SmoothPhp\Contracts\EventSo
      * @param Email    $email
      * @param Password $password
      * @param DateTime $createdAt
-     * @param Timezone $timezone
      */
-    public function __construct(UserId $userId, Name $name, Email $email, Password $password, DateTime $createdAt, Timezone $timezone)
+    public function __construct(UserId $userId, Name $name, Email $email, Password $password, DateTime $createdAt)
     {
         $this->userId = $userId;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
         $this->createdAt = $createdAt;
-        $this->timezone = $timezone;
     }
 
     /**
@@ -100,8 +95,7 @@ final class UserRegistered implements Serializable, \SmoothPhp\Contracts\EventSo
             Name::deserialize($data['name']),
             Email::deserialize($data['email']),
             Password::deserialize($data['password']),
-            DateTime::deserialize($data['created']),
-            Timezone::deserialize($data['timezone'])
+            DateTime::deserialize($data['created'])
         );
     }
 
@@ -117,7 +111,6 @@ final class UserRegistered implements Serializable, \SmoothPhp\Contracts\EventSo
                 'email' => $this->email->serialize(),
                 'password' => $this->password->serialize(),
                 'created' => $this->createdAt->serialize(),
-                'timezone' => $this->timezone->serialize(),
             ];
     }
 
@@ -127,13 +120,5 @@ final class UserRegistered implements Serializable, \SmoothPhp\Contracts\EventSo
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @return Timezone
-     */
-    public function getTimezone()
-    {
-        return $this->timezone;
     }
 }

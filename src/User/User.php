@@ -4,7 +4,6 @@ namespace FullRent\Core\User;
 use FullRent\Core\User\Events\UserAmendedName;
 use FullRent\Core\User\Events\UserChangedPassword;
 use FullRent\Core\User\Events\UserFinishedApplication;
-use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
 use FullRent\Core\User\Events\UserHasUpdatedSettings;
 use FullRent\Core\User\Events\UserInvited;
@@ -21,7 +20,6 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\PasswordResetToken;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\DateTime;
-use FullRent\Core\ValueObjects\Timezone;
 use Illuminate\Contracts\Hashing\Hasher;
 use SmoothPhp\EventSourcing\AggregateRoot;
 
@@ -44,9 +42,6 @@ final class User extends AggregateRoot
     /**  @var InviteToken */
     private $inviteToken;
 
-    /** @var Timezone */
-    private $timezone;
-
     /** @var Password */
     private $password;
 
@@ -63,18 +58,16 @@ final class User extends AggregateRoot
      * @param Name $name
      * @param Email $email
      * @param Password $password
-     * @param Timezone $timezone
      * @return User
      */
     public static function registerUser(
         UserId $userId,
         Name $name,
         Email $email,
-        Password $password,
-        Timezone $timezone
+        Password $password
     ) {
         $user = new static();
-        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now(), $timezone));
+        $user->apply(new UserRegistered($userId, $name, $email, $password, DateTime::now()));
 
         return $user;
     }
@@ -103,12 +96,6 @@ final class User extends AggregateRoot
     public function changeEmail(Email $email)
     {
         $this->apply(new UsersEmailHasChanged($this->userId, $email, DateTime::now()));
-    }
-
-
-    public function changeTimezone(Timezone $timezone)
-    {
-        $this->apply(new UserHasChangedTimezone($timezone));
     }
 
     /**
@@ -193,7 +180,6 @@ final class User extends AggregateRoot
     {
         $this->userId = $userRegistered->getUserId();
         $this->email = $userRegistered->getEmail();
-        $this->timezone = $userRegistered->getTimezone();
         $this->password = $userRegistered->getPassword();
     }
 
@@ -224,14 +210,6 @@ final class User extends AggregateRoot
     protected function applyUsersEmailHasChanged(UsersEmailHasChanged $usersEmailHasChanged)
     {
         $this->email = $usersEmailHasChanged->getEmail();
-    }
-
-    /**
-     * @param UserHasChangedTimezone $userHasChangedTimezone
-     */
-    protected function applyUserHasChangedTimezone(UserHasChangedTimezone $userHasChangedTimezone)
-    {
-        $this->timezone = $userHasChangedTimezone->getTimezone();
     }
 
     /**

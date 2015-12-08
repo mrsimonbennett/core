@@ -87,8 +87,7 @@ final class CompanyController extends Controller
             UserId::fromIdentity($registerCompanyCommand->getLandlordId()),
             new Name($request->get('user_legal_name'), $request->get('user_know_as', $request->get('user_legal_name'))),
             new Email($request->get('user_email')),
-            new Password(bcrypt($request->get('user_password'))),
-            new Timezone($request->get('user_timezone'))
+            new Password(bcrypt($request->get('user_password')))
         );
         $this->bus->execute($registerUserCommand);
 
