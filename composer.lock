@@ -482,7 +482,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/4a94b91434bf02395b4c2714ae19562116a80a10",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/c35d52bd53fafd4a92c72c8e0b8489ebfc1a4306",
                 "reference": "4a94b91434bf02395b4c2714ae19562116a80a10",
                 "shasum": ""
             },
@@ -1798,16 +1798,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "886204b731495e5ebe53e7c3c3a277bb51b6b295"
+                "reference": "f178a6c90f62c91fdc09b2428fc4288515dffb6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/886204b731495e5ebe53e7c3c3a277bb51b6b295",
-                "reference": "886204b731495e5ebe53e7c3c3a277bb51b6b295",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/f178a6c90f62c91fdc09b2428fc4288515dffb6a",
+                "reference": "f178a6c90f62c91fdc09b2428fc4288515dffb6a",
                 "shasum": ""
             },
             "require": {
@@ -1859,7 +1859,7 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-11-23 09:24:12"
+            "time": "2015-12-05 07:53:26"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
