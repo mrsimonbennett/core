@@ -53,7 +53,7 @@ final class User extends AggregateRoot
     /** @var array */
     private $settings;
 
-    private function __construct()
+    public function __construct()
     {
         $this->settings = config('user.settings');
     }
