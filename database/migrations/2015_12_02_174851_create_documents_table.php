@@ -20,7 +20,6 @@ class CreateDocumentsTable extends Migration
                 $table->string('name');
                 $table->string('type');
                 $table->date('expires_at');
-                $table->date('attached_at');
 
                 $table->index('document_id');
 

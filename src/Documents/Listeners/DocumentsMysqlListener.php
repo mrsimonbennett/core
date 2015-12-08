@@ -1,12 +1,12 @@
 <?php namespace FullRent\Core\Documents\Listeners;
 
 use FullRent\Core\Documents\Events\DocumentStored;
-use FullRent\Core\Documents\Events\DocumentTrashed;
-use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 use FullRent\Core\Documents\Events\DocumentNameChanged;
+use FullRent\Core\Documents\Events\DocumentMovedToTrash;
+use FullRent\Core\Documents\Events\DocumentTypeAttached;
 use FullRent\Core\Documents\Events\DocumentExpiryDateChanged;
 
 /**
@@ -86,9 +86,9 @@ final class DocumentsMysqlListener implements Subscriber, Projection
     }
 
     /**
-     * @param DocumentTrashed $e
+     * @param DocumentMovedToTrash $e
      */
-    public function whenDocumentTrashed(DocumentTrashed $e)
+    public function whenDocumentTrashed(DocumentMovedToTrash $e)
     {
         $this->client
             ->query()
@@ -109,7 +109,7 @@ final class DocumentsMysqlListener implements Subscriber, Projection
             DocumentNameChanged::class       => ['whenDocumentNameChanged'],
             DocumentExpiryDateChanged::class => ['whenDocumentExpiryDateChanged'],
             DocumentTypeAttached::class      => ['whenDocumentTypeAttached'],
-            DocumentTrashed::class           => ['whenDocumentTrashed'],
+            DocumentMovedToTrash::class      => ['whenDocumentTrashed'],
         ];
     }
 }

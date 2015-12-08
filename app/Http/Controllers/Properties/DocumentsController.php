@@ -12,7 +12,8 @@ use FullRent\Core\Documents\Commands\UploadDocument;
 use FullRent\Core\Documents\Commands\UpdateDocument;
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Documents\Queries\FindDocumentsByPropertyId;
-use FullRent\Core\Application\Http\Requests\Properties\Documents\UpdatePropertyDocumentHttpRequest;
+use FullRent\Core\Documents\Queries\FindDeletedDocumentsByPropertyId;
+use FullRent\Core\Application\Http\Requests\Properties\UpdatePropertyHttpRequest;
 
 /**
  * Class DocumentsController
@@ -50,6 +51,15 @@ final class DocumentsController extends Controller
     }
 
     /**
+     * @param string $propertyId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deletedDocumentsForProperty($propertyId)
+    {
+        return $this->json->success(['documents' => $this->query->query(new FindDeletedDocumentsByPropertyId($propertyId))]);
+    }
+
+    /**
      * TODO: Proper expiry date
      *
      * @param Request $request
@@ -74,25 +84,23 @@ final class DocumentsController extends Controller
     }
 
     /**
-     * @param UpdatePropertyDocumentHttpRequest $request
-     * @param string                            $propertyId
-     * @param string                            $documentId
+     * @param UpdatePropertyHttpRequest $request
+     * @param string                    $propertyId
+     * @param string                    $documentId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateDocument(UpdatePropertyDocumentHttpRequest $request, $propertyId, $documentId)
+    public function updateDocument(UpdatePropertyHttpRequest $request, $propertyId, $documentId)
     {
         try {
             $this->bus->execute(new UpdateDocument(
                 $documentId,
-                $request->request->get('filename'),
-                $request->request->get('expiry-date'),
-                $request->request->get('document-type')
+                $request->request->get('name'),
+                $request->request->get('expiry-date')
             ));
 
             return $this->json->success(['property_id' => $propertyId, 'document_id' => $documentId]);
         } catch (\Exception $e) {
-            Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
-            return $this->json->error(['message' => $e->getMessage()]);
+            return $this->returnError($e);
         }
     }
 
@@ -103,15 +111,22 @@ final class DocumentsController extends Controller
      */
     public function deleteDocument($propertyId, $documentId)
     {
-        Log::info('Delete document request received');
-
         try {
             $this->bus->execute(new DeleteDocument($documentId));
 
             return $this->json->success(['property_id' => $propertyId]);
         } catch (\Exception $e) {
-            Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
-            return $this->json->error(['message' => $e->getMessage()]);
+            return $this->returnError($e);
         }
+    }
+
+    /**
+     * @param \Exception $e
+     * @return \Illuminate\Http\JsonResponse
+     */
+    private function returnError(\Exception $e)
+    {
+        Log::debug(sprintf("Exception at [%s] L%d\n%s\n\n", $e->getFile(), $e->getLine(), $e->getMessage()));
+        return $this->json->error(['message' => $e->getMessage()]);
     }
 }
