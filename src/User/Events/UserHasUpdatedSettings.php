@@ -62,7 +62,7 @@ final class UserHasUpdatedSettings implements Serializable, Event
     public function serialize()
     {
         return [
-            'user_id'    => $this->userId,
+            'user_id'    => (string) $this->userId,
             'settings'   => $this->settings,
             'updated_at' => $this->updatedAt->serialize(),
         ];
