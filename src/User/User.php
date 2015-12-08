@@ -6,6 +6,7 @@ use FullRent\Core\User\Events\UserChangedPassword;
 use FullRent\Core\User\Events\UserFinishedApplication;
 use FullRent\Core\User\Events\UserHasChangedTimezone;
 use FullRent\Core\User\Events\UserHasRequestedPasswordReset;
+use FullRent\Core\User\Events\UserHasUpdatedSettings;
 use FullRent\Core\User\Events\UserInvited;
 use FullRent\Core\User\Events\UserPasswordReset;
 use FullRent\Core\User\Events\UserRegistered;
@@ -176,6 +177,16 @@ final class User extends AggregateRoot
     }
 
     /**
+     * @param array $settings
+     */
+    public function updateSettings(array $settings)
+    {
+        // strip out settings that aren't in the config
+        $settings = array_intersect_key($settings, config('user.settings'));
+        $this->apply(new UserHasUpdatedSettings($this->userId, $settings, DateTime::now()));
+    }
+
+    /**
      * @param UserRegistered $userRegistered
      */
     protected function applyUserRegistered(UserRegistered $userRegistered)
@@ -242,6 +253,15 @@ final class User extends AggregateRoot
     protected function applyUserFinishedApplication(UserFinishedApplication $e)
     {
         $this->inviteToken = null;
+    }
+
+    /**
+     * @param UserHasUpdatedSettings $e
+     */
+    protected function applyUserHasUpdatedSettings(UserHasUpdatedSettings $e)
+    {
+        $this->userId = $e->userId();
+        $this->settings = $e->settings();
     }
 
     /**
