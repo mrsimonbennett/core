@@ -74,8 +74,8 @@ final class SettingsController extends Controller
      */
     public function updateSettings(UpdateUserSettingsHttpRequest $request, $userId)
     {
-        $this->bus->execute(new UpdateUserSettings($userId, $settings));
+        $this->bus->execute(new UpdateUserSettings($userId, $request->request->all()));
 
-        return $this->json->success(['user_id' => $userId, 'settings' => $settings]);
+        return $this->json->success(['user_id' => $userId]);
     }
 }
