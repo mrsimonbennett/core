@@ -58,6 +58,8 @@ final class MysqlUserReadRepository implements UserReadRepository
                                 ->get();
             $user->companies = $companies;
 
+            $user->settings = $this->db->table('user_settings')->where('user_id', $user->id)->first();
+
             return $user;
         }
 
