@@ -4,6 +4,7 @@ use FullRent\Core\User\Events\UserRegistered;
 use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
+use FullRent\Core\User\Events\UserHasUpdatedSettings;
 
 /**
  * Class UserSettingsSubscriber
@@ -45,12 +46,25 @@ final class UserSettingsSubscriber implements Subscriber, Projection
     }
 
     /**
+     * @param UserHasUpdatedSettings $e
+     */
+    public function whenUserHasUpdatedSettings(UserHasUpdatedSettings $e)
+    {
+        $this->client
+            ->query()
+            ->table('user_settings')
+            ->where('user_id', $e->userId())
+            ->update($e->settings());
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
-            UserRegistered::class => ['whenUserRegistered'],
+            UserRegistered::class         => ['whenUserRegistered'],
+            UserHasUpdatedSettings::class => ['whenUserHasUpdatedSettings'],
         ];
     }
 }
