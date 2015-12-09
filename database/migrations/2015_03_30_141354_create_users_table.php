@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration {
 			$table->string('legal_name');
 			$table->string('known_as');
 			$table->string('email');
-			$table->string('password')->nullable();
             $table->boolean('has_address')->default(false);
             $table->boolean('completed')->default(false);
             $table->rememberToken();
