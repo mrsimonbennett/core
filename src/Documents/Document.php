@@ -2,6 +2,7 @@
 
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
@@ -37,29 +38,35 @@ final class Document extends AggregateRoot
     private $documentType;
 
     /**
-     * @param DocumentId   $documentId
-     * @param UploadedFile $file
-     * @param DateTime     $expiryDate
-     * @param Filesystem   $storage
+     * @param DocumentId        $documentId
+     * @param UploadedFile      $file
+     * @param DateTime          $expiryDate
+     * @param FilesystemAdapter $storage
      * @return static
      */
     public static function upload(
         DocumentId $documentId,
         UploadedFile $file,
         DateTime $expiryDate,
-        Filesystem $storage
+        FilesystemAdapter $storage
     ) {
         $document = new static;
         $document->documentId = $documentId;
 
         try {
-            $storage->put((string) $documentId, file_get_contents($file));
+            $storage->getDriver()->put(
+                (string) $documentId,
+                file_get_contents($file)/*,
+                ['mimetype' => $file->getMimeType()]*/
+            );
+
             $document->apply(new DocumentStored(
                 $documentId,
                 new DocumentName($file->getClientOriginalName()),
                 $expiryDate,
                 DateTime::now()
             ));
+
 
             return $document;
         } catch (\Exception $e) {
@@ -93,7 +100,7 @@ final class Document extends AggregateRoot
      */
     public function addType(DocumentType $type)
     {
-        if (!$this->documentType) {
+        if (!$this->documentType || strlen(trim($this->documentType)) == 0) {
             $this->apply(new DocumentTypeAttached($this->documentId, $type, DateTime::now()));
         }
 

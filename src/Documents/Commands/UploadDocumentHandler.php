@@ -2,7 +2,6 @@
 
 use FullRent\Core\Documents\Document;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Samcrosoft\Cloudinary\Wrapper\CloudinaryWrapper;
 use FullRent\Core\Documents\Repository\DocumentRepository;
 
 /**
