@@ -56,8 +56,7 @@ final class Document extends AggregateRoot
         try {
             $storage->getDriver()->put(
                 (string) $documentId,
-                file_get_contents($file)/*,
-                ['mimetype' => $file->getMimeType()]*/
+                file_get_contents($file)
             );
 
             $document->apply(new DocumentStored(
