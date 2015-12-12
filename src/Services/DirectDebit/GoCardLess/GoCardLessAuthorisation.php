@@ -36,14 +36,15 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
     /**
      *
      * @param string $redirectUrl
-     * @todo add the pre populate data
+     * @param array $prePopulate
      * @return string
+     * @throws \GoCardless_ArgumentsException
      */
-    public function generateAuthorisationUrl($redirectUrl)
+    public function generateAuthorisationUrl($redirectUrl, $prePopulate = [])
     {
         $authorize_url_options = array(
             'redirect_uri' => $redirectUrl,
-            'merchant'     => []
+            'merchant'     => $prePopulate,
         );
 
         return $this->gocardlessClient->authorize_url($authorize_url_options);
@@ -52,16 +53,18 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
     /**
      * @param string $companyUrl
      * @param string $authorisationCode
+     * @param $redirectPath
      * @return AccessTokens
+     * @throws \GoCardless_ArgumentsException
      */
-    public function getAccessToken($companyUrl, $authorisationCode)
+    public function getAccessToken($companyUrl, $authorisationCode, $redirectPath)
     {
         $domain = env('CARDLESS_REDIRECT');
 
         $params = array(
             'client_id'    => getenv('CARDLESS_APP'),
             'code'         => $authorisationCode,
-            'redirect_uri' => "https://{$companyUrl}.{$domain}/direct-debit/access_token",
+            'redirect_uri' => "https://{$companyUrl}.{$domain}/{$redirectPath}",
             'grant_type'   => 'authorization_code',
         );
 

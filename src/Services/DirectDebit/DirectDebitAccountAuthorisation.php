@@ -10,16 +10,18 @@ interface DirectDebitAccountAuthorisation
 {
     /**
      * @param string $redirectUrl
+     * @param array $prePopulate
      * @return string
      */
-    public function generateAuthorisationUrl($redirectUrl);
+    public function generateAuthorisationUrl($redirectUrl,$prePopulate = []);
 
     /**
      * @param string $companyUrl
      * @param string $authorisationCode
+     * @param $redirectPath
      * @return AccessTokens
      */
-    public function getAccessToken($companyUrl, $authorisationCode);
+    public function getAccessToken($companyUrl, $authorisationCode, $redirectPath);
 
 
 }

@@ -77,11 +77,15 @@ final class Company extends AggregateRoot
 
     /**
      * @param $authCode
+     * @param $redirectPath
      * @param DirectDebitAccountAuthorisation $accountAuthorisation
      */
-    public function authorizeDirectDebit($authCode, DirectDebitAccountAuthorisation $accountAuthorisation)
-    {
-        $accessTokens = $accountAuthorisation->getAccessToken($this->companyDomain, $authCode);
+    public function authorizeDirectDebit(
+        $authCode,
+        $redirectPath,
+        DirectDebitAccountAuthorisation $accountAuthorisation
+    ) {
+        $accessTokens = $accountAuthorisation->getAccessToken($this->companyDomain, $authCode, $redirectPath);
         $this->apply(new CompanySetUpDirectDebit($this->companyId,
                                                  $accessTokens->getMerchantId(),
                                                  $accessTokens->getAccessToken(),
@@ -112,10 +116,10 @@ final class Company extends AggregateRoot
     public function enrolNewTenant(TenantId $tenantId, TenancyId $tenancyId, TenantEmail $tenantEmail)
     {
         $this->apply(new CompanyEnrolledNewTenant($this->companyId,
-                                                 $tenantId,
-                                                 $tenancyId,
-                                                 $tenantEmail,
-                                                 new DateTime()));
+                                                  $tenantId,
+                                                  $tenancyId,
+                                                  $tenantEmail,
+                                                  new DateTime()));
     }
 
 

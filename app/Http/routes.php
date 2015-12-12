@@ -14,7 +14,7 @@ $router->group([],
                 $router->get('exists/{domain}', 'CompanyController@checkExists');
                 $router->get('{domain}', 'CompanyController@show');
 
-                $router->get('{id}/direct-debit/authorization_url', 'CompanyDirectDebit@authorizationUrl');
+                $router->post('{id}/direct-debit/authorization_url', 'CompanyDirectDebit@authorizationUrl');
                 $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
                 $router->post('invite', 'CompanyController@invite');
 
