@@ -27,7 +27,10 @@ final class GoCardLessAuthorisation implements DirectDebitAccountAuthorisation
         \GoCardless::$environment = env('CARDLESS_ENV');
 
         $this->gocardlessClient = new GoCardless_Client(
-            ['app_id' => getenv('CARDLESS_APP'), 'app_secret' => getenv('CARDLESS_SECRET')]
+            [
+                'app_id'     => getenv('CARDLESS_APP'),
+                'app_secret' => getenv('CARDLESS_SECRET')
+            ]
         );
 
 
