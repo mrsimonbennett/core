@@ -7,6 +7,7 @@ use FullRent\Core\Tenancy\Commands\DraftTenancy;
 use FullRent\Core\Tenancy\Commands\InviteExistingUserToTenancy;
 use FullRent\Core\Tenancy\Commands\InviteNewUserToTenancy;
 use FullRent\Core\Tenancy\Queries\FindPropertiesDraftTenancies;
+use FullRent\Core\Tenancy\Queries\FindTenancyByCompanyId;
 use FullRent\Core\Tenancy\Queries\FindTenancyById;
 use FullRent\Core\User\Queries\FindUserByEmailQuery;
 use Illuminate\Http\Request;
@@ -88,6 +89,11 @@ final class TenanciesController extends Controller
         } else {
             $this->commandBus->execute(new InviteExistingUserToTenancy($tenancyId, $user->id));
         }
+    }
+
+    public function index(Request $request)
+    {
+        return ['tenancies' => $this->queryBus->query(new FindTenancyByCompanyId($request->get('company_id')))];
     }
 
 }

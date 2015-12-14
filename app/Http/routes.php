@@ -103,6 +103,7 @@ $router->group([],
             function () use ($router) {
                 $router->post('draft', ['uses' => 'Tenancy\TenanciesController@draft']);
                 $router->get('{propertyId}/drafts', ['uses' => 'Tenancy\TenanciesController@getPropertiesDraftTenancies']);
+                $router->get('/', ['uses' => 'Tenancy\TenanciesController@index']);
 
                 $router->get('{tenancyId}',['uses' => 'Tenancy\TenanciesController@getTenancyById']);
                 $router->post('{tenancyId}/invite-email',['uses' => 'Tenancy\TenanciesController@inviteByEmail']);
