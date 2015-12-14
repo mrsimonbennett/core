@@ -1,10 +1,12 @@
 <?php namespace FullRent\Core\Documents;
 
 use FullRent\Core\ValueObjects\DateTime;
+use League\Flysystem\Config;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
+use FullRent\Core\Application\Storage\DocumentStore;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentType;
@@ -41,23 +43,20 @@ final class Document extends AggregateRoot
      * @param DocumentId        $documentId
      * @param UploadedFile      $file
      * @param DateTime          $expiryDate
-     * @param FilesystemAdapter $storage
+     * @param DocumentStore        $storage
      * @return static
      */
     public static function upload(
         DocumentId $documentId,
         UploadedFile $file,
         DateTime $expiryDate,
-        FilesystemAdapter $storage
+        DocumentStore $storage
     ) {
         $document = new static;
         $document->documentId = $documentId;
 
         try {
-            $storage->getDriver()->put(
-                (string) $documentId,
-                file_get_contents($file)
-            );
+            $storage->write((string) $documentId . '.' . $file->getClientOriginalExtension(), file_get_contents($file), new Config);
 
             $document->apply(new DocumentStored(
                 $documentId,

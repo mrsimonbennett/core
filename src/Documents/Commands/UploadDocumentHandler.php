@@ -1,7 +1,9 @@
 <?php namespace FullRent\Core\Documents\Commands;
 
+use League\Flysystem\Filesystem;
 use FullRent\Core\Documents\Document;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use League\Flysystem\AdapterInterface;
+use FullRent\Core\Application\Storage\DocumentStore;
 use FullRent\Core\Documents\Repository\DocumentRepository;
 
 /**
@@ -14,17 +16,17 @@ final class UploadDocumentHandler
     /** @var DocumentRepository */
     private $repository;
 
-    /** @var Filesystem */
-    private $filesystem;
+    /** @var DocumentStore */
+    private $store;
 
     /**
      * @param DocumentRepository $repository
-     * @param Filesystem         $filesystem
+     * @param DocumentStore      $store
      */
-    public function __construct(DocumentRepository $repository, Filesystem $filesystem)
+    public function __construct(DocumentRepository $repository, DocumentStore $store)
     {
         $this->repository = $repository;
-        $this->filesystem = $filesystem;
+        $this->store = $store;
     }
 
     /**
@@ -36,7 +38,7 @@ final class UploadDocumentHandler
             $command->getDocumentId(),
             $command->getUploadedDocument(),
             $command->getExpiresAt(),
-            $this->filesystem
+            $this->store
         );
 
         $this->repository->save($document);
