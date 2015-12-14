@@ -150,6 +150,7 @@ return [
         FullRent\Core\Application\Providers\AuthServiceProvider::class,
         FullRent\Core\Application\Providers\EventServiceProvider::class,
         FullRent\Core\Application\Providers\RouteServiceProvider::class,
+        FullRent\Core\Application\Providers\StorageServiceProvider::class,
 
 
         /**
@@ -158,6 +159,7 @@ return [
         SmoothPhp\LaravelAdapter\ServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Samcrosoft\Cloudinary\Provider\CloudinaryServiceProvider::class,
+        GrahamCampbell\Flysystem\FlysystemServiceProvider::class,
 
         /**
          * src

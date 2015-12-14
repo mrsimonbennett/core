@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "41901cd0b049d83c18f55dec752b3127",
+    "hash": "bca91550bbc62a3f2386151adcbee034",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1481,6 +1481,52 @@
                 "storage"
             ],
             "time": "2015-09-30 22:26:59"
+        },
+        {
+            "name": "league/flysystem-adapter-decorator",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-adapter-decorator.git",
+                "reference": "72178f148bdd1bec16d9f25bf8f7ac32795bfcc7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-adapter-decorator/zipball/72178f148bdd1bec16d9f25bf8f7ac32795bfcc7",
+                "reference": "72178f148bdd1bec16d9f25bf8f7ac32795bfcc7",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "~1.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "~1.0.1",
+                "phpspec/phpspec": "~2.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\AdapterDecorator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "A base implementation of a flysystem adapter decorator",
+            "time": "2015-01-21 22:19:54"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
