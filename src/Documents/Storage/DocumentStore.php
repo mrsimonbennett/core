@@ -1,4 +1,4 @@
-<?php namespace FullRent\Core\Application\Storage;
+<?php namespace FullRent\Core\Documents\Storage;
 
 use League\Flysystem\Config;
 use Illuminate\Contracts\Auth\Guard;

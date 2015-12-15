@@ -3,7 +3,7 @@
 use League\Flysystem\Filesystem;
 use FullRent\Core\Documents\Document;
 use League\Flysystem\AdapterInterface;
-use FullRent\Core\Application\Storage\DocumentStore;
+use FullRent\Core\Documents\Storage\DocumentStore;
 use FullRent\Core\Documents\Repository\DocumentRepository;
 
 /**

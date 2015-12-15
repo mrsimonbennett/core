@@ -1,10 +1,10 @@
-<?php namespace FullRent\Core\Application\Providers;
+<?php namespace FullRent\Core\Documents\Provider;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\AdapterInterface;
 use Illuminate\Support\ServiceProvider;
 use GrahamCampbell\Flysystem\FlysystemManager;
-use FullRent\Core\Application\Storage\DocumentStore;
+use FullRent\Core\Documents\Storage\DocumentStore;
 
 /**
  * Class StorageServiceProvider

@@ -6,7 +6,7 @@ use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use FullRent\Core\Documents\Events\DocumentStored;
-use FullRent\Core\Application\Storage\DocumentStore;
+use FullRent\Core\Documents\Storage\DocumentStore;
 use FullRent\Core\Documents\ValueObjects\DocumentId;
 use FullRent\Core\Documents\ValueObjects\DocumentName;
 use FullRent\Core\Documents\ValueObjects\DocumentType;

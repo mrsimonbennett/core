@@ -150,7 +150,7 @@ return [
         FullRent\Core\Application\Providers\AuthServiceProvider::class,
         FullRent\Core\Application\Providers\EventServiceProvider::class,
         FullRent\Core\Application\Providers\RouteServiceProvider::class,
-        FullRent\Core\Application\Providers\StorageServiceProvider::class,
+        FullRent\Core\Documents\Provider\StorageServiceProvider::class,
 
 
         /**
