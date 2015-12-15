@@ -1,5 +1,6 @@
 <?php namespace FullRent\Core\Documents\Events;
 
+use FullRent\Core\Documents\ValueObjects\DocumentExtension;
 use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\EventSourcing\Event;
 use FullRent\Core\Documents\ValueObjects\DocumentName;
@@ -70,6 +71,15 @@ final class DocumentStored implements Serializable, Event
     public function getUploadedAt()
     {
         return $this->uploadedAt;
+    }
+
+    /**
+     * @return DocumentExtension
+     */
+    public function getDocumentExtension()
+    {
+        $parts = explode('.', (string) $this->documentName);
+        return new DocumentExtension(count($parts) > 1 ? end($parts) : '');
     }
 
     /**

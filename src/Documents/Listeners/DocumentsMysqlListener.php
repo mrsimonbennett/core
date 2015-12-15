@@ -37,9 +37,10 @@ final class DocumentsMysqlListener implements Subscriber, Projection
         $this->client->query()
                      ->table('documents')
                      ->insert([
-                             'document_id'                      => $e->getDocumentId(),
-                             'name'                             => $e->getDocumentName(),
-                             'uploaded_at'                      => $e->getUploadedAt(),
+                             'document_id' => $e->getDocumentId(),
+                             'name'        => $e->getDocumentName(),
+                             'ext'         => $e->getDocumentExtension(),
+                             'uploaded_at' => $e->getUploadedAt(),
                          ]);
     }
 

@@ -19,6 +19,7 @@ class CreateDocumentsTable extends Migration
                 $table->char('document_id', 36);
                 $table->string('name');
                 $table->string('type');
+                $table->string('ext');
                 $table->date('expires_at');
 
                 $table->index('document_id');
