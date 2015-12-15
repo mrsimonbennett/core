@@ -1,5 +1,6 @@
 <?php namespace FullRent\Core\Documents\Storage;
 
+use Illuminate\Http\Request;
 use League\Flysystem\Config;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Filesystem\Filesystem;
@@ -20,19 +21,18 @@ final class DocumentStore implements AdapterInterface
     /** @var AdapterInterface */
     private $adapter;
 
-    /** @var UserInterface */
-    private $user;
+    /** @var Request */
+    private $request;
 
     /**
      * DocumentStore constructor.
      *
      * @param AdapterInterface     $adapter
-     * @param Guard            $auth
      */
-    public function __construct(AdapterInterface $adapter, Guard $auth)
+    public function __construct(AdapterInterface $adapter, Request $request)
     {
-        $this->user    = $auth->user();
-        $this->base    = $adapter;
+        $this->adapter = $adapter;
+        $this->request = $request;
     }
 
     /**
@@ -51,7 +51,14 @@ final class DocumentStore implements AdapterInterface
      */
     public function write($path, $contents, Config $config)
     {
-        $path = sprintf('%s/%s/%s', $this->company->getId(), $this->user->getId(), $path);
+        $path = sprintf(
+            '%s/%s/%s',
+            $this->request->request->get('company_id'),
+            $this->request->request->get('user_id'),
+            $path
+        );
+
+        \Log::debug(sprintf('Writing to location [%s]', $path));
 
         return $this->getDecoratedAdapter()->write($path, $contents, $config);
     }
