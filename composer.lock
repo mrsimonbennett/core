@@ -51,16 +51,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.11.4",
+            "version": "3.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2524c78e0fa1ed049719b8b6b0696f0b6dfb1ca2"
+                "reference": "442d5cd0be09fe7ee6d0f4448624e52fb503c198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2524c78e0fa1ed049719b8b6b0696f0b6dfb1ca2",
-                "reference": "2524c78e0fa1ed049719b8b6b0696f0b6dfb1ca2",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/442d5cd0be09fe7ee6d0f4448624e52fb503c198",
+                "reference": "442d5cd0be09fe7ee6d0f4448624e52fb503c198",
                 "shasum": ""
             },
             "require": {
@@ -125,7 +125,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-12-04 01:19:53"
+            "time": "2015-12-16 01:04:57"
         },
         {
             "name": "barryvdh/laravel-cors",
@@ -1851,16 +1851,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "1.1.1",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "a208865a5aeffc2dbbef2a5b3409887272d93f32"
+                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a208865a5aeffc2dbbef2a5b3409887272d93f32",
-                "reference": "a208865a5aeffc2dbbef2a5b3409887272d93f32",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/d762ee5b099a29044603cd4649851e81aa66cb47",
+                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47",
                 "shasum": ""
             },
             "require": {
@@ -1895,7 +1895,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2015-12-01 02:52:15"
+            "time": "2015-12-10 14:48:13"
         },
         {
             "name": "predis/predis",

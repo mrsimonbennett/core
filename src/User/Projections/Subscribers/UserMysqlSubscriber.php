@@ -47,7 +47,6 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                                               'legal_name'  => $userRegistered->getName()->getLegalName(),
                                               'known_as'    => $userRegistered->getName()->getKnowAs(),
                                               'email'       => $userRegistered->getEmail(),
-                                              'password'    => $userRegistered->getPassword(),
                                               'created_at'  => $userRegistered->getCreatedAt(),
                                               'has_address' => false,
                                               'completed'   => true,
@@ -57,7 +56,7 @@ final class UserMysqlSubscriber implements Projection, Subscriber
 
     /**
      * @param UserInvited $e
-     */
+    */
     public function whenUserInvited(UserInvited $e)
     {
         $this->db->table('users')->insert([
@@ -65,7 +64,6 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                                               'legal_name'  => 'Pending',
                                               'known_as'    => 'Pending',
                                               'email'       => $e->getEmail(),
-                                              'password'    => null,
                                               'created_at'  => $e->getInvitedAt(),
                                               'has_address' => false,
                                               'updated_at'  => Carbon::now(),
@@ -83,20 +81,9 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                  ->update([
                               'legal_name' => $e->getName()->getLegalName(),
                               'known_as'   => $e->getName()->getKnowAs(),
-                              'password'   => $e->getPassword(),
                               'updated_at' => $e->getFinishedAt(),
                               'completed'  => true
                           ]);
-    }
-
-    /**
-     * @param UserPasswordReset $e
-     */
-    public function whenUserPasswordReset(UserPasswordReset $e)
-    {
-        $this->db->table('users')
-                 ->where('id', $e->getUserId())
-                 ->update(['password' => $e->getPassword()]);
     }
 
     /**
@@ -124,15 +111,6 @@ final class UserMysqlSubscriber implements Projection, Subscriber
                           ]);
     }
 
-    /**
-     * @param UserChangedPassword $e
-     */
-    public function whenUserChangesPassword(UserChangedPassword $e)
-    {
-        $this->db->table('users')
-                 ->where('id', $e->getUserId())
-                 ->update(['password' => $e->getNewPassword()]);
-    }
 
     /**
      * @return array
@@ -141,12 +119,10 @@ final class UserMysqlSubscriber implements Projection, Subscriber
     {
         return [
             UserRegistered::class          => ['whenUserRegistered'],
-            UserPasswordReset::class       => ['whenUserPasswordReset'],
             UserInvited::class             => ['whenUserInvited'],
             UserFinishedApplication::class => ['whenUserFinishedApplication'],
             UserAmendedName::class         => ['whenUserAmendsName'],
             UsersEmailHasChanged::class    => ['whenUserUpdatesEmail'],
-            UserChangedPassword::class     => ['whenUserChangesPassword'],
         ];
     }
 }

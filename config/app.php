@@ -181,7 +181,7 @@ return [
         \FullRent\Core\Tenancy\TenancyServiceProvider::class,
         \FullRent\Core\Documents\DocumentsServiceProvider::class,
         \FullRent\Core\Listeners\Email\EmailListenersServiceProvider::class,
-
+        \FullRent\Core\Projections\ProjectionsServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------
