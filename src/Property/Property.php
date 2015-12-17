@@ -1,7 +1,9 @@
 <?php
 namespace FullRent\Core\Property;
 
+use FullRent\Core\Property\Entity\InventoryItem;
 use FullRent\Core\Property\Events\AmendedPropertyAddress;
+use FullRent\Core\Property\Events\InventoryItemAdded;
 use FullRent\Core\Property\Events\PropertyExtraInformationAmended;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
@@ -18,6 +20,9 @@ use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
 use FullRent\Core\Property\ValueObjects\ImageId;
+use FullRent\Core\Property\ValueObjects\Inventory\InventoryItemDescription;
+use FullRent\Core\Property\ValueObjects\Inventory\InventoryItemId;
+use FullRent\Core\Property\ValueObjects\Inventory\InventoryItemName;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
 use FullRent\Core\Property\ValueObjects\PropertyId;
@@ -83,6 +88,9 @@ final class Property extends AggregateRoot
 
     /** @var ImageId[] */
     private $images = [];
+
+    /** @var Entity\InventoryItem[] */
+    private $inventory = [];
 
 
     /**
@@ -209,6 +217,16 @@ final class Property extends AggregateRoot
     }
 
     /**
+     * @param InventoryItemId          $id
+     * @param InventoryItemName        $name
+     * @param InventoryItemDescription $description
+     */
+    public function addInventoryItem(InventoryItemId $id, InventoryItemName $name, InventoryItemDescription $description)
+    {
+        $this->apply(new InventoryItemAdded($this->id, $id, $name, $description));
+    }
+
+    /**
      * @param NewPropertyListed $newPropertyListed
      */
     protected function applyNewPropertyListed(NewPropertyListed $newPropertyListed)
@@ -253,6 +271,21 @@ final class Property extends AggregateRoot
     }
 
     /**
+     * @param InventoryItemAdded $e
+     */
+    protected function applyInventoryItemAdded(InventoryItemAdded $e)
+    {
+        $this->id = $e->getPropertyId();
+
+        $this->inventory[] = InventoryItem::forProperty(
+            $e->getPropertyId(),
+            $e->getItemId(),
+            $e->getName(),
+            $e->getDescription()
+        );
+    }
+
+    /**
      * @return string
      */
     public function getAggregateRootId()
@@ -260,5 +293,11 @@ final class Property extends AggregateRoot
         return 'property-' . (string)$this->id;
     }
 
-
+    /**
+     * @return Entity\InventoryItem[]
+     */
+    public function getChildren()
+    {
+        return $this->inventory;
+    }
 }
