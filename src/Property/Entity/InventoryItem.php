@@ -1,6 +1,5 @@
 <?php namespace FullRent\Core\Property\Entity;
 
-use FullRent\Core\Property\Events\InventoryItemAdded;
 use SmoothPhp\EventSourcing\Entity;
 use FullRent\Core\Property\ValueObjects\PropertyId;
 use FullRent\Core\Property\ValueObjects\Inventory\InventoryItemId;
@@ -42,11 +41,6 @@ final class InventoryItem extends Entity
         $item->description = $description;
 
         return $item;
-    }
-
-    protected function applyInventoryItemAdded(InventoryItemAdded $e)
-    {
-        
     }
 
     /**
