@@ -1,8 +1,8 @@
-<?php
-namespace FullRent\Core\Tenancy\Commands;
+<?php namespace FullRent\Core\Tenancy\Commands;
 
-use FullRent\Core\Tenancy\Repositories\TenancyRepository;
 use FullRent\Core\Tenancy\ValueObjects\TenantId;
+use FullRent\Core\Tenancy\ValueObjects\TenancyId;
+use FullRent\Core\Tenancy\Repositories\TenancyRepository;
 
 /**
  * Class InviteExistingUserToTenancyHandler
