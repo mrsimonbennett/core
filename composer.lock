@@ -2335,16 +2335,16 @@
         },
         {
             "name": "smoothphp/cqrs-es-framework",
-            "version": "v1.1.5",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework.git",
-                "reference": "0ac2d913249dc392ad4edc74038164410c715dff"
+                "reference": "91c2d7245803449743db72dd4d58b3c79ac1d1c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/0ac2d913249dc392ad4edc74038164410c715dff",
-                "reference": "0ac2d913249dc392ad4edc74038164410c715dff",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework/zipball/91c2d7245803449743db72dd4d58b3c79ac1d1c3",
+                "reference": "91c2d7245803449743db72dd4d58b3c79ac1d1c3",
                 "shasum": ""
             },
             "require": {
@@ -2396,20 +2396,20 @@
                 "event sourcing",
                 "smooth php"
             ],
-            "time": "2015-12-08 13:08:27"
+            "time": "2015-12-05 07:53:55"
         },
         {
             "name": "smoothphp/cqrs-es-framework-laravel",
-            "version": "v0.0.6",
+            "version": "v0.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SmoothPhp/CQRS-ES-Framework-Laravel.git",
-                "reference": "269ecd2b4724f16d533566b74fd5cc28542eedfc"
+                "reference": "87aa8296526ca5ae686a7ef333df8f55ab68e2e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/269ecd2b4724f16d533566b74fd5cc28542eedfc",
-                "reference": "269ecd2b4724f16d533566b74fd5cc28542eedfc",
+                "url": "https://api.github.com/repos/SmoothPhp/CQRS-ES-Framework-Laravel/zipball/87aa8296526ca5ae686a7ef333df8f55ab68e2e8",
+                "reference": "87aa8296526ca5ae686a7ef333df8f55ab68e2e8",
                 "shasum": ""
             },
             "require": {
@@ -2453,7 +2453,7 @@
                 "event sourcing",
                 "laravel"
             ],
-            "time": "2015-12-08 15:27:56"
+            "time": "2015-12-09 07:53:21"
         },
         {
             "name": "stripe/stripe-php",
