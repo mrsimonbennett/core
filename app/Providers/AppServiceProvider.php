@@ -1,6 +1,8 @@
 <?php namespace FullRent\Core\Application\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -25,7 +27,6 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-
 	}
 
 }

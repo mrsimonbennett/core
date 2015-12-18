@@ -2,6 +2,7 @@
 namespace FullRent\Core\Property;
 
 use FullRent\Core\Property\Events\AmendedPropertyAddress;
+use FullRent\Core\Property\Events\DocumentAttachedToProperty;
 use FullRent\Core\Property\Events\PropertyExtraInformationAmended;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
@@ -9,6 +10,7 @@ use FullRent\Core\Property\Events\ImageRemovedFromProperty;
 use FullRent\Core\Property\Events\NewPropertyListed;
 use FullRent\Core\Property\Events\PropertyAcceptingApplications;
 use FullRent\Core\Property\Events\PropertyClosedAcceptingApplications;
+use FullRent\Core\Property\Exceptions\DocumentAlreadyAdded;
 use FullRent\Core\Property\Exceptions\ImageAlreadyAdded;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyAcceptingApplicationsException;
 use FullRent\Core\Property\Exceptions\PropertyAlreadyClosedToApplicationsException;
@@ -17,6 +19,7 @@ use FullRent\Core\Property\ValueObjects\Address;
 use FullRent\Core\Property\ValueObjects\ApplicantEmail;
 use FullRent\Core\Property\ValueObjects\Bathrooms;
 use FullRent\Core\Property\ValueObjects\BedRooms;
+use FullRent\Core\Property\ValueObjects\DocumentId;
 use FullRent\Core\Property\ValueObjects\ImageId;
 use FullRent\Core\Property\ValueObjects\Parking;
 use FullRent\Core\Property\ValueObjects\Pets;
@@ -83,6 +86,9 @@ final class Property extends AggregateRoot
 
     /** @var ImageId[] */
     private $images = [];
+
+    /** @var DocumentId[] */
+    private $documents = [];
 
 
     /**
@@ -171,6 +177,20 @@ final class Property extends AggregateRoot
     }
 
     /**
+     * @param DocumentId $newDocumentId
+     */
+    public function attachDocument(DocumentId $newDocumentId)
+    {
+        foreach ($this->documents as $documentId) {
+            if ($documentId->equal($newDocumentId)) {
+                throw new DocumentAlreadyAdded('This document has already been added to the property');
+            }
+        }
+
+        $this->apply(new DocumentAttachedToProperty($this->id, $newDocumentId, DateTime::now()));
+    }
+
+    /**
      * @param ImageId $imageId
      * @throws \Exception
      */
@@ -187,6 +207,23 @@ final class Property extends AggregateRoot
         }
 
         $this->apply(new ImageRemovedFromProperty($this->id, $imageId, DateTime::now()));
+    }
+
+    /**
+     * @param DocumentId $documentId
+     * @throws \Exception
+     */
+    public function removeDocument(DocumentId $documentId)
+    {
+        $filtered = array_filter($this->documents, function (DocumentId $existingDocumentId) use ($documentId) {
+            return $existingDocumentId->equal($documentId);
+        });
+
+        if (count($filtered) > 1) {
+            throw new \Exception('This document has been loaded more than once. Oopsie.');
+        } elseif (count($filtered) < 1) {
+            throw new \Exception('No document with this ID exists on property');
+        }
     }
 
     /**
@@ -250,6 +287,17 @@ final class Property extends AggregateRoot
         $this->images = array_filter($this->images, function (ImageId $imageId) use ($e) {
             return !$imageId->equal($e->getImageId());
         });
+    }
+
+    /**
+     * @param DocumentAttachedToProperty $e
+     */
+    protected function applyDocumentAttachedToProperty(DocumentAttachedToProperty $e)
+    {
+        $this->documents = array_filter($this->documents, function (DocumentId $documentId) use ($e) {
+                return !$documentId->equal($e->getDocumentId());
+            }
+        );
     }
 
     /**
