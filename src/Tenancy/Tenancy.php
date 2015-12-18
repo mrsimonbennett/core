@@ -10,6 +10,7 @@ use FullRent\Core\Tenancy\Events\TenancyRentScheduledPaymentAmended;
 use FullRent\Core\Tenancy\Events\TenancySetToFullRentCollection;
 use FullRent\Core\Tenancy\Exceptions\RentPaymentNotFound;
 use FullRent\Core\Tenancy\ValueObjects\CompanyId;
+use FullRent\Core\Tenancy\ValueObjects\DocumentId;
 use FullRent\Core\Tenancy\ValueObjects\PropertyId;
 use FullRent\Core\Tenancy\ValueObjects\RentAmount;
 use FullRent\Core\Tenancy\ValueObjects\RentDetails;
@@ -41,6 +42,9 @@ final class Tenancy extends AggregateRoot
      * @var CompanyId
      */
     private $companyId;
+
+    /** @var DocumentId[] */
+    private $documents = [];
 
     /**
      * @param TenancyId $tenancyId
@@ -148,6 +152,20 @@ final class Tenancy extends AggregateRoot
         $this->tenancyId = $e->getTenancyId();
         $this->companyId = $e->getCompanyId();
 
+    }
+
+    /**
+     * @param DocumentId $newDocumentId
+     */
+    public function attachDocument(DocumentId $newDocumentId)
+    {
+        foreach ($this->documents as $documentId) {
+            if ($documentId->equal($newDocumentId)) {
+                throw new Exceptions\DocumentAlreadyAdded('This document has already been added to the tenancy');
+            }
+        }
+
+        $this->apply(new Events\DocumentAttachedToTenancy($this->tenancyId, $newDocumentId, DateTime::now()));
     }
 
     /**
