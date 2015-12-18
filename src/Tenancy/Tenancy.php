@@ -188,6 +188,14 @@ final class Tenancy extends AggregateRoot
     }
 
     /**
+     * @param Events\DocumentAttachedToTenancy $e
+     */
+    protected function applyDocumentAttachedToTenancy(Events\DocumentAttachedToTenancy $e)
+    {
+        $this->documents[] = $e->getDocumentId();
+    }
+
+    /**
      * @return string
      */
     public function getAggregateRootId()
