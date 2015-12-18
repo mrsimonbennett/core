@@ -28,7 +28,7 @@ final class RegisterUserHandler
     public function handle(RegisterUser $registerUser)
     {
         $user = User::registerUser($registerUser->getUserId(), $registerUser->getName(), $registerUser->getEmail(),
-            $registerUser->getPassword(), $registerUser->getTimezone());
+            $registerUser->getPassword());
 
         $this->userRepository->save($user);
     }
