@@ -294,7 +294,17 @@ final class Property extends AggregateRoot
      */
     protected function applyDocumentAttachedToProperty(DocumentAttachedToProperty $e)
     {
-        $this->documents = array_filter($this->documents, function (DocumentId $documentId) use ($e) {
+        $this->documents[] = $e->getDocumentId();
+    }
+
+    /**
+     * @param Events\DocumentRemovedFromProperty $e
+     */
+    protected function applyDocumentRemovedFromProperty(Events\DocumentRemovedFromProperty $e)
+    {
+        $this->documents = array_filter(
+            $this->documents,
+            function (DocumentId $documentId) use ($e) {
                 return !$documentId->equal($e->getDocumentId());
             }
         );
