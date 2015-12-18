@@ -14,21 +14,25 @@ final class RegisterDirectDebitService extends BaseCommand
      * @var string
      */
     private $companyId;
+
     /**
      * @var string
      */
     private $directDebitAuthCode;
 
+    /** @var string */
+    private $redirectPath;
+
     /**
      * @param string $companyId
      * @param string $directDebitAuthCode
+     * @param string $redirectPath
      */
-    public function __construct($companyId, $directDebitAuthCode)
+    public function __construct($companyId, $directDebitAuthCode, $redirectPath)
     {
         $this->companyId = $companyId;
         $this->directDebitAuthCode = $directDebitAuthCode;
-
-
+        $this->redirectPath = $redirectPath;
     }
 
     /**
@@ -45,6 +49,14 @@ final class RegisterDirectDebitService extends BaseCommand
     public function getDirectDebitAuthCode()
     {
         return $this->directDebitAuthCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectPath()
+    {
+        return $this->redirectPath;
     }
 
 }

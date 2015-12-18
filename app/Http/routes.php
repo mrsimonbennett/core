@@ -14,7 +14,7 @@ $router->group([],
                 $router->get('exists/{domain}', 'CompanyController@checkExists');
                 $router->get('{domain}', 'CompanyController@show');
 
-                $router->get('{id}/direct-debit/authorization_url', 'CompanyDirectDebit@authorizationUrl');
+                $router->post('{id}/direct-debit/authorization_url', 'CompanyDirectDebit@authorizationUrl');
                 $router->post('{id}/direct-debit/access_token', 'CompanyDirectDebit@accessToken');
                 $router->post('invite', 'CompanyController@invite');
 
@@ -103,6 +103,7 @@ $router->group([],
             function () use ($router) {
                 $router->post('draft', ['uses' => 'Tenancy\TenanciesController@draft']);
                 $router->get('{propertyId}/drafts', ['uses' => 'Tenancy\TenanciesController@getPropertiesDraftTenancies']);
+                $router->get('/', ['uses' => 'Tenancy\TenanciesController@index']);
 
                 $router->get('{tenancyId}',['uses' => 'Tenancy\TenanciesController@getTenancyById']);
                 $router->post('{tenancyId}/invite-email',['uses' => 'Tenancy\TenanciesController@inviteByEmail']);

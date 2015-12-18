@@ -16,6 +16,7 @@ final class RegisterDirectDebitServiceHandler
      * @var CompanyRepository
      */
     private $companyRepository;
+
     /**
      * @var DirectDebitAccountAuthorisation
      */
@@ -24,8 +25,10 @@ final class RegisterDirectDebitServiceHandler
     /**
      * @param CompanyRepository $companyRepository
      */
-    public function __construct(CompanyRepository $companyRepository, DirectDebitAccountAuthorisation $accountAuthorisation)
-    {
+    public function __construct(
+        CompanyRepository $companyRepository,
+        DirectDebitAccountAuthorisation $accountAuthorisation
+    ) {
         $this->companyRepository = $companyRepository;
         $this->accountAuthorisation = $accountAuthorisation;
     }
@@ -37,7 +40,9 @@ final class RegisterDirectDebitServiceHandler
     {
         $company = $this->companyRepository->load(new CompanyId($command->getCompanyId()));
 
-        $company->authorizeDirectDebit($command->getDirectDebitAuthCode(), $this->accountAuthorisation);
+        $company->authorizeDirectDebit($command->getDirectDebitAuthCode(),
+                                       $command->getRedirectPath(),
+                                       $this->accountAuthorisation);
 
         $this->companyRepository->save($company);
     }

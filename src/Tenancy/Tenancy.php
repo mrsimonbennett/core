@@ -7,6 +7,7 @@ use FullRent\Core\Tenancy\Events\RemovedScheduledRentPayment;
 use FullRent\Core\Tenancy\Events\TenancyDrafted;
 use FullRent\Core\Tenancy\Events\TenancyRentPaymentScheduled;
 use FullRent\Core\Tenancy\Events\TenancyRentScheduledPaymentAmended;
+use FullRent\Core\Tenancy\Events\TenancySetToFullRentCollection;
 use FullRent\Core\Tenancy\Exceptions\RentPaymentNotFound;
 use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\PropertyId;
@@ -132,6 +133,11 @@ final class Tenancy extends AggregateRoot
     public function inviteExistingUser(TenantId $tenantId)
     {
         $this->apply(new InvitedExistingUserToTenancy($this->tenancyId, $tenantId, $this->companyId, new DateTime()));
+    }
+
+    public function setCollectDirectDebitWithFullRent()
+    {
+        $this->apply(new TenancySetToFullRentCollection($this->tenancyId,new DateTime()));
     }
 
     /**

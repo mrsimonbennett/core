@@ -25,7 +25,10 @@ final class GoCardlessDirectDebit implements DirectDebit
     {
         GoCardless::$environment = 'sandbox';
         $this->gocardlessClient = new GoCardless_Client(
-            ['app_id' => getenv('CARDLESS_APP'), 'app_secret' => getenv('CARDLESS_SECRET')]
+            [
+                'app_id'     => getenv('CARDLESS_APP'),
+                'app_secret' => getenv('CARDLESS_SECRET')
+            ]
         );
     }
 
@@ -84,7 +87,7 @@ final class GoCardlessDirectDebit implements DirectDebit
         $signature
     ) {
         $client = $this->generateClient($accessTokens);
-        $confirmation =  $client->confirm_resource(
+        $confirmation = $client->confirm_resource(
             [
                 'resource_id'   => $resourceId,
                 'resource_type' => $resourceType,
@@ -92,6 +95,7 @@ final class GoCardlessDirectDebit implements DirectDebit
                 'signature'     => $signature
             ]
         );
+
         return new PreAuthorization($confirmation->id);
 
     }
@@ -104,17 +108,22 @@ final class GoCardlessDirectDebit implements DirectDebit
      * @param $changeDate
      * @return Bill
      */
-    public function createBill(AccessTokens $accessTokens, PreAuthorization $preAuthToken, $billName, $billAmount,
-                               DateTime $changeDate)
-    {
+    public function createBill(
+        AccessTokens $accessTokens,
+        PreAuthorization $preAuthToken,
+        $billName,
+        $billAmount,
+        DateTime $changeDate
+    ) {
         $client = $this->generateClient($accessTokens);
         $preAuth = $client->pre_authorization($preAuthToken->getId());
 
         $bill = $preAuth->create_bill([
-                                          'name'               =>$billName,
+                                          'name'               => $billName,
                                           'amount'             => $billAmount,
                                           'charge_customer_at' => $changeDate->toDateString()
                                       ]);
+
         return Bill::fromGoCardless($bill);
     }
 
