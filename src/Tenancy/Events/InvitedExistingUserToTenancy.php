@@ -82,7 +82,7 @@ final class InvitedExistingUserToTenancy implements Event, Serializable
         return [
             'tenancy_id' => (string)$this->tenantId,
             'tenant_id'  => (string)$this->tenantId,
-            'company' => (string)$this->companyId,
+            'company_id' => (string)$this->companyId,
             'invited_at' => $this->invitedAt->serialize(),
         ];
     }
