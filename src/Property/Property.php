@@ -3,6 +3,7 @@ namespace FullRent\Core\Property;
 
 use FullRent\Core\Property\Events\AmendedPropertyAddress;
 use FullRent\Core\Property\Events\DocumentAttachedToProperty;
+use FullRent\Core\Property\Events\DocumentRemovedFromProperty;
 use FullRent\Core\Property\Events\PropertyExtraInformationAmended;
 use FullRent\Core\Property\Events\ApplicantInvitedToApplyByEmail;
 use FullRent\Core\Property\Events\ImageAttachedToProperty;
@@ -224,6 +225,8 @@ final class Property extends AggregateRoot
         } elseif (count($filtered) < 1) {
             throw new \Exception('No document with this ID exists on property');
         }
+
+        $this->apply(new DocumentRemovedFromProperty($this->id, $documentId, DateTime::now()));
     }
 
     /**
