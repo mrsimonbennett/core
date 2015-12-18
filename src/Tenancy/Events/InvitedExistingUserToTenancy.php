@@ -1,10 +1,11 @@
 <?php
 namespace FullRent\Core\Tenancy\Events;
 
+use FullRent\Core\ValueObjects\DateTime;
+use SmoothPhp\Contracts\EventSourcing\Event;
+use FullRent\Core\Tenancy\ValueObjects\TenantId;
 use FullRent\Core\Tenancy\ValueObjects\CompanyId;
 use FullRent\Core\Tenancy\ValueObjects\TenancyId;
-use FullRent\Core\Tenancy\ValueObjects\TenantId;
-use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
