@@ -98,13 +98,11 @@ final class Document extends AggregateRoot
      */
     public function addType(DocumentType $type)
     {
-        if (!$this->documentType || strlen(trim($this->documentType)) == 0) {
-            $this->apply(new DocumentTypeAttached($this->documentId, $type, DateTime::now()));
-        }
-
-        if (!(string) $this->documentType == (string) $type) {
+        if ($this->documentType != $type && !is_null($this->documentType)) {
             throw new DocumentTypeImmutable('Document type cannot be changed once set');
         }
+
+        $this->apply(new DocumentTypeAttached($this->documentId, $type, DateTime::now()));
     }
 
     /**
