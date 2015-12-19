@@ -70,6 +70,10 @@ $router->group([],
             }
         );
 
+        $router->group(['prefix' => 'documents'], function () use ($router) {
+            $router->get('types', 'DocumentsController@documentTypes');
+        });
+
 
         $router->get('/tenants/{id}/contracts', 'Tenant\ContractsController@getTenantsContracts');
 
