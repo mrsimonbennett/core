@@ -28,9 +28,8 @@ final class DocumentType implements Serializable
      *
      * @param string $documentType
      */
-    private function __construct($documentType)
+    public function __construct($documentType)
     {
-        $documentType = ucfirst(strtolower($documentType));
         if (!in_array($documentType, static::$types)) {
             throw new DocumentTypeNotFound("The document type {$documentType} was not found");
         }
