@@ -16,6 +16,14 @@ final class DocumentType implements Serializable
 {
     /** @var string[] */
     private static $types = [
+        /*
+         |--------------------------------------------------------------------------
+         | Valid document types
+         |--------------------------------------------------------------------------
+         |
+         | Make sure you add the translation in /resources/lang/document-types.php
+         |
+         */
         'contract',
         'gas-cert',
     ];
