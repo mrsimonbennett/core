@@ -22,7 +22,7 @@ return [
     /**
      * Database Table use to store events in
      */
-    'eventstore_table'           => 'eventstore',
+    'eventstore_table'           =>   env('DB_TABLE_EVENTSTORE','eventstore'),
 
 
     /*
