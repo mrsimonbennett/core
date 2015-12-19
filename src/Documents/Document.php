@@ -1,7 +1,7 @@
 <?php namespace FullRent\Core\Documents;
 
-use FullRent\Core\ValueObjects\DateTime;
 use League\Flysystem\Config;
+use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -36,7 +36,7 @@ final class Document extends AggregateRoot
     /** @var DateTime */
     private $expiresAt;
 
-    /** @var DocumentType|null */
+    /** @var DocumentType*/
     private $documentType;
 
     /**
