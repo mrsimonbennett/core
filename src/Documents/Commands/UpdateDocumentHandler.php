@@ -35,13 +35,20 @@ final class UpdateDocumentHandler
     {
         $document = $this->repository->load($command->documentId());
 
-        $document->changeName($command->newDocumentName());
-        $document->changeExpiryDate($command->expiryDate());
+        if ($command->newDocumentName()) {
+            $document->changeName($command->newDocumentName());
+        }
 
-        try {
-            $document->addType($command->documentType());
-        } catch (DocumentTypeImmutable $e) {
-            Log::debug("Attempt to change document type [{$command->documentId()}]");
+        if ($command->expiryDate()) {
+            $document->changeExpiryDate($command->expiryDate());
+        }
+
+        if ($command->documentType()) {
+            try {
+                $document->addType($command->documentType());
+            } catch (DocumentTypeImmutable $e) {
+                Log::debug("Attempt to change document type [{$command->documentId()}]");
+            }
         }
 
         $this->repository->save($document);

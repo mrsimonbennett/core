@@ -33,12 +33,12 @@ final class UpdateDocument extends BaseCommand
      * @param string $expiryDate
      * @param string $type
      */
-    public function __construct($documentId, $name, $expiryDate, $type)
+    public function __construct($documentId, $name = null, $expiryDate = null, $type = null)
     {
         $this->documentId = new DocumentId($documentId);
-        $this->name       = new DocumentName($name);
-        $this->expiryDate = DateTime::createFromFormat('d/m/Y', $expiryDate);
-        $this->type       = new DocumentType($type);
+        $this->name       = $name       ? new DocumentName($name)                          : null;
+        $this->expiryDate = $expiryDate ? DateTime::createFromFormat('d/m/Y', $expiryDate) : null;
+        $this->type       = $type       ? new DocumentType($type)                          : null;
     }
 
     /**
