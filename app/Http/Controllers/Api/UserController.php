@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers;
+namespace FullRent\Core\Application\Http\Controllers\Api;
 
 use FullRent\Core\Application\Http\Requests\UpdateUserBasicDetailsHTTPRequest;
 use FullRent\Core\Application\Http\Requests\UpdateUserEmailHttpRequest;
@@ -17,7 +17,7 @@ use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class UserController
- * @package FullRent\Core\Application\Http\Controllers
+ * @package FullRent\Core\Application\Http\Controllers\Api
  * @author Simon Bennett <simon@bennett.im>
  */
 final class UserController extends Controller

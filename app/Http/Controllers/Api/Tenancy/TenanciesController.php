@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\Tenancy;
+namespace FullRent\Core\Application\Http\Controllers\Api\Tenancy;
 
 use FullRent\Core\Application\Http\Requests\Tenancies\DraftTenancyHttpRequest;
 use FullRent\Core\QueryBus\QueryBus;
@@ -16,7 +16,7 @@ use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class TenanciesController
- * @package FullRent\Core\Application\Http\Controllers
+ * @package FullRent\Core\Application\Http\Controllers\Api
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenanciesController extends Controller

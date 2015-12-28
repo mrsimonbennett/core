@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers;
+namespace FullRent\Core\Application\Http\Controllers\Api;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\ChangeCompanyDomainHttpRequest;
@@ -24,6 +24,7 @@ use FullRent\Core\User\ValueObjects\Password;
 use FullRent\Core\User\ValueObjects\UserId;
 use FullRent\Core\ValueObjects\Timezone;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**

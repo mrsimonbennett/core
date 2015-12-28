@@ -1,4 +1,4 @@
-<?php namespace FullRent\Core\Application\Http\Controllers\User;
+<?php namespace FullRent\Core\Application\Http\Controllers\Api\User;
 
 use Log;
 use Illuminate\Routing\Controller;
@@ -13,7 +13,7 @@ use FullRent\Core\Application\Http\Requests\User\UpdateUserSettingsHttpRequest;
 
 /**
  * Class SettingsController
- * @package FullRent\Core\Application\Http\Controllers\User
+ * @package FullRent\Core\Application\Http\Controllers\Api\User
  * @author jrdn hannah <jrdn@jrdnhannah.co.uk>
  */
 final class SettingsController extends Controller

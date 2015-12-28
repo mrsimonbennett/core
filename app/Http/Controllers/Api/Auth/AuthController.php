@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\Auth;
+namespace FullRent\Core\Application\Http\Controllers\Api\Auth;
 
 use FullRent\Core\Projections\AuthProjection\Queries\FindAuthByEmailQuery;
 use FullRent\Core\QueryBus\QueryBus;
@@ -14,7 +14,7 @@ use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class AuthController
- * @package FullRent\Core\Application\Http\Controllers\Auth
+ * @package FullRent\Core\Application\Http\Controllers\Api\Auth
  * @author Simon Bennett <simon@bennett.im>
  */
 final class AuthController extends Controller

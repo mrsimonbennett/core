@@ -2,11 +2,11 @@
 namespace FullRent\Core\Application\Http\Controllers;
 
 /**
- * Class Controller
+ * Class DashboardController
  * @package FullRent\Core\Application\Http\Controllers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Controller
+final class DashboardController extends Controller
 {
 
 }

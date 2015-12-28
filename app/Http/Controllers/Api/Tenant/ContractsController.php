@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\Tenant;
+namespace FullRent\Core\Application\Http\Controllers\Api\Tenant;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Contract\Query\ContractReadRepository;
@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 
 /**
  * Class ContractsController
- * @package FullRent\Core\Application\Http\Controllers\Tenant
+ * @package FullRent\Core\Application\Http\Controllers\Api\Tenant
  * @author Simon Bennett <simon@bennett.im>
  */
 final class ContractsController extends Controller

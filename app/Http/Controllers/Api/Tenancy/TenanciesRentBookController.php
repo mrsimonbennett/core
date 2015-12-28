@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\Tenancy;
+namespace FullRent\Core\Application\Http\Controllers\Api\Tenancy;
 
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Commands\AmendScheduledTenancyRentPayment;
@@ -12,7 +12,7 @@ use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
  * Class TenanciesRentBookController
- * @package FullRent\Core\Application\Http\Controllers
+ * @package FullRent\Core\Application\Http\Controllers\Api
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenanciesRentBookController extends Controller

@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\GoCardless;
+namespace FullRent\Core\Application\Http\Controllers\Api\GoCardless;
 
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 use FullRent\Core\QueryBus\QueryBus;
@@ -17,7 +17,7 @@ use Illuminate\Routing\Controller;
 
 /**
  * Class GoCardlessWebHooksController
- * @package FullRent\Core\Application\Http\Controllers\GoCardless
+ * @package FullRent\Core\Application\Http\Controllers\Api\GoCardless
  * @author Simon Bennett <simon@bennett.im>
  */
 final class GoCardlessWebHooksController extends Controller

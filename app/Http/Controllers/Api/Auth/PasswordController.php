@@ -1,5 +1,5 @@
 <?php
-namespace FullRent\Core\Application\Http\Controllers\Auth;
+namespace FullRent\Core\Application\Http\Controllers\Api\Auth;
 
 use FullRent\Core\Application\Http\Helpers\JsonResponse;
 use FullRent\Core\Application\Http\Requests\ResetPasswordHttpRequest;
@@ -11,7 +11,7 @@ use Illuminate\Routing\Controller;
 
 /**
  * Class PasswordController
- * @package FullRent\Core\Application\Http\Controllers\Auth
+ * @package FullRent\Core\Application\Http\Controllers\Api\Auth
  * @author Simon Bennett <simon@bennett.im>
  */
 final class PasswordController extends Controller
