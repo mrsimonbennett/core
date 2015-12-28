@@ -158,6 +158,7 @@ return [
         SmoothPhp\LaravelAdapter\ServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Samcrosoft\Cloudinary\Provider\CloudinaryServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
         /**
          * src
@@ -225,7 +226,8 @@ return [
         'URL'       => 'Illuminate\Support\Facades\URL',
         'Validator' => 'Illuminate\Support\Facades\Validator',
         'View'      => 'Illuminate\Support\Facades\View',
-
+        'Form'      => 'Collective\Html\FormFacade',
+        'Html'      => 'Collective\Html\HtmlFacade',
     ],
 
 ];

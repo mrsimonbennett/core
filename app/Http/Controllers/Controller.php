@@ -6,7 +6,7 @@ namespace FullRent\Core\Application\Http\Controllers;
  * @package FullRent\Core\Application\Http\Controllers
  * @author Simon Bennett <simon@bennett.im>
  */
-final class Controller
+class Controller extends \Illuminate\Routing\Controller
 {
 
 }
