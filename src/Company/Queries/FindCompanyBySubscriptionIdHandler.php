@@ -5,7 +5,7 @@ use FullRent\Core\Infrastructure\Mysql\MySqlClient;
 
 /**
  * Class FindCompanyBySubscriptionIdHandler
- * @package FullRent\Core\Company\Queries
+ * @package FullRent\Core\CompanyModal\Queries
  * @author Simon Bennett <simon@bennett.im>
  */
 final class FindCompanyBySubscriptionIdHandler

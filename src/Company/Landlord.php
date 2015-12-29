@@ -6,7 +6,7 @@ use FullRent\Core\Company\ValueObjects\LandlordId;
 
 /**
  * Class Landlord
- * @package FullRent\Core\Company
+ * @package FullRent\Core\CompanyModal
  * @author Simon Bennett <simon@bennett.im>
  */
 final class Landlord implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

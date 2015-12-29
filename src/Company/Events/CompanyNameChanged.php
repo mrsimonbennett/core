@@ -8,7 +8,7 @@ use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class CompanyNameChanged
- * @package FullRent\Core\Company\Events
+ * @package FullRent\Core\CompanyModal\Events
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanyNameChanged implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

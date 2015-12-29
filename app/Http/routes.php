@@ -3,7 +3,7 @@
 use Illuminate\Routing\Router;
 
 
-$router->group([],
+$router->group(['middleware' => 'company'],
     function (Router $router) {
 
 
@@ -15,6 +15,13 @@ $router->group([],
         $router->group(['middleware' => 'auth'],
             function (Router $router) {
                 $router->get('/', ['uses' => 'DashboardController@index']);
+
+
+                /**
+                 * Properties
+                 */
+                $router->get('/properties', ['uses' => 'Properties\PropertiesController@index']);
+
             }
         );
     }

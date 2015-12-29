@@ -5,7 +5,7 @@ use SmoothPhp\CommandBus\BaseCommand;
 
 /**
  * Class ChangeCompanyDomain
- * @package FullRent\Core\Company\Commands
+ * @package FullRent\Core\CompanyModal\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
 final class ChangeCompanyDomain extends BaseCommand

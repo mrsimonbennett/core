@@ -6,7 +6,7 @@ use FullRent\Core\ValueObjects\Identity\UuidIdentity;
 
 /**
  * Class TenancyId
- * @package FullRent\Core\Company\ValueObjects
+ * @package FullRent\Core\CompanyModal\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenancyId extends UuidIdentity implements Identity

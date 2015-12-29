@@ -12,7 +12,7 @@
  *       Revision:  none
  *
  *         Author:  Stas Kobzar (stas@modulis.ca),
- *        Company:  Modulis.ca Inc.
+ *        CompanyModal:  Modulis.ca Inc.
  *
  * =====================================================================================
  */

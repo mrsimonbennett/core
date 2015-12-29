@@ -23,8 +23,11 @@
                     FR
                 </div>
             </li>
-            <li class="active">
+            <li @if(Request::is('/')) class="active" @endif>
                 <a href="/"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span></a>
+            </li>
+            <li @if(Request::is('properties*')) class="active" @endif>
+                <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
             </li>
         </ul>
     </div>

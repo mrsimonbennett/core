@@ -13,7 +13,7 @@ use SmoothPhp\Contracts\EventDispatcher\EventDispatcher;
 
 /**
  * Class LaravelServiceProvider
- * @package FullRent\Core\Company\ServiceProviders
+ * @package FullRent\Core\CompanyModal\ServiceProviders
  * @author Simon Bennett <simon@bennett.im>
  */
 final class LaravelServiceProvider extends FullRentServiceProvider

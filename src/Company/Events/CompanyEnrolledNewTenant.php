@@ -11,7 +11,7 @@ use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class CompanyEnrolledNewTenant
- * @package FullRent\Core\Company\Events
+ * @package FullRent\Core\CompanyModal\Events
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanyEnrolledNewTenant implements Serializable, Event

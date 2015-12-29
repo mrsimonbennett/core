@@ -5,7 +5,7 @@ use SmoothPhp\EventSourcing\EventSourcedRepository;
 
 /**
  * Class SmoothCompanyRepository
- * @package FullRent\Core\Company
+ * @package FullRent\Core\CompanyModal
  * @author Simon Bennett <simon@bennett.im>
  */
 final class SmoothCompanyRepository extends EventSourcedRepository implements CompanyRepository

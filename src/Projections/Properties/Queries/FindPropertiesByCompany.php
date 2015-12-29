@@ -1,20 +1,18 @@
 <?php
-namespace FullRent\Core\Company\Queries;
+namespace FullRent\Core\Projections\Properties\Queries;
 
 /**
- * Class FindCompanyByIdQuery
- * @package FullRent\Core\CompanyModal\Queries
+ * Class FindPropertiesByCompany
+ * @package FullRent\Core\Projections\Properties\Queries
  * @author Simon Bennett <simon@bennett.im>
  */
-final class FindCompanyByIdQuery
+final class FindPropertiesByCompany
 {
-    /**
-     * @var string
-     */
     private $companyId;
 
     /**
-     * @param string $companyId
+     * FindPropertiesByCompany constructor.
+     * @param $companyId
      */
     public function __construct($companyId)
     {
@@ -22,7 +20,7 @@ final class FindCompanyByIdQuery
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getCompanyId()
     {

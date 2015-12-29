@@ -9,7 +9,7 @@ use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class CompanyHasBeenRegistered
- * @package FullRent\Core\Company\Events
+ * @package FullRent\Core\CompanyModal\Events
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanyHasBeenRegistered implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

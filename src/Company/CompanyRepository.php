@@ -6,7 +6,7 @@ use SmoothPhp\Contracts\EventSourcing\AggregateRoot;
 
 /**
  * Interface CompanyRepository
- * @package FullRent\Core\Company
+ * @package FullRent\Core\CompanyModal
  * @author Simon Bennett <simon@bennett.im>
  */
 interface CompanyRepository

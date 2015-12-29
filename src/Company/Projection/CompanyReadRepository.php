@@ -8,7 +8,7 @@ use stdClass;
 
 /**
  * Interface CompanyReadRepository
- * @package FullRent\Core\Company\Projection
+ * @package FullRent\Core\CompanyModal\Projection
  * @author Simon Bennett <simon@bennett.im>
  * @deprecated Use Query Bus
  */
