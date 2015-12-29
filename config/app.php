@@ -159,9 +159,16 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Samcrosoft\Cloudinary\Provider\CloudinaryServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+
 
         /**
-         * src
+         * Services
+         */
+        FullRent\Core\Application\Http\Composer\ComposeServiceProvider::class,
+
+        /**
+         * Domain
          */
         'FullRent\Core\Company\ServiceProviders\LaravelServiceProvider',
         'FullRent\Core\User\ServiceProviders\LaravelServiceProvider',

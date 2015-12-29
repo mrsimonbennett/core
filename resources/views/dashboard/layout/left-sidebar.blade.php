@@ -3,11 +3,12 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element"> <span>
-                        <canvas id="user-icon" width="48" height="48" class="img-circle" ></canvas>
+                        <canvas id="user-icon" width="48" height="48" class="img-circle"></canvas>
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Simon
-                                        Bennett</strong>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">{{$currentUser->known_as}}</strong>
                              </span> <span class="text-muted text-xs block">Landlord <b
                                             class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">

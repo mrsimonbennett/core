@@ -40,6 +40,9 @@ final class AuthLoginController extends Controller
     public function postLogin(AuthLoginHttpRequest $request)
     {
         if ($this->guard->attempt($request->only(['email', 'password']))) {
+
+            // @todo does the user belong to this group?
+
             return redirect()->intended("/");
         }
 

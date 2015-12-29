@@ -22,7 +22,8 @@
     "samcrosoft/cloudinary": "~1.1.0",
     "symfony/options-resolver": "~2.6",
     "imagine/imagine": "^0.6.3",
-    "laravelcollective/html": "5.1"
+    "laravelcollective/html": "5.1",
+    "barryvdh/laravel-debugbar": "^2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
