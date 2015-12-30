@@ -17,4 +17,19 @@ final class PropertiesController extends Controller
     {
         return view('dashboard.properties.index');
     }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show()
+    {
+        return view('dashboard.properties.show');
+    }
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit()
+    {
+        return view('dashboard.properties.edit');
+    }
 }

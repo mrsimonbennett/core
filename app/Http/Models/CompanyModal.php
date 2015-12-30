@@ -6,7 +6,7 @@ namespace FullRent\Core\Application\Http\Models;
  * @package FullRent\Core\Application\Http\Models
  * @author Simon Bennett <simon@bennett.im>
  */
-final class CompanyModal implements CompanyInterface
+final class CompanyModal
 {
 
     public static function fromStdClass($data)

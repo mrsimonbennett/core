@@ -21,6 +21,8 @@ $router->group(['middleware' => 'company'],
                  * Properties
                  */
                 $router->get('/properties', ['uses' => 'Properties\PropertiesController@index']);
+                $router->get('/properties/{propertyId}', ['uses' => 'Properties\PropertiesController@show']);
+                $router->get('/properties/{propertyId}/edit', ['uses' => 'Properties\PropertiesController@edit']);
 
             }
         );

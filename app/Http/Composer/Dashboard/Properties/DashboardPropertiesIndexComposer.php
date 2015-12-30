@@ -8,11 +8,11 @@ use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Contracts\View\View;
 
 /**
- * Class DashboardPropertyIndexComposer
+ * Class DashboardPropertiesIndexComposer
  * @package FullRent\Core\Application\Http\Composer\Dashboard\Properties
  * @author Simon Bennett <simon@bennett.im>
  */
-final class DashboardPropertyIndexComposer implements Composer
+final class DashboardPropertiesIndexComposer implements Composer
 {
     /** @var QueryBus */
     private $queryBus;
@@ -21,7 +21,7 @@ final class DashboardPropertyIndexComposer implements Composer
     private $company;
 
     /**
-     * DashboardPropertyIndexComposer constructor.
+     * DashboardPropertiesIndexComposer constructor.
      * @param QueryBus $queryBus
      * @param CompanyModal $company
      */
