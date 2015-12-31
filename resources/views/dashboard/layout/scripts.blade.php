@@ -70,4 +70,25 @@
     context.textAlign = "center";
     context.fillStyle = "#FFF";
     context.fillText(initials, canvasCssWidth / 2, canvasCssHeight / 1.5);
+
+    @if(Session::has('notification'))
+            toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "preventDuplicates": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "10000",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    toastr.success('{{Session::get('notification.message')}}','{{Session::get('notification.title')}}')
+
+    @endif
 </script>

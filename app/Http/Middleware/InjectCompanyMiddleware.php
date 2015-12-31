@@ -6,6 +6,8 @@ use FullRent\Core\Application\Http\Models\CompanyModal;
 use FullRent\Core\Company\Queries\FindCompanyByDomainQuery;
 use FullRent\Core\QueryBus\QueryBus;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 /**
@@ -47,8 +49,14 @@ final class InjectCompanyMiddleware
         $this->application->bind(CompanyModal::class,
             function () use ($company) {
                 return CompanyModal::fromStdClass($company);
-        });
+            });
 
+        /** @var Factory $view */
+        $view = $this->application->make(Factory::class);
+        $view->composer('dashboard.*',
+            function (View $view) use ($company) {
+                $view->with('currentCompany', $company);
+            });
 
         return $next($request);
     }

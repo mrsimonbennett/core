@@ -65,7 +65,7 @@ final class PropertiesController extends Controller
                                                                  $request->get('bathrooms'),
                                                                  $request->get('parking'), ''));
 
-        return redirect('/properties/' . $id);
+        return redirect('/properties/' . $id)->with($this->notification('Property Updated','Property address amended'));
 
     }
 }
