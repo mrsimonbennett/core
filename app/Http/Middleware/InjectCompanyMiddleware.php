@@ -5,6 +5,7 @@ use Closure;
 use FullRent\Core\Application\Http\Models\CompanyModal;
 use FullRent\Core\Company\Queries\FindCompanyByDomainQuery;
 use FullRent\Core\QueryBus\QueryBus;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -23,15 +24,20 @@ final class InjectCompanyMiddleware
     /** @var Application */
     private $application;
 
+    /** @var Repository */
+    private $cache;
+
     /**
      * InjectCompanyMiddleware constructor.
      * @param QueryBus $queryBus
      * @param Application $application
+     * @param Repository $cache
      */
-    public function __construct(QueryBus $queryBus, Application $application)
+    public function __construct(QueryBus $queryBus, Application $application, Repository $cache)
     {
         $this->queryBus = $queryBus;
         $this->application = $application;
+        $this->cache = $cache;
     }
 
     /**
@@ -44,7 +50,14 @@ final class InjectCompanyMiddleware
     public function handle($request, Closure $next)
     {
 
-        $company = $this->queryBus->query(new FindCompanyByDomainQuery($this->getSubDomain($request)));
+        $companyName = $this->getSubDomain($request);
+
+        $company = $this->cache->remember($companyName . '-check',
+                                          5,
+            function () use ($companyName) {
+                return $this->queryBus->query(new FindCompanyByDomainQuery($companyName));
+            }
+        );
 
         $this->application->bind(CompanyModal::class,
             function () use ($company) {

@@ -6,6 +6,8 @@ use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardProper
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesIndexComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesShowComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\DashboardTenanciesShowComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\RentBook\DashboardTenanciesRentBookAddComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\RentBook\DashboardTenanciesRentBookChangeComposer;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,6 +43,8 @@ final class ComposeServiceProvider extends ServiceProvider
         $view->composer('dashboard.properties.edit', DashboardPropertiesEditComposer::class);
 
         $view->composer('dashboard.tenancies.show', DashboardTenanciesShowComposer::class);
+        $view->composer('dashboard.tenancies.rentbook.add', DashboardTenanciesRentBookAddComposer::class);
+        $view->composer('dashboard.tenancies.rentbook.change', DashboardTenanciesRentBookChangeComposer::class);
 
     }
 }
