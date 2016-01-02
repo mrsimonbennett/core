@@ -157,6 +157,7 @@ final class User extends AggregateRoot
         \Log::debug($this->password->getPassword());
         if ($hasher->check($oldPassword, $this->password->getPassword())) {
             $this->apply(new UserChangedPassword($this->userId, $newPassword, DateTime::now()));
+
             return;
         }
 
@@ -192,10 +193,13 @@ final class User extends AggregateRoot
         $this->email = $e->getEmail();
         $this->inviteToken = $e->getInviteToken();
     }
+
     protected function applyUserPasswordReset(UserPasswordReset $e)
     {
         $this->password = $e->getPassword();
+        $this->resetToken = null;
     }
+
     /**
      * @param UserChangedPassword $e
      */

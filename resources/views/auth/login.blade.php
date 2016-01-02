@@ -6,7 +6,12 @@
 
     </p>
     @include('parts.error')
+    @if(Session::has('success'))
+        <div class="alert alert-success">
 
+            <p>{!! (Session::get('success')) !!}</p>
+        </div>
+    @endif
     {!!Form::Open(['url'=> '/auth/login','method' => 'post','class' => 'm-t'])!!}
     <div class="form-group">
         {!!Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Email'])!!}
@@ -16,7 +21,7 @@
     </div>
     <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
 
-    <a href="#">
+    <a href="/auth/password-reset">
         <small>Forgot password?</small>
     </a>
 

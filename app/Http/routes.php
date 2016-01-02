@@ -11,7 +11,11 @@ $router->group(['middleware' => ['guest', 'company']],
         $router->get('/auth/invited/{token}', 'Auth\AuthInvitedController@getInvitedForm');
         $router->post('/auth/invited/{token}', 'Auth\AuthInvitedController@postInvitedForm');
 
+        $router->get('/auth/password-reset', 'Auth\AuthPasswordController@getResetPasswordForm');
+        $router->post('/auth/password-reset', 'Auth\AuthPasswordController@postResetPassword');
 
+        $router->get('/auth/password-reset/{token}/', 'Auth\AuthPasswordController@getResetWithTokenForm');
+        $router->post('/auth/password-reset/{token}/', 'Auth\AuthPasswordController@postResetWithTokenForm');
     });
 
 
