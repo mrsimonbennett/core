@@ -17,4 +17,13 @@ final class TenanciesController extends Controller
     {
         return view('dashboard.tenancies.show');
     }
+
+    public function index()
+    {
+        return view('dashboard.tenancies.index');
+    }
+    public function draft()
+    {
+        return view('dashboard.tenancies.draft');
+    }
 }

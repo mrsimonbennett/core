@@ -29,6 +29,11 @@
             <li @if(Request::is('properties*')) class="active" @endif>
                 <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
             </li>
+
+            <li @if(Request::is('tenancies*')) class="active" @endif>
+                <a href="/tenancies"><i class="fa fa-legal"></i> <span
+                            class="">Tenancies</span> </a>
+            </li>
         </ul>
     </div>
 </nav>

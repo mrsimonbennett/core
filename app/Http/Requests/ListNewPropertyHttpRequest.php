@@ -31,8 +31,6 @@ class ListNewPropertyHttpRequest extends Request
             "county"      => "required",
             "country"     => "required",
             "postcode"    => "required",
-            "company_id"  => 'required|exists:companies,id',
-            "landlord_id" => "required|exists:users,id",
         ];
     }
 

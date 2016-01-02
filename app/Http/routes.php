@@ -19,6 +19,9 @@ $router->group(['middleware' => ['auth', 'company']],
          * Properties
          */
         $router->get('/properties', ['uses' => 'Properties\PropertiesController@index']);
+        $router->get('/properties/create', ['uses' => 'Properties\PropertiesController@create']);
+        $router->post('/properties', ['uses' => 'Properties\PropertiesController@listProperty']);
+
         $router->get('/properties/{propertyId}', ['uses' => 'Properties\PropertiesController@show']);
         $router->put('/properties/{propertyId}', ['uses' => 'Properties\PropertiesController@update']);
         $router->get('/properties/{propertyId}/edit', ['uses' => 'Properties\PropertiesController@edit']);
@@ -26,6 +29,9 @@ $router->group(['middleware' => ['auth', 'company']],
         /**
          * Tenancies
          */
+        $router->get('/tenancies', ['uses' => 'Tenancies\TenanciesController@index']);
+        $router->get('/tenancies/draft', ['uses' => 'Tenancies\TenanciesController@draft']);
+
         $router->get('/tenancies/{tenancyId}', ['uses' => 'Tenancies\TenanciesController@show']);
         $router->get('/tenancies/{tenancyId}/invite', ['uses' => 'Tenancies\TenanciesInviteController@getInviteForm']);
         $router->post('/tenancies/{tenancyId}/invite-email', 'Tenancies\TenanciesInviteController@postInviteViaEmail');

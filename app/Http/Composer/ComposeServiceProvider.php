@@ -2,9 +2,12 @@
 namespace FullRent\Core\Application\Http\Composer;
 
 use FullRent\Core\Application\Http\Composer\Dashboard\AllDashboardComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesCreateComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesEditComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesIndexComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesShowComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\DashboardTenanciesDraftComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\DashboardTenanciesIndexComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\DashboardTenanciesShowComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\RentBook\DashboardTenanciesRentBookAddComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Tenancies\RentBook\DashboardTenanciesRentBookChangeComposer;
@@ -39,10 +42,15 @@ final class ComposeServiceProvider extends ServiceProvider
 
 
         $view->composer('dashboard.properties.index', DashboardPropertiesIndexComposer::class);
+        $view->composer('dashboard.properties.create', DashboardPropertiesCreateComposer::class);
         $view->composer('dashboard.properties.show', DashboardPropertiesShowComposer::class);
         $view->composer('dashboard.properties.edit', DashboardPropertiesEditComposer::class);
 
+
+        $view->composer('dashboard.tenancies.index', DashboardTenanciesIndexComposer::class);
         $view->composer('dashboard.tenancies.show', DashboardTenanciesShowComposer::class);
+        $view->composer('dashboard.tenancies.draft', DashboardTenanciesDraftComposer::class);
+
         $view->composer('dashboard.tenancies.rentbook.add', DashboardTenanciesRentBookAddComposer::class);
         $view->composer('dashboard.tenancies.rentbook.change', DashboardTenanciesRentBookChangeComposer::class);
 

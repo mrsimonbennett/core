@@ -31,10 +31,10 @@
     </table>
 
 
-    <a href="/properties/{{$property->id}}/draft-tenancy" class="btn btn-success btn-sm">Draft Tenancy <i
+    <a href="/tenancies/draft?property={{$property->id}}" class="btn btn-success btn-sm">Draft Tenancy <i
                 class="fa fa-legal"></i></a>
 
 @else
-    <a href="/properties/{{$property->id}}/draft-tenancy" class="btn btn-success btn-sm">Draft First Tenancy <i
+    <a href="/tenancies/draft?property={{$property->id}}" class="btn btn-success btn-sm">Draft First Tenancy <i
                 class="fa fa-legal"></i></a>
 @endif
