@@ -7,6 +7,11 @@ $router->group(['middleware' => ['guest', 'company']],
     function (Router $router) {
         $router->get('auth/login', ['uses' => 'Auth\AuthLoginController@getLogin']);
         $router->post('auth/login', ['uses' => 'Auth\AuthLoginController@postLogin']);
+
+        $router->get('/auth/invited/{token}', 'Auth\AuthInvitedController@getInvitedForm');
+        $router->post('/auth/invited/{token}', 'Auth\AuthInvitedController@postInvitedForm');
+
+
     });
 
 

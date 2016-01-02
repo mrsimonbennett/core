@@ -59,6 +59,9 @@ final class TenanciesInviteController extends Controller
         }
 
         sleep(2);//damn event store
-        return redirect("/tenancies/{$tenancyId}");
+
+        return redirect("/tenancies/{$tenancyId}")
+            ->with($this->notification('Tenant Invited',
+                                       "{$request->get('email')} has been invited to join tenancy via email"));
     }
 }

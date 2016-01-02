@@ -6,6 +6,8 @@ use FullRent\Core\Infrastructure\Email\EmailClient;
 use FullRent\Core\QueryBus\QueryBus;
 use FullRent\Core\Tenancy\Events\InvitedNewUserToTenancy;
 use FullRent\Core\Tenancy\Queries\FindTenancyById;
+use FullRent\Core\User\Events\UserFinishedApplication;
+use FullRent\Core\User\Queries\FindUserById;
 use SmoothPhp\Contracts\EventDispatcher\Projection;
 use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
@@ -14,7 +16,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  * @package FullRent\Core\Listeners\Email
  * @author Simon Bennett <simon@bennett.im>
  */
-final class TenancyEmailListener implements Subscriber, Projection
+final class TenancyEmailListener implements Subscriber
 {
     /** @var QueryBus */
     private $queryBus;
@@ -45,10 +47,27 @@ final class TenancyEmailListener implements Subscriber, Projection
                                  [
                                      'company' => $company,
                                      'token'   => $e->getInviteCode()->getCode(),
-                                     'tenancy'  => $this->queryBus->query(new FindTenancyById($e->getId()))
+                                     'tenancy' => $this->queryBus->query(new FindTenancyById($e->getId()))
                                  ],
                                  '',
                                  $e->getTenantEmail());
+    }
+
+    /**
+     * @param UserFinishedApplication $e
+     */
+    public function whenUserFinishedApplication(UserFinishedApplication $e)
+    {
+        $user = $this->queryBus->query(new FindUserById($e->getUserId()));
+        $company = current($user->companies);
+
+
+        $this->emailClient->send('users.finished_application',
+                                 'Thank you for joining FullRent',
+                                 ['company' => $company, 'user' => $user, 'name' => $e->getName()->getKnowAs()],
+                                 $e->getName()->getKnowAs(),
+                                 $user->email
+        );
     }
 
     /**
@@ -61,6 +80,7 @@ final class TenancyEmailListener implements Subscriber, Projection
     {
         return [
             InvitedNewUserToTenancy::class => ['invitedNewUserToTenancy', 100],
+            UserFinishedApplication::class => ['whenUserFinishedApplication', 100],
         ];
     }
 }
