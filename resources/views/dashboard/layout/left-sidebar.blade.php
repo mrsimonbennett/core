@@ -9,7 +9,7 @@
                             <span class="clear">
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">{{$currentUser->known_as}}</strong>
-                             </span> <span class="text-muted text-xs block">Landlord <b
+                             </span> <span class="text-muted text-xs block">{{ucfirst($currentUser->role)}} <b
                                             class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="profile.html">Profile</a></li>
@@ -26,14 +26,20 @@
             <li @if(Request::is('/')) class="active" @endif>
                 <a href="/"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span></a>
             </li>
-            <li @if(Request::is('properties*')) class="active" @endif>
-                <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
-            </li>
+            @can('view_all_properties', $currentUser)
+                <li @if(Request::is('properties*')) class="active" @endif>
+                    <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
+                </li>
+            @endcan
+            @can('view_all_tenancies', $currentUser)
+                <li @if(Request::is('tenancies*')) class="active" @endif>
+                    <a href="/tenancies"><i class="fa fa-legal"></i> <span
+                                class="nav-label">Tenancies</span> </a>
+                </li>
+            @else
 
-            <li @if(Request::is('tenancies*')) class="active" @endif>
-                <a href="/tenancies"><i class="fa fa-legal"></i> <span
-                            class="">Tenancies</span> </a>
-            </li>
+            @endcan
+
         </ul>
     </div>
 </nav>

@@ -1,6 +1,8 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 /**
  * Class Controller
  * @package FullRent\Core\Application\Http\Controllers
@@ -8,6 +10,7 @@ namespace FullRent\Core\Application\Http\Controllers;
  */
 class Controller extends \Illuminate\Routing\Controller
 {
+    use AuthorizesRequests;
     /**
      * Helper to returning a JS notification to the admin UI
      * @param string $title

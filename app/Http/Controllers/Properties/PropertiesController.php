@@ -51,6 +51,8 @@ final class PropertiesController extends Controller
      */
     public function index()
     {
+        $this->authorize('view_all_properties');
+
         return view('dashboard.properties.index');
     }
 
@@ -59,27 +61,36 @@ final class PropertiesController extends Controller
      */
     public function create()
     {
+        $this->authorize('list_property');
+
         return view('dashboard.properties.create');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show()
+    public function show($propertyId)
     {
+        $this->authorize('view_property', $propertyId);
+
         return view('dashboard.properties.show');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit()
+    public function edit($propertyId)
     {
+        $this->authorize('edit_property', $propertyId);
+
         return view('dashboard.properties.edit');
     }
 
     public function listProperty(ListNewPropertyHttpRequest $request)
     {
+        $this->authorize('list_property');
+
+
         $address = new Address($request->get('address'),
                                $request->get('city'),
                                $request->get('county'),
@@ -104,13 +115,15 @@ final class PropertiesController extends Controller
     }
 
     /**
-     * @param $id
+     * @param $propertyId
      * @param UpdatePropertyHttpRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update($id, UpdatePropertyHttpRequest $request)
+    public function update($propertyId, UpdatePropertyHttpRequest $request)
     {
-        $this->commandBus->execute(new UpdatePropertiesBasicInformation($id,
+        $this->authorize('edit_property', $propertyId);
+
+        $this->commandBus->execute(new UpdatePropertiesBasicInformation($propertyId,
                                                                         $request->get('address'),
                                                                         $request->get('city'),
                                                                         $request->get('county'),
@@ -120,8 +133,8 @@ final class PropertiesController extends Controller
                                                                         $request->get('bathrooms'),
                                                                         $request->get('parking'), ''));
 
-        return redirect('/properties/' . $id)->with($this->notification('Property Updated',
-                                                                        'Property address amended'));
+        return redirect('/properties/' . $propertyId)->with($this->notification('Property Updated',
+                                                                                'Property address amended'));
 
     }
 }
