@@ -2,6 +2,7 @@
 namespace FullRent\Core\Application\Http\Composer;
 
 use FullRent\Core\Application\Http\Composer\Dashboard\AllDashboardComposer;
+use FullRent\Core\Application\Http\Composer\Dashboard\Layout\DashboardLayoutLeftSideBarComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesCreateComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesEditComposer;
 use FullRent\Core\Application\Http\Composer\Dashboard\Properties\DashboardPropertiesIndexComposer;
@@ -39,7 +40,7 @@ final class ComposeServiceProvider extends ServiceProvider
         /** @var Factory $view */
         $view = $this->app->make('Illuminate\Contracts\View\Factory');
         $view->composer('dashboard.*', AllDashboardComposer::class);
-
+        $view->composer('dashboard.layout.left-sidebar', DashboardLayoutLeftSideBarComposer::class);
 
         $view->composer('dashboard.properties.index', DashboardPropertiesIndexComposer::class);
         $view->composer('dashboard.properties.create', DashboardPropertiesCreateComposer::class);

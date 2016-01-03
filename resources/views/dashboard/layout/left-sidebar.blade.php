@@ -27,18 +27,24 @@
                 <a href="/"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span></a>
             </li>
             @can('view_all_properties', $currentUser)
-                <li @if(Request::is('properties*')) class="active" @endif>
-                    <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
-                </li>
+            <li @if(Request::is('properties*')) class="active" @endif>
+                <a href="/properties"><i class="fa fa-home"></i> <span class="nav-label">Properties</span></a>
+            </li>
             @endcan
             @can('view_all_tenancies', $currentUser)
-                <li @if(Request::is('tenancies*')) class="active" @endif>
-                    <a href="/tenancies"><i class="fa fa-legal"></i> <span
-                                class="nav-label">Tenancies</span> </a>
-                </li>
+            <li @if(Request::is('tenancies*')) class="active" @endif>
+                <a href="/tenancies"><i class="fa fa-legal"></i> <span
+                            class="nav-label">Tenancies</span> </a>
+            </li>
             @else
+                @foreach($user_tenancies as $tenancy)
 
-            @endcan
+                    <li @if(Request::is('tenancies*')) class="active" @endif>
+                        <a href="/tenancies/{{$tenancy->id}}"><i class="fa fa-legal"></i> <span
+                                    class="nav-label">{{$tenancy->property->address_firstline}}</span> </a>
+                    </li>
+                @endforeach
+                @endcan
 
         </ul>
     </div>
