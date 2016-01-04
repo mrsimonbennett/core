@@ -16,7 +16,7 @@
                         <li><a href="contacts.html">Contacts</a></li>
                         <li><a href="mailbox.html">Mailbox</a></li>
                         <li class="divider"></li>
-                        <li><a href="login.html">Logout</a></li>
+                        <li><a href="/auth/logout">Logout</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">

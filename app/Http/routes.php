@@ -23,6 +23,7 @@ $router->group(['middleware' => ['auth', 'company']],
     function (Router $router) {
         $router->get('/', ['uses' => 'DashboardController@index']);
 
+        $router->get('/auth/logout','Auth\AuthLogoutController@logout');
 
         /**
          * Properties
