@@ -3,7 +3,9 @@ namespace FullRent\Core\Application\Providers;
 
 use FullRent\Core\Application\Policies\Properties\CheckOwnerOfProperty;
 use FullRent\Core\Application\Policies\Properties\ListPropertyPolicy;
+use FullRent\Core\Application\Policies\Tenancies\ManageTenancyPolicy;
 use FullRent\Core\Application\Policies\Tenancies\ViewAllCompanyTenanciesPolicy;
+use FullRent\Core\Application\Policies\Tenancies\ViewTenancyPolicy;
 use FullRent\Core\Application\Policies\ViewAllProperties;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -20,8 +22,7 @@ final class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-    ];
+    protected $policies = [];
 
     /**
      * Register any application authentication / authorization services.
@@ -41,13 +42,19 @@ final class AuthServiceProvider extends ServiceProvider
                 'list_property'       => ListPropertyPolicy::class,
 
                 /*
-                 * Tenanices
+                 * Tenancies
                  */
                 'view_all_tenancies'  => ViewAllCompanyTenanciesPolicy::class,
+                'manage_tenancy'      => ManageTenancyPolicy::class,
+                'view_tenancy'        => ViewTenancyPolicy::class,
             ],
             $gate);
     }
 
+    /**
+     * @param array $policies
+     * @param GateContract $gate
+     */
     private function definePolices(array $policies, GateContract $gate)
     {
         foreach ($policies as $policyName => $class) {

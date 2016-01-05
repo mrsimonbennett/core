@@ -16,7 +16,11 @@
         <div class="col-lg-12">
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-9">
-                    <h2><span class="label label-warning">Draft</span> Tenancy
+                    <h2>
+                        @can('manage_tenancy',$tenancy->id)
+                        <span class="label label-warning">Draft</span>
+                        @endcan
+                        Tenancy
                         for {{$tenancy->property->address_firstline}}
                         <small> - {{(new \Carbon\Carbon($tenancy->tenancy_start))->toFormattedDateString()}}
                             - {{(new \Carbon\Carbon($tenancy->tenancy_end))->toFormattedDateString()}}</small>
