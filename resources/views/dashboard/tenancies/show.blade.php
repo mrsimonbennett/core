@@ -17,9 +17,7 @@
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-9">
                     <h2>
-                        @can('manage_tenancy',$tenancy->id)
                         <span class="label label-warning">Draft</span>
-                        @endcan
                         Tenancy
                         for {{$tenancy->property->address_firstline}}
                         <small> - {{(new \Carbon\Carbon($tenancy->tenancy_start))->toFormattedDateString()}}
@@ -30,7 +28,9 @@
             </div>
             <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
+                        @can('manage_tenancy',$tenancy->id)
+
                         <div class="ibox float-e-margins">
                             <div class="ibox-title ">
                                 <h5>
@@ -58,10 +58,47 @@
 
                             </div>
                         </div>
+                        @endcan
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title ">
+                                <h5>{{$tenancy->property->address_firstline}}
+                                    <small>{{$tenancy->property->address_postcode}}</small>
+                                </h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="ibox-content no-padding border-left-right">
+                                    <img src="http://placehold.it/600x200" alt="" class="img-responsive">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <ul>
+                                            <li>{{$tenancy->property->address_firstline}}</li>
+                                            <li>{{$tenancy->property->address_city}}</li>
+                                            <li>{{$tenancy->property->address_county}}</li>
+                                            <li>{{$tenancy->property->address_postcode}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <ul>
+                                            <li>{{$tenancy->property->bedrooms}} Bedrooms</li>
+                                            <li>{{$tenancy->property->bathrooms}} Bathrooms</li>
+                                            <li>{{$tenancy->property->parking}} Parking Spots</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
-                    <div class="col-lg-9">
+                    <div class="col-lg-8">
                         <div class="panel blank-panel">
 
                             <div class="ibox float-e-margins">

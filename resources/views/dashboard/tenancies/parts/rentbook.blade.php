@@ -1,19 +1,26 @@
+@can('manage_tenancy',$tenancy->id)
 <p>
     Below are our best guesses of your rent booked based on the tenancy
     setup
 </p>
 <p>
     @if(!$currentCompany->direct_debit_setup)
+
         <a href="#setup-directdebit" class="btn btn-primary btn-sm" data-toggle="modal">Set Up Direct Debit Rent
             Collection</a>
-    @endif
+        @endcan
 </p>
+@else
+    <p>Below are a list of the rent payments due in this tenancy.</p>
+@endif
+
 <table class="table table-striped table-hover">
     <tbody>
     @foreach($tenancy->rent_book_payments as $payment)
         <tr>
             <td>{{(new \Carbon\Carbon($payment->payment_due))->toFormattedDateString()}}</td>
             <td> £{{$payment->payment_amount}}</td>
+            @can('manage_tenancy',$tenancy->id)
             <td class="client-status">
                 <a href="/tenancies/{{$tenancy->id}}/rentbook/{{$payment->id}}/change"
                    class="btn btn-xs btn-success">
@@ -24,8 +31,10 @@
                     Delete <i class="fa fa-trash"></i>
                 </a>
             </td>
+            @endcan
         </tr>
     @endforeach
+    @can('manage_tenancy',$tenancy->id)
     <tr>
         <td>Total:</td>
         <td>£{{$rentTotal}}</td>
@@ -33,6 +42,7 @@
                class="btn btn-xs btn-primary">Add <i
                         class="fa fa-plus"></i></a></td>
     </tr>
+    @endcan
     </tbody>
 </table>
 
