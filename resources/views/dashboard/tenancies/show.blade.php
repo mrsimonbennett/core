@@ -109,7 +109,6 @@
                                         <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
                                         <li class=""><a data-toggle="tab" href="#rentbook">Rent Book</a></li>
                                         <li class=""><a data-toggle="tab" href="#tenants">Tenants</a></li>
-                                        <li class=""><a data-toggle="tab" href="#photos">Legal Documents</a></li>
                                     </ul>
                                 </div>
                                 <div class="ibox-content">
@@ -132,8 +131,6 @@
                                             </div>
                                             <div id="tenants" class="tab-pane">
                                                 @include('dashboard.tenancies.parts.tenants')
-                                            </div>
-                                            <div id="photos" class="tab-pane">
                                             </div>
                                         </div>
 
