@@ -39,6 +39,8 @@ final class TenanciesInviteController extends Controller
      */
     public function getInviteForm($tenancyId)
     {
+        $this->authorize('manage_tenancy');
+
         return view('dashboard.tenancies.invite-email', ['tenancyId' => $tenancyId]);
     }
 
@@ -49,6 +51,8 @@ final class TenanciesInviteController extends Controller
      */
     public function postInviteViaEmail(Request $request, $tenancyId)
     {
+        $this->authorize('manage_tenancy');
+
         //does fullrent know who this person is?
         $user = $this->queryBus->query(new FindUserByEmailQuery($request->get('email')));
 

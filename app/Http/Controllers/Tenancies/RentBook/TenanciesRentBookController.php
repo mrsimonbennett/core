@@ -33,11 +33,15 @@ final class TenanciesRentBookController extends Controller
      */
     public function change()
     {
+        $this->authorize('manage_tenancy');
+
         return view('dashboard.tenancies.rentbook.change');
     }
 
     public function add()
     {
+        $this->authorize('manage_tenancy');
+
         return view('dashboard.tenancies.rentbook.add');
     }
 
@@ -49,6 +53,8 @@ final class TenanciesRentBookController extends Controller
      */
     public function addPayment(Request $request, $tenancyId)
     {
+        $this->authorize('manage_tenancy');
+
         $this->commandBus->execute(new ScheduleTenancyRentPayment(uuid(),
                                                                   $tenancyId,
                                                                   $request->get('rent_amount'),
@@ -67,6 +73,8 @@ final class TenanciesRentBookController extends Controller
      */
     public function updateRentPayment(ChangeRentBookPaymentInfoRequest $request, $tenancyId, $rentPaymentId)
     {
+        $this->authorize('manage_tenancy');
+
         $this->commandBus->execute(new AmendScheduledTenancyRentPayment($tenancyId,
                                                                         $rentPaymentId,
                                                                         $request->get('rent_amount'),
@@ -85,6 +93,7 @@ final class TenanciesRentBookController extends Controller
      */
     public function deleteRentPayment($tenancyId, $rentPaymentId)
     {
+        $this->authorize('manage_tenancy');
 
         $this->commandBus->execute(new RemoveScheduledRentPayment($tenancyId, $rentPaymentId));
 
