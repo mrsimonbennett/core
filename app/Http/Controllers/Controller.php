@@ -1,12 +1,24 @@
 <?php
 namespace FullRent\Core\Application\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-abstract class Controller extends BaseController
+/**
+ * Class Controller
+ * @package FullRent\Core\Application\Http\Controllers
+ * @author Simon Bennett <simon@bennett.im>
+ */
+class Controller extends \Illuminate\Routing\Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    /**
+     * Helper to returning a JS notification to the admin UI
+     * @param string $title
+     * @param string $message
+     * @return array
+     */
+    protected function notification($title, $message = '')
+    {
+        return ['notification' => ['title' => $title, 'message' => $message]];
+    }
 }

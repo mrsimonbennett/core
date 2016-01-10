@@ -7,7 +7,7 @@ use FullRent\Core\QueryBus\QueryHandler;
 
 /**
  * Class FindCompanyByDomainQueryHandler
- * @package FullRent\Core\Company\Queries
+ * @package FullRent\Core\CompanyModal\Queries
  * @author Simon Bennett <simon@bennett.im>
  */
 final class FindCompanyByDomainQueryHandler implements QueryHandler

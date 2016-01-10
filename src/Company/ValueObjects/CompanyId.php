@@ -6,7 +6,7 @@ use FullRent\Core\ValueObjects\Identity\UuidIdentity;
 
 /**
  * Class CompanyId
- * @package FullRent\Core\Company\ValueObjects
+ * @package FullRent\Core\CompanyModal\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanyId extends UuidIdentity implements Identity

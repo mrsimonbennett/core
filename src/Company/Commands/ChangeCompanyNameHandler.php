@@ -7,7 +7,7 @@ use FullRent\Core\Company\ValueObjects\CompanyName;
 
 /**
  * Class ChangeCompanyNameHandler
- * @package FullRent\Core\Company\Commands
+ * @package FullRent\Core\CompanyModal\Commands
  * @author Simon Bennett <simon@bennett.im>
  */
 final class ChangeCompanyNameHandler

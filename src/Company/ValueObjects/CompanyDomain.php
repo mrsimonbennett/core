@@ -5,7 +5,7 @@ use SmoothPhp\Contracts\Serialization\Serializable;
 
 /**
  * Class CompanyDomain
- * @package FullRent\Core\Company\ValueObjects
+ * @package FullRent\Core\CompanyModal\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanyDomain implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

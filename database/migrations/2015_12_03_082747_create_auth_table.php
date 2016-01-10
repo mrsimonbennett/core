@@ -17,6 +17,7 @@ class CreateAuthTable extends Migration
                 $table->char('id', 36);
                 $table->string('email');
                 $table->string('password')->nullable();
+                $table->rememberToken();
             });
     }
 

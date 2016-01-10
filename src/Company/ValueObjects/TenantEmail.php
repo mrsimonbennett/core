@@ -5,7 +5,7 @@ use FullRent\Core\ValueObjects\Person\Email;
 
 /**
  * Class TenantEmail
- * @package FullRent\Core\Company\ValueObjects
+ * @package FullRent\Core\CompanyModal\ValueObjects
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenantEmail extends Email

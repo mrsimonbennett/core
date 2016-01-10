@@ -10,7 +10,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class ApplicationEventListener
- * @package FullRent\Core\Company\Projection\Subscribers
+ * @package FullRent\Core\CompanyModal\Projection\Subscribers
  * @author Simon Bennett <simon@bennett.im>
  */
 final class ApplicationEventListener implements Subscriber

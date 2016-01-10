@@ -8,7 +8,7 @@ use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class TenantEnrolled
- * @package FullRent\Core\Company\Events
+ * @package FullRent\Core\CompanyModal\Events
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenantEnrolled implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

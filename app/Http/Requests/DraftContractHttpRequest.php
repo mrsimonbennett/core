@@ -22,7 +22,7 @@ class DraftContractHttpRequest extends Request
     public function rules()
     {
         return [
-            "landlord_id" => 'required|uuid|exists:Company',
+            "landlord_id" => 'required|uuid|exists:CompanyModal',
             'property_id' => 'required|uuid|exists:Property',
             'rent' => 'required|integer',
             'deposit' => 'required|integer',

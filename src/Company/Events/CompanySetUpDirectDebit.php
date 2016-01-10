@@ -7,7 +7,7 @@ use FullRent\Core\ValueObjects\DateTime;
 
 /**
  * Class CompanySetUpDirectDebit
- * @package FullRent\Core\Company\Events
+ * @package FullRent\Core\CompanyModal\Events
  * @author Simon Bennett <simon@bennett.im>
  */
 final class CompanySetUpDirectDebit implements Serializable, \SmoothPhp\Contracts\EventSourcing\Event

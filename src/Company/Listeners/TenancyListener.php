@@ -10,7 +10,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
 
 /**
  * Class TenancyListener
- * @package FullRent\Core\Company\Listeners
+ * @package FullRent\Core\CompanyModal\Listeners
  * @author Simon Bennett <simon@bennett.im>
  */
 final class TenancyListener implements Subscriber

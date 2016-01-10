@@ -19,8 +19,8 @@ use FullRent\Core\ValueObjects\DateTime;
 use SmoothPhp\EventSourcing\AggregateRoot;
 
 /**
- * Class Company
- * @package FullRent\Core\Company
+ * Class CompanyModal
+ * @package FullRent\Core\CompanyModal
  * @author Simon Bennett <simon@bennett.im>
  */
 final class Company extends AggregateRoot
@@ -58,6 +58,8 @@ final class Company extends AggregateRoot
 
         return $company;
     }
+
+
 
     /**
      * @param Landlord $landlord
