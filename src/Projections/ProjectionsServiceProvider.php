@@ -2,6 +2,7 @@
 namespace FullRent\Core\Projections;
 
 use FullRent\Core\Projections\AuthProjection\AuthMysqlProjection;
+use FullRent\Core\Projections\User\UserRedisClear;
 use SmoothPhp\LaravelAdapter\AggregateServiceProvider;
 
 /**
@@ -19,6 +20,8 @@ final class ProjectionsServiceProvider extends AggregateServiceProvider
     {
         return [
             AuthMysqlProjection::class,
+
+            UserRedisClear::class,
         ];
     }
 

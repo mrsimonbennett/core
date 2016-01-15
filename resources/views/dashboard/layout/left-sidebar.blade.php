@@ -12,9 +12,7 @@
                              </span> <span class="text-muted text-xs block">{{ucfirst($currentUser->role)}} <b
                                             class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a href="profile.html">Profile</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
-                        <li><a href="mailbox.html">Mailbox</a></li>
+                        <li><a href="/manage-account">Manage Account</a></li>
                         <li class="divider"></li>
                         <li><a href="/auth/logout">Logout</a></li>
                     </ul>

@@ -60,5 +60,15 @@ $router->group(['middleware' => ['auth', 'company']],
                      'Tenancies\RentBook\TenanciesRentBookController@deleteRentPayment');
 
 
+        $router->group(['prefix' => 'manage-account'],function(Router $router){
+            $router->get('/{type?}', 'ManageAccount\ManageAccountController@index');
+            $router->put('/basic','ManageAccount\ManageAccountController@updateNameDetails');
+            $router->put('/email','ManageAccount\ManageAccountController@updateEmail');
+            $router->put('/password','ManageAccount\ManageAccountController@updatePassword');
+
+        });
+
+
+
     }
 );
