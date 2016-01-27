@@ -26,11 +26,17 @@ final class UserRedisClear implements Subscriber, Projection
         $this->cache = $cache;
     }
 
+    /**
+     * @param UsersEmailHasChanged $e
+     */
     public function whenUsersEmailHasChanged(UsersEmailHasChanged $e)
     {
         $this->cache->forget('user-' . (string)$e->getId());
     }
 
+    /**
+     * @param UserAmendedName $e
+     */
     public function whenUserAmendedName(UserAmendedName $e)
     {
         $this->cache->forget('user-' . (string)$e->getId());
