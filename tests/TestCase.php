@@ -1,7 +1,5 @@
 <?php
 
-use App\Exceptions\Handler;
-use Broadway\EventSourcing\EventSourcedAggregateRoot;
 use SmoothPhp\Contracts\CommandBus\CommandBus;
 
 /**
