@@ -26,6 +26,9 @@ final class PropertyMysqlListenerV2 implements Projection, Subscriber
         $this->client = $client;
     }
 
+    /**
+     * @param AmendedPropertyAddress $e
+     */
     public function whenPropertyAddressAmendedUpDateMysql(AmendedPropertyAddress $e)
     {
         $this->client->query()

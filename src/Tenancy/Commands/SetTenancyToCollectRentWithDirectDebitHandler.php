@@ -24,6 +24,9 @@ final class SetTenancyToCollectRentWithDirectDebitHandler
         $this->tenancyRepository = $tenancyRepository;
     }
 
+    /**
+     * @param SetTenancyToCollectRentWithDirectDebit $command
+     */
     public function handle(SetTenancyToCollectRentWithDirectDebit $command)
     {
         $tenancy = $this->tenancyRepository->load(new TenancyId($command->getTenancyId()));

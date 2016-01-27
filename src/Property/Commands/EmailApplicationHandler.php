@@ -25,6 +25,10 @@ final class EmailApplicationHandler
         $this->propertyRepository = $propertyRepository;
     }
 
+    /**
+     * @param EmailApplication $command
+     * @throws \FullRent\Core\Property\Exceptions\PropertyClosedToApplications
+     */
     public function handle(EmailApplication $command)
     {
         $property = $this->propertyRepository->load(new PropertyId($command->getPropertyId()));

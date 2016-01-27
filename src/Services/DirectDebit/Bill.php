@@ -75,6 +75,10 @@ final class Bill implements Serializable, \SmoothPhp\Contracts\EventSourcing\Eve
         $this->chargeCustomerAt = $chargeCustomerAt;
     }
 
+    /**
+     * @param $bill
+     * @return static
+     */
     public static function fromGoCardless($bill)
     {
         return new static($bill->id,

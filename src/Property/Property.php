@@ -130,6 +130,10 @@ final class Property extends AggregateRoot
         $this->apply(new PropertyAcceptingApplications($this->id, $acceptingAt));
     }
 
+    /**
+     * @param DateTime|null $closedAt
+     * @throws PropertyAlreadyClosedToApplicationsException
+     */
     public function closeApplications(DateTime $closedAt = null)
     {
         if (!$this->acceptingApplicationsFrom) {
@@ -224,11 +228,17 @@ final class Property extends AggregateRoot
         $this->listedAt = $newPropertyListed->getListedAt();
     }
 
+    /**
+     * @param PropertyAcceptingApplications $e
+     */
     protected function applyPropertyAcceptingApplications(PropertyAcceptingApplications $e)
     {
         $this->acceptingApplicationsFrom = true;
     }
 
+    /**
+     * @param PropertyClosedAcceptingApplications $e
+     */
     protected function applyPropertyClosedAcceptingApplications(PropertyClosedAcceptingApplications $e)
     {
         $this->acceptingApplicationsFrom = false;

@@ -19,6 +19,9 @@ final class SmoothPropertyRepository extends EventSourcedRepository implements P
         return 'property-';
     }
 
+    /**
+     * @return mixed
+     */
     protected function getAggregateType()
     {
         return Property::class;

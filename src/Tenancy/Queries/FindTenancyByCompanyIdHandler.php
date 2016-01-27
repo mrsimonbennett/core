@@ -22,6 +22,10 @@ final class FindTenancyByCompanyIdHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindTenancyByCompanyId $query
+     * @return array|static[]
+     */
     public function handle(FindTenancyByCompanyId $query)
     {
         $tenancies = $this->client->query()

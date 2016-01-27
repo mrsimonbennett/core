@@ -135,6 +135,9 @@ final class Tenancy extends AggregateRoot
         $this->apply(new InvitedExistingUserToTenancy($this->tenancyId, $tenantId, $this->companyId, new DateTime()));
     }
 
+    /**
+     *
+     */
     public function setCollectDirectDebitWithFullRent()
     {
         $this->apply(new TenancySetToFullRentCollection($this->tenancyId,new DateTime()));

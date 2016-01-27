@@ -26,6 +26,9 @@ final class AmendScheduledTenancyRentPaymentHandler
         $this->tenancyRepository = $tenancyRepository;
     }
 
+    /**
+     * @param AmendScheduledTenancyRentPayment $command
+     */
     public function handle(AmendScheduledTenancyRentPayment $command)
     {
         $tenancy = $this->tenancyRepository->load(new TenancyId($command->getTenancyId()));

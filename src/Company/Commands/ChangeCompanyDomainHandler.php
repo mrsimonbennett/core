@@ -24,6 +24,9 @@ final class ChangeCompanyDomainHandler
         $this->companyRepository = $companyRepository;
     }
 
+    /**
+     * @param ChangeCompanyDomain $command
+     */
     public function handle(ChangeCompanyDomain $command)
     {
         $company = $this->companyRepository->load(new CompanyId($command->getCompanyId()));

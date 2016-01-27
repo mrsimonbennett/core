@@ -21,6 +21,9 @@ final class GoCardlessDirectDebit implements DirectDebit
      */
     private $gocardlessClient;
 
+    /**
+     * GoCardlessDirectDebit constructor.
+     */
     public function __construct()
     {
         GoCardless::$environment = 'sandbox';
@@ -127,6 +130,10 @@ final class GoCardlessDirectDebit implements DirectDebit
         return Bill::fromGoCardless($bill);
     }
 
+    /**
+     * @param AccessTokens $accessTokens
+     * @return GoCardless_Client
+     */
     private function generateClient(AccessTokens $accessTokens)
     {
         return new GoCardless_Client(

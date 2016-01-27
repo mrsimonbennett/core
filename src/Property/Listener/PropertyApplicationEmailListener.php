@@ -36,6 +36,9 @@ final class PropertyApplicationEmailListener implements Subscriber
         $this->mailer = $mailer;
     }
 
+    /**
+     * @param ApplicantInvitedToApplyByEmail $e
+     */
     public function whenApplicantInvitedToApplyByEmail(ApplicantInvitedToApplyByEmail $e)
     {
         $property = $this->queryBus->query(new FindPropertyById((string)$e->getPropertyId()));

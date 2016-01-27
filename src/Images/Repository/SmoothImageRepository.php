@@ -18,6 +18,9 @@ final class SmoothImageRepository extends EventSourcedRepository implements Imag
         return 'image-';
     }
 
+    /**
+     * @return mixed
+     */
     protected function getAggregateType()
     {
         return Image::class;

@@ -31,6 +31,9 @@ final class DraftTenancyHandler
         $this->tenancyRepository = $tenancyRepository;
     }
 
+    /**
+     * @param DraftTenancy $command
+     */
     public function handle(DraftTenancy $command)
     {
         $tenancyDuration = new TenancyDuration(DateTime::createFromFormat('d/m/Y', $command->getStart()),

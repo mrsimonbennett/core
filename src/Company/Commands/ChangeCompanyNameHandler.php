@@ -24,6 +24,9 @@ final class ChangeCompanyNameHandler
         $this->companyRepository = $companyRepository;
     }
 
+    /**
+     * @param ChangeCompanyName $command
+     */
     public function handle(ChangeCompanyName $command)
     {
         $company = $this->companyRepository->load(new CompanyId($command->getCompanyId()));

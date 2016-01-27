@@ -24,6 +24,9 @@ final class RemoveScheduledRentPaymentHandler
         $this->tenancyRepository = $tenancyRepository;
     }
 
+    /**
+     * @param RemoveScheduledRentPayment $command
+     */
     public function handle(RemoveScheduledRentPayment $command)
     {
         $tenancy = $this->tenancyRepository->load(new TenancyId($command->getTenancyId()));

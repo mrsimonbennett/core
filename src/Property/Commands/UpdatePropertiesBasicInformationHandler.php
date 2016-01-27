@@ -28,6 +28,9 @@ final class UpdatePropertiesBasicInformationHandler
         $this->propertyRepository = $propertyRepository;
     }
 
+    /**
+     * @param UpdatePropertiesBasicInformation $command
+     */
     public function handle(UpdatePropertiesBasicInformation $command)
     {
         $property = $this->propertyRepository->load(new PropertyId($command->getPropertyId()));

@@ -25,6 +25,9 @@ final class ListNewPropertyHandler
         $this->propertyRepository = $propertyRepository;
     }
 
+    /**
+     * @param ListNewProperty $listNewProperty
+     */
     public function handle(ListNewProperty $listNewProperty)
     {
         $property = Property::listNewProperty($listNewProperty->getPropertyId(), $listNewProperty->getAddress(),

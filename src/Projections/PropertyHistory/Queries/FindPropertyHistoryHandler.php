@@ -22,6 +22,10 @@ final class FindPropertyHistoryHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindPropertyHistory $query
+     * @return array|static[]
+     */
     public function handle(FindPropertyHistory $query)
     {
         return $this->client->query()
