@@ -72,12 +72,18 @@ final class Subscription extends AggregateRoot
     }
 
 
+    /**
+     * @param SubscriptionTrailStarted $e
+     */
     protected function applySubscriptionTrailStarted(SubscriptionTrailStarted $e)
     {
         $this->id = $e->getId();
         $this->companyId = $e->getCompanyId();
     }
 
+    /**
+     * @param SubscriptionStripeCustomerRegistered $e
+     */
     protected function applySubscriptionStripeCustomerRegistered(SubscriptionStripeCustomerRegistered $e)
     {
         $this->stripCustomer = $e->getStripCustomer();

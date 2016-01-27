@@ -59,6 +59,9 @@ final class UserHasUpdatedSettings implements Serializable, Event
         return $this->updatedAt;
     }
 
+    /**
+     * @return array
+     */
     public function serialize()
     {
         return [

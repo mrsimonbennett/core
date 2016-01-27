@@ -24,6 +24,11 @@ final class FindCompanyByDomainQueryHandler implements QueryHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindCompanyByDomainQuery $query
+     * @return mixed|static
+     * @throws CompanyNotFoundException
+     */
     public function handle(FindCompanyByDomainQuery $query)
     {
         if (is_null($company = $this->client->query()->table('companies')

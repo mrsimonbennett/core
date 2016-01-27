@@ -25,6 +25,9 @@ final class RegisterUserHandler
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param RegisterUser $registerUser
+     */
     public function handle(RegisterUser $registerUser)
     {
         $user = User::registerUser($registerUser->getUserId(), $registerUser->getName(), $registerUser->getEmail(),

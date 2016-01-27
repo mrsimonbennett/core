@@ -31,6 +31,9 @@ final class StartCompanyTrailHandler
         $this->cardPaymentGateWay = $cardPaymentGateWay;
     }
 
+    /**
+     * @param StartCompanyTrail $command
+     */
     public function handle(StartCompanyTrail $command)
     {
         $subscription = Subscription::startTrail(new SubscriptionId($command->getSubscriptionId()),

@@ -21,6 +21,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  */
 final class MysqlCompanySubscriber implements Subscriber, Projection
 {
+    /** @var int */
     protected $priority = 10;
 
     /**
@@ -28,6 +29,10 @@ final class MysqlCompanySubscriber implements Subscriber, Projection
      */
     private $db;
 
+    /**
+     * MysqlCompanySubscriber constructor.
+     * @param \Illuminate\Database\DatabaseManager $db
+     */
     public function __construct(\Illuminate\Database\DatabaseManager $db)
     {
         $this->db = $db;

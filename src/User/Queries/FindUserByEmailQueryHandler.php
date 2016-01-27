@@ -22,6 +22,10 @@ final class FindUserByEmailQueryHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindUserByEmailQuery $query
+     * @return mixed|static
+     */
     public function handle(FindUserByEmailQuery $query)
     {
         $user = $this->client->query()

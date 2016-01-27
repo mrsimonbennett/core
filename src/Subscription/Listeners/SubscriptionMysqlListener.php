@@ -42,6 +42,9 @@ final class SubscriptionMysqlListener implements Subscriber, Projection
                      ]);
     }
 
+    /**
+     * @param SubscriptionToLandlordPlanCreated $e
+     */
     public function whenConvenedToPlan(SubscriptionToLandlordPlanCreated $e)
     {
         $this->client

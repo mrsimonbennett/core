@@ -47,6 +47,10 @@ final class UsersEmailHasChanged implements Serializable, \SmoothPhp\Contracts\E
     /*
       * @return mixed The object instance
       */
+    /**
+     * @param array $data
+     * @return static
+     */
     public static function deserialize(array $data)
     {
         return new static(new UserId($data['user_id']),

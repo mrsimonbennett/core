@@ -19,6 +19,9 @@ final class SmoothCompanyRepository extends EventSourcedRepository implements Co
         return 'company-';
     }
 
+    /**
+     * @return mixed
+     */
     protected function getAggregateType()
     {
         return Company::class;

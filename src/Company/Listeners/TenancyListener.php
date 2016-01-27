@@ -27,6 +27,9 @@ final class TenancyListener implements Subscriber
         $this->commandBus = $commandBus;
     }
 
+    /**
+     * @param InvitedExistingUserToTenancy $e
+     */
     public function whenInvitedExistingUserToTenancy(InvitedExistingUserToTenancy $e)
     {
         $this->commandBus->execute(new EnrolTenant((string)$e->getCompanyId(),
@@ -34,6 +37,9 @@ final class TenancyListener implements Subscriber
                                                    (string)$e->getId()));
     }
 
+    /**
+     * @param InvitedNewUserToTenancy $e
+     */
     public function whenInvitedNewUserToTenancy(InvitedNewUserToTenancy $e)
     {
         $this->commandBus->execute(new EnrolNewTenant((string)$e->getCompanyId(),

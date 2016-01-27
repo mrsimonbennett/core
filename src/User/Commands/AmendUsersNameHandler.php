@@ -23,6 +23,10 @@ final class AmendUsersNameHandler
     {
         $this->userRepository = $userRepository;
     }
+
+    /**
+     * @param AmendUsersName $command
+     */
     public function handle(AmendUsersName $command)
     {
         $user = $this->userRepository->load(new UserId($command->getUserId()));

@@ -48,6 +48,9 @@ final class User extends AggregateRoot
     /** @var array */
     private $settings;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->settings = config('user.settings');
@@ -130,6 +133,12 @@ final class User extends AggregateRoot
         throw new InvalidPasswordResetRequest();
     }
 
+    /**
+     * @param InviteToken $inviteToken
+     * @param Password $password
+     * @param Name $name
+     * @throws InvalidInviteToken
+     */
     public function finishApplication(InviteToken $inviteToken, Password $password, Name $name)
     {
         if (isset($this->inviteToken) && $this->inviteToken->equals($inviteToken)) {
@@ -140,6 +149,9 @@ final class User extends AggregateRoot
         throw new InvalidInviteToken;
     }
 
+    /**
+     * @param Name $name
+     */
     public function amendName(Name $name)
     {
         $this->apply(new UserAmendedName($this->userId, $name, DateTime::now()));
@@ -194,6 +206,9 @@ final class User extends AggregateRoot
         $this->inviteToken = $e->getInviteToken();
     }
 
+    /**
+     * @param UserPasswordReset $e
+     */
     protected function applyUserPasswordReset(UserPasswordReset $e)
     {
         $this->password = $e->getPassword();

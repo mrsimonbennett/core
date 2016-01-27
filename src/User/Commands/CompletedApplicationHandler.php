@@ -33,6 +33,10 @@ final class CompletedApplicationHandler
         $this->queryBus = $queryBus;
     }
 
+    /**
+     * @param CompletedApplication $command
+     * @throws \FullRent\Core\User\Exceptions\InvalidInviteToken
+     */
     public function handle(CompletedApplication $command)
     {
         $userObj = $this->queryBus->query(new FindUserByEmailQuery($command->getEmail()));

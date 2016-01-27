@@ -143,6 +143,9 @@ final class Company extends AggregateRoot
         $this->landlords[(string)$landlordEnrolled->getLandlord()->getLandlordId()] = $landlordEnrolled->getLandlord();
     }
 
+    /**
+     * @param TenantEnrolled $e
+     */
     protected function applyTenantEnrolled(TenantEnrolled $e)
     {
         $this->tenants[(string)$e->getTenantId()] = $e->getTenantId();

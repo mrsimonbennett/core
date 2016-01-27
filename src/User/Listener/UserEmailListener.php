@@ -16,6 +16,7 @@ use SmoothPhp\Contracts\EventDispatcher\Subscriber;
  */
 final class UserEmailListener implements Subscriber
 {
+    /** @var int */
     protected $priority = 0;
 
 
@@ -57,6 +58,9 @@ final class UserEmailListener implements Subscriber
 
     }
 
+    /**
+     * @param UserPasswordReset $e
+     */
     public function whenUserPasswordReset(UserPasswordReset $e)
     {
         $user = $this->queryBus->query(new FindUserById($e->getUserId()));

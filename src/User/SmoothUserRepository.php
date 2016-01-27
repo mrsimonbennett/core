@@ -19,6 +19,9 @@ final class SmoothUserRepository extends EventSourcedRepository implements UserR
         return 'user-';
     }
 
+    /**
+     * @return mixed
+     */
     protected function getAggregateType()
     {
         return User::class;

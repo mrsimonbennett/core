@@ -24,6 +24,11 @@ final class FindUserByIdHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindUserById $query
+     * @return mixed|static
+     * @throws UserNotFound
+     */
     public function handle(FindUserById $query)
     {
         if (is_null($user = $this->client->query()->table('users')->where('id', $query->getUserId())->first())) {

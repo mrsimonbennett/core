@@ -22,6 +22,10 @@ final class FindCompanyLandlordHandler
         $this->client = $client;
     }
 
+    /**
+     * @param FindCompanyLandlord $query
+     * @return mixed|static
+     */
     public function handle(FindCompanyLandlord $query)
     {
         return $this->client->query()
